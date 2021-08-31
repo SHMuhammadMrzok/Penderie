@@ -1,0 +1,109 @@
+.balance-title {
+  overflow: hidden;
+  height: auto;
+  width: 100%;
+  display: block;
+ 
+  margin-bottom: 10px;
+  h3 {
+    color: $dark-color;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  p {
+    color: #797979;
+    font-weight: 300;
+    font-size: 0.9rem;
+  }
+}
+.balance-recharge {
+  overflow: hidden;
+  height: auto;
+  width: 100%;
+  display: block;
+  background: #fff;
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+  margin-bottom: 50px;
+  .nav-tabs {
+    background: $sec-color;
+    .nav-link {
+      font-weight: 500;
+      color: #fff;
+      border: 0 !important;
+      font-size: 1rem;
+      padding: 13px 20px;
+
+      &:hover {
+        border: 0 !important;
+      }
+      &.active {
+        border-radius: 0;
+        color: $main-color;
+        border: 0 !important;
+      }
+    }
+  }
+  .button{
+    width: auto;
+    margin-left: auto;
+  }
+  .tab-content {
+    padding: 30px;
+    h4 {
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      color: #000;
+      margin-bottom: 15px;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+  }
+
+  .form-group {
+    position: relative;
+
+    label {
+      font-weight: 500;
+    }
+    .d-flex {
+      display: flex;
+      align-items: center;
+
+      span {
+        padding: 0 15px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.balance-now {
+  overflow: hidden;
+  height: auto;
+  width: 100%;
+  display: block;
+  padding: 30px;
+  background: #ffff;
+  border: 1px solid #dedede;
+  border-radius: 10px;
+  p {
+    font-size: 1rem;
+    color: #797979;
+    margin-bottom: 0;
+  }
+  h1 {
+    font-size: 3rem;
+    margin: 0;
+    font-weight: bold;
+  }
+}
+
+.table-balance{
+ overflow: hidden;
+ height: auto;
+ width: 100%;
+ display: block;
+ margin-top: 30px; 
+}

@@ -1,0 +1,70 @@
+@font-face {
+font-family: GESS;
+font-style: oblique;
+font-weight: bold;
+src: url('fonts/GESSTwoLight-Light.eot?') format('eot'),
+     url('fonts/GESSTwoLight-Light.ttf') format('woff'),
+	 url(//:) format('no404'), url('fonts/GESSTwoLight-Light.ttf') format('truetype'); font-weight: bold; font-style: normal;
+}
+
+@font-face {
+font-family: GESS_bold;
+font-style: oblique;
+font-weight: bold;
+src: url('fonts/ge-ss-med.eot?') format('eot'),
+     url('fonts/ge-ss-med.ttf') format('woff'),
+     url(//:) format('no404'), url('fonts/ge-ss-med.ttf') format('truetype'); font-weight: bold; font-style: normal;
+}
+
+
+
+@font-face {
+font-family: 'Droid Arabic Kufi';
+font-style: normal;
+font-weight: 400;
+src: url(fonts/DroidKufi-Regular.eot);
+src: url(fonts/DroidKufi-Regular.eot?#iefix) format('embedded-opentype'),
+     url(fonts/DroidKufi-Regular.woff2) format('woff2'),
+     url(fonts/DroidKufi-Regular.woff) format('woff'),
+     url(fonts/DroidKufi-Regular.ttf) format('truetype');
+}
+@font-face {
+font-family: 'Droid Arabic Kufi';
+font-style: normal;
+font-weight: 700;
+src: url(fonts/DroidKufi-Bold.eot);
+src: url(fonts/DroidKufi-Bold.eot?#iefix) format('embedded-opentype'),
+     url(fonts/DroidKufi-Bold.woff2) format('woff2'),
+     url(fonts/DroidKufi-Bold.woff) format('woff'),
+     url(fonts/DroidKufi-Bold.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'NeoSans-bold';
+    src: url('fonts/NeoSans-bold.eot');
+    src: url('fonts/NeoSans-bold.eot?#iefix') format('embedded-opentype'),
+        url('fonts/NeoSans-bold.woff') format('woff'),
+        url('fonts/NeoSans-bold.ttf') format('truetype'),
+        url('fonts/NeoSans-bold.svg#NeoSans-bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'NeoSans-regular';
+    src: url('fonts/NeoSans-regular.eot');
+    src: url('fonts/NeoSans-regular.eot?#iefix') format('embedded-opentype'),
+        url('fonts/NeoSans-regular.woff') format('woff'),
+        url('fonts/NeoSans-regular.ttf') format('truetype'),
+        url('fonts/NeoSans-regular.svg#NeoSans-regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "JF Flat Regular";
+    src: url('fonts/JF-Flat-regular.eot');
+    src: url('fonts/JF-Flat-regular.eot?#iefix') format('embedded-opentype'),
+    url('fonts/JF-Flat-regular.svg#JF Flat Regular') format('svg'),
+    url('fonts/JF-Flat-regular.woff') format('woff'),
+    url('fonts/JF-Flat-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

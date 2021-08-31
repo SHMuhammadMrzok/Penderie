@@ -1,0 +1,103 @@
+.compare-title{
+  @extend .block;
+  margin-top: 30px;
+  text-align: center;
+  border: 4px solid #ffd026;
+  border-radius: 6px;
+  background: rgba(255, 208, 38, 0.14901960784313725);
+  padding: 20px 15px;
+  p{
+    font-size: 1.1rem;
+    font-weight: 600;
+    span{
+      font-size: .9rem;
+      font-weight: normal;
+      color: rgba(0, 0, 0, 0.5411764705882353);
+    } 
+  }
+}
+.compare-page{
+  padding-bottom: 30px;
+  padding-top: 30px;
+  .compare-item-container{
+    h1.name{
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #000;
+      border:1px solid $border-color;
+      padding: 15px;
+      text-align: center;
+      border-radius: 4px;
+    }
+    .img{
+      @extend .block;
+      margin-bottom: 15px;
+      img{
+        max-width: 100%;
+      }
+    }
+    .rated{
+     justify-content: center;
+     ul{
+       justify-content: center;
+     }
+    }
+    .price{
+      margin: 15px 0;
+      font-size: 1.1rem;
+      color: #000;
+      text-align: center;
+      font-weight: 600;
+    }
+   .brand {
+      color: #b9b9b9;
+      font-size: .85rem;
+      font-weight: 400;
+      margin-top: 15px;
+      text-align: center;
+      margin-bottom: 15px;
+      a{
+        color: #b9b9b9;
+        text-decoration: none;
+      }
+    }
+    .add-to-card-button{
+      justify-content: center;
+      margin-bottom: 15px;
+      margin-top: 15px;
+    }
+    .about-item{
+      font-size: .9rem;
+      display: block;
+      margin-top: 15px; 
+      margin-bottom: 15px;
+      article{
+        font-size: 1rem;
+        color:darken($gray-font, 40%);
+        line-height: 2;
+      }
+    }
+    .delet-item{
+      color: #b9b9b9;
+      padding: 0px 0;
+      font-size: 0.9rem;
+      display: inline-flex;
+      font-weight: normal;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      @include transition(300ms);
+      a{    color: #b9b9b9;}
+      svg{
+        width: 16px;
+        height: 16px;
+        margin-top: -3px;
+        fill: #b9b9b9;
+        margin-left: 0px;
+        margin-right: 3px;
+        @include transition(300ms);
+      }
+    }
+  }
+}

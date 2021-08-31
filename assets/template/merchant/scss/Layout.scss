@@ -1,0 +1,59 @@
+@import url("https://fonts.googleapis.com/css?family=Cairo:200,300,400,600,700,900");
+$MainColor:#f79d36;
+$SecondColor:#2c3e50;
+$GrayColor:#f4f4f4;
+$MainFontSize:20px;
+
+
+@mixin background($img,$fix,$high){
+  background: url("../images/#{$img}")no-repeat center center #{$fix} ;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  min-height: #{$high}px;
+  width: 100%;
+}
+@mixin transition($val){
+  -webkit-transition: all #{$val}s ease-in;
+  -moz-transition: all #{$val}s ease-in;
+  -o-transition: all #{$val}s ease-in;
+  transition: all #{$val}s ease-in;
+}
+@mixin Placeholder($HolderColor){
+  &::-webkit-input-placeholder {
+    color: $HolderColor !important;
+  }
+  &:-moz-placeholder { /* Firefox 18- */
+    color: $HolderColor !important;
+  }
+  &::-moz-placeholder {  /* Firefox 19+ */
+    color: $HolderColor !important;
+  }
+  &:-ms-input-placeholder {
+    color: $HolderColor !important;
+  }
+}
+
+body{
+  font-family: 'Cairo', sans-serif;
+}
+button{
+  outline: 0;
+  border: 0;
+}
+button:focus{
+  outline: 0;
+  box-shadow: none;
+  border: none;
+}
+a:hover{
+  text-decoration: none;
+}
+.large-container{
+  max-width:1920px;
+  margin: 0 auto;
+}
+.container-fluid{
+  max-width: 1170px;
+}

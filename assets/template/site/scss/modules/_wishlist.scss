@@ -1,0 +1,124 @@
+.wishlist-main {
+  @extend .block;
+
+  .wishlist-container {
+    @extend .flex;
+    border: 1px solid $border-color;
+    padding: 0;
+
+    margin: 15px 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    .image {
+      @extend .block;
+      border-right: 1px solid $border-color;
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+    }
+
+    .data-prod {
+      @extend .flex;
+      height: 100%;
+      padding-right: 15px;
+
+      p.brand a,
+      p.brand {
+        color: #b9b9b9;
+        font-size: 0.85rem;
+        font-weight: 400;
+        margin-bottom: 0px;
+      }
+      .info {
+        display: inline-flex;
+        height: 100%;
+        width: 100%;
+
+        justify-content: center;
+        padding: 0 15px;
+        flex-flow: column;
+
+        h3 {
+          a {
+            font-weight: 600;
+            font-size: 1rem;
+            display: block;
+            line-height: 1.5;
+            text-decoration: none;
+            color: #000;
+          }
+        }
+
+        p.price {
+          color: #000;
+          font-size: 1rem;
+          font-weight: 500;
+          margin-bottom: 5px;
+
+          .new-price {
+            color: #000;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+          }
+
+          .old-price {
+            color: $gray-font;
+            font-size: 1rem;
+            font-weight: 400;
+            text-decoration: line-through;
+            margin-bottom: 5px;
+          }
+        }
+      }
+
+      .add-cart {
+        width: 210px;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        display: inline-flex;
+        flex-flow: column;
+
+        a {
+          display: inline-flex;
+          color: #000;
+          font-size: 1rem;
+          text-decoration: underline;
+          margin-top: 10px;
+
+          &:hover {
+            color: $sec-color;
+          }
+        }
+
+        a.button {
+          width: 100%;
+          display: inline-flex;
+          background: $sec-color;
+          color: #fff;
+          justify-content: center;
+          align-items: center;
+          font-size: 1rem;
+          text-decoration: none;
+          text-transform: uppercase;
+          border-radius: 4px;
+          padding: 10px;
+          text-align: center;
+          @include transition(300ms);
+
+          &:hover {
+            background: $main-color;
+            color: #fff;
+            @include transition(300ms);
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,85 @@
+
+.terms-conditions-page {
+  background-color: #fff;
+  padding: 20px;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.body-content .terms-conditions-page .terms-conditions h2,
+.body-content .faq-page h2,
+.body-content .track-order-page h2 {
+  font-size: 30px;
+  color: #555;
+  text-align: center;
+  font-weight: 600;
+}
+
+.body-content .terms-conditions-page .terms-conditions ol {
+  padding-left: 22px;
+}
+.body-content .terms-conditions-page .terms-conditions ol li {
+  font-style: normal;
+  font-size: 14px;
+  color: #666;
+  padding-bottom: 20px;
+  font-family: "Open Sans", sans-serif;
+}
+.body-content .terms-conditions-page .terms-conditions p {
+  font-size: 15px;
+}
+.body-content .terms-conditions-page .terms-conditions h2,
+.body-content .terms-conditions-page .terms-conditions span,
+.body-content .track-order-page span {
+  text-align: left;
+}
+
+.track-order-page {
+  background-color: #fff;
+  padding: 20px;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.product-comparison {
+  background-color: #fff;
+  padding: 20px;
+  overflow: hidden;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.faq-page {
+  background-color: #fff;
+  padding: 20px;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.faq-page .panel-group .panel {
+  padding: 0px;
+  box-shadow: none;
+}
+.faq-page .panel-body {
+  font-family: $main-font-family;
+}
+
+.body-content .terms-conditions-page .terms-conditions span,
+.body-content .faq-page .title-tag,
+.body-content .track-order-page span {
+  display: block;
+  font-style: normal;
+  font-size: 14px;
+  color: #666;
+}
+.body-content .faq-page .title-tag {
+  text-align: left;
+  padding-bottom: 30px;
+}
+.body-content .track-order-page .register-form label {
+  font-weight: 400;
+  font-size: 14px;
+}
+.body-content .track-order-page .register-form .form-group {
+  margin-bottom: 25px;
+}

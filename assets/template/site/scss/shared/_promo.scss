@@ -1,0 +1,36 @@
+.promo-topline {
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: #fff;
+  background-image: url(../images/promo-topline-bg.png);
+
+  .promo-topline-item {
+    position: relative;
+    padding: 0 55px;
+  }
+  .promo-topline-close {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    -moz-align-items: center;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    -webkit-backface-visibility: hidden;
+    svg{
+      width: 15px;
+      height: 15px;
+      fill: #fff;
+    }
+  }
+}

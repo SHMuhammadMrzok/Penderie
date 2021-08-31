@@ -1,0 +1,41 @@
+/*header*/
+header{
+  background-color: white;
+  border-top: 4px solid $MainColor;
+  padding: 5px 0;
+  box-shadow: 0 2px 20px 0px #bfbfbf;
+  .social{
+    display: flex;
+    a{
+      display: flex;
+      align-items: center;
+      margin:0 10px;
+      padding:10px;
+      @include transition(0.3);
+      svg{
+        width: 20px;
+        height: 20px;
+        @include transition(0.3);
+        fill:$SecondColor ;
+      }
+      &:hover{
+        @include transition(0.3);
+        border-radius: 50%;
+        color:#2c3e50 ;
+        box-shadow: 0 0px 8px 0px $SecondColor ;
+        svg{
+          @include transition(0.3);
+          fill:$MainColor;
+        }
+      }
+    }
+  }
+  .logo{
+    text-align: right;
+    img{
+      width: 75px;
+    }
+  }
+
+}
+

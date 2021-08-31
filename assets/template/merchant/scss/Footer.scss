@@ -1,0 +1,44 @@
+/*footer*/
+footer{
+  background: #282828;
+  height: 60px;
+  color: white;
+  display: flex;
+  align-items: center;
+  .social{
+    display: flex;
+    a{
+      display: flex;
+      align-items: center;
+      margin:0 10px;
+      padding:10px;
+      @include transition(0.3);
+      svg{
+        width: 20px;
+        height: 20px;
+        @include transition(0.3);
+        fill:white ;
+      }
+      &:hover{
+        @include transition(0.3);
+        border-radius: 50%;
+        color:#2c3e50 ;
+        box-shadow: 0 0px 8px 0px $SecondColor ;
+        svg{
+          @include transition(0.3);
+          fill:$MainColor;
+        }
+      }
+    }
+  }
+  .copyright{
+    display: inline-block;
+    padding: 10px 10px 10px 0;
+    text-align: right;
+    font-size: $MainFontSize - 8px;
+    .copy-icon{
+      font-size: 16px;
+      vertical-align: -3px;
+    }
+  }
+}

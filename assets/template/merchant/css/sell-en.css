@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap');
+ 
+
+.dashboard-left {
+    text-align: left;
+}
+.dashboard-right,.dashboard .dashboard-content .dashboard-right ul li a, .dashboard .dashboard-content .dashboard-right ul li .sub-menu-item{
+    text-align: left;
+}
+.dashboard .dashboard-content .dashboard-right ul li a p, .dashboard .dashboard-content .dashboard-right ul li .sub-menu-item p,
+.dashboard .dashboard-content .dashboard-right ul li a p, .dashboard .dashboard-content .dashboard-right ul li .sub-menu-item p{
+    float: left;
+}
+.dashboard-content {
+    flex-flow: row-reverse;
+}
+.dashboard .dashboard-content .dashboard-left ul li .right-content .form-group .form-item label{
+    text-align: left;
+}
+.dashboard .dashboard-content .dashboard-right ul li a svg, .dashboard .dashboard-content .dashboard-right ul li .sub-menu-item svg {
+    fill: #ae96b8;
+    width: 15px;
+    float: right;
+    height: 15px;
+    transform: rotate(90deg);
+}
+.dashboard .dashboard-content .dashboard-right ul li a, .dashboard .dashboard-content .dashboard-right ul li .sub-menu-item{
+    letter-spacing: 0 ;
+}
+.contact-info {
+    text-align: left;
+}
+.step-num{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+}
+.guide .steps-bar .steps{
+    direction: ltr;
+}

@@ -1,0 +1,36 @@
+.brand-page {
+  @extend .flex;
+
+  .brand-container {
+    @extend .flex;
+    align-items: center;
+    padding: 15px;
+    justify-content: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+
+    img {
+      max-width: 100%;
+      display: inline-flex;
+
+    }
+  }
+}
+.brands-slider-container{
+  @extend .block;
+  position: relative;
+  a{
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+  .owl-carousel{
+    height: 100%;
+    
+  }
+}
+.no-border-bottom {
+  border-bottom: 0 !important;
+}

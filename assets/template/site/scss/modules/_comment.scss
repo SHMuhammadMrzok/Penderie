@@ -1,0 +1,155 @@
+.comments-block {
+  overflow: visible;
+  height: auto;
+  width: 100%;
+  display: block;
+  border-radius: 0px;
+  margin-top: 30px;
+ 
+  .title{
+    margin-bottom: 15px;
+  }
+  .rate-block-bar {
+    overflow: hidden;
+    height: auto; 
+    width: 100%;
+    display: block;
+    padding: 15px;
+    background: #fff;
+    border-radius: 4px;
+    h1 {
+      font-weight: bold;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      p {
+        margin-right: 10px;
+        font-size: 3rem;
+      }
+    }
+    .rate-bars {
+      overflow: hidden;
+      height: auto;
+      width: 100%;
+      display: block;
+      ul {
+        list-style: none;
+        li {
+          display: flex;
+          white-space: nowrap;
+          align-items: center;
+          p {
+            width: 100px;
+            display: inline-flex;
+            font-weight: 500;
+            color: $main-color;
+          }
+
+          .bar {
+            width: 100%;
+            display: block;
+            overflow: hidden;
+            margin: 10px 0;
+            background: rgba(238, 238, 238, 0.3215686275);
+            border-radius: 4px;
+            height: 25px;
+            .fill {
+              background: $sec-color;
+              display: block;
+              height: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+  .single-comment-area {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    display: block;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    background: #fff;
+    padding: 30px;
+    @include transition(300ms);
+    &:hover {
+      border: 1px solid $sec-color;
+    }
+    h2 {
+      color: $main-color;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    .rated {
+      margin-bottom: 7px;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+    }
+    p {
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+    article {
+      font-size: 0.9rem;
+      line-height: 2;
+      margin-top: 10px;
+      color: #636363;
+      font-weight: 400;
+    }
+  }
+
+  .write-comment{
+    overflow: hidden;
+    height: auto;
+ 
+    width: 100%;
+    display: block;
+  
+    margin-bottom: 30px;
+    border-radius: 4px;
+ 
+    textarea{
+      min-height: 100px;
+    }
+    label{
+      font-weight: 600;
+    }
+  }
+  .other-comments{
+    overflow: hidden;
+    height: auto;
+    width: 100%;
+    display: block;
+    padding: 15px;
+    .comment-row{
+      overflow: hidden;
+      height: auto;
+      width: 100%;
+      display: block;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+      &:last-child{
+        border-bottom: 0;
+      }
+      h4 {
+        font-size: 1.2rem;
+      }
+      p {
+        color: #ccc;
+        font-size: 0.9rem;
+      }
+      article {
+        font-size: 0.9rem;
+        line-height: 2;
+        margin-top: 10px;
+        color: #636363;
+        font-weight: 400;
+      }
+    }
+  }
+}

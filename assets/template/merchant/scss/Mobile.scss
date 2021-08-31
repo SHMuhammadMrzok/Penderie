@@ -1,0 +1,346 @@
+@media (max-width: 992px) {
+  /*--------Home--------------*/
+  .why{
+    .icon{
+      width: 120px;
+      height: 120px;
+      svg{
+        width: 50px;
+        height:50px;
+      }
+    }
+  }
+  /*--------Admin---------------*/
+  .guide{
+    .steps-bar{
+      .steps{
+        .step-num{
+          .step-item{
+            hr{
+              width: 100px;
+            }
+            .hr-small{
+              width: 40px;
+            }
+          }
+        }
+      }
+    }
+  }
+  /*adminA*/
+  .packages{
+    .package-item{
+      h3{
+        font-size: 20px;
+        padding: 20px;
+      }
+      p{
+        font-size: 16px;
+        padding: 15px 0;
+      }
+    }
+    .package-title{
+      padding-top: 70px;
+      p{
+        font-size: 14px;
+      }
+    }
+  }
+}
+@media (max-width: 768px){
+  /*--------Home--------------*/
+  .welcome{
+    .welcome-content{
+      h2{
+        font-size: 30px;
+      }
+      .welcome-border{
+        hr{
+          width: 80px;
+        }
+      }
+      p{
+        font-size: 15px;
+        width: 70%;
+      }
+      button{
+        a{
+          font-size: 12px;
+          padding: 15px;
+          &:hover{
+            padding: 10px 7px;
+          }
+        }
+      }
+    }
+    .login{
+      left:15%;
+      width: 70%;
+      padding: 50px 20px;
+      h5{
+        font-size: 20px;
+      }
+      .forget-pass{
+        font-size: 12px;
+      }
+      .checkbox-input {
+        label {
+          font-size: 12px;
+          margin:  0 5px 0 0;
+        }
+        .custom-checkbox {
+          padding: 7px;
+        }
+      }
+      .btn{
+        padding: 15px 25px;
+        font-size: 15px;
+      }
+    }
+  }
+  .why{
+    h3{
+      font-size: 30px;
+    }
+    hr{
+      width: 180px;
+    }
+    .icon{
+      width: 80px;
+      height: 80px;
+      svg{
+        width: 40px;
+        height:40px;
+      }
+    }
+    .content{
+      padding-right: 10px;
+      h4{
+        font-size: 20px;
+      }
+      p{
+        font-size:15px;
+      }
+    }
+    button{
+      a{
+        font-size: 12px;
+        padding: 15px;
+      }
+    }
+  }
+  .publish-video {
+    .video-content {
+      h3 {
+        font-size: 25px;
+      }
+      .icon{
+        a{
+          svg{
+            width: 80px;
+            height: 80px;
+            margin:  15px auto 0;
+          }
+        }
+      }
+    }
+  }
+  .how{
+    h3{
+      font-size: 30px;
+    }
+    hr{
+      width: 180px;
+    }
+    .how-icon{
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+      svg{
+        width: 50px;
+        height: 50px;
+      }
+      hr{
+       display: none;
+      }
+    }
+    h4{
+      font-size: 20px;
+      margin: 20px auto;
+    }
+    p{
+      font-size: 15px;
+      margin-bottom: 70px;
+    }
+    button{
+      a{
+        font-size: 12px;
+        padding: 15px 30px;
+      }
+    }
+  }
+}
+@media (max-width: 576px) {
+  /*--------Header------------*/
+  header{
+    .social{
+      a{
+        margin:0;
+        padding:7px;
+        svg{
+          width: 12px;
+          height: 12px;
+        }
+      }
+    }
+    .logo{
+      img{
+
+      }
+    }
+  }
+  /*--------Home--------------*/
+  .welcome{
+    .welcome-content{
+      h2{
+        font-size: 25px;
+      }
+      p{
+        width: 90%;
+      }
+      button{
+        a{
+          padding: 12px 10px;
+        }
+      }
+    }
+    .login{
+      left:7.5%;
+      width: 85%;
+    }
+  }
+  .why{
+    .icon{
+      margin: 10px  auto;
+    }
+    .content{
+      text-align: center;
+    }
+  }
+  /*--------Admin---------------*/
+  .guide{
+    .guide-steps{
+      h2{
+        font-size: 24px;
+      }
+      p{
+        font-size: 14px;
+      }
+    }
+    .steps-bar{
+      .steps{
+        .step-num{
+          .step-item{
+            hr{
+              width: 50px;
+            }
+            .hr-small{
+              width: 7px;
+            }
+            span{
+              width: 20px;
+              height: 20px;
+              font-size: 12px;
+              font-weight: normal;
+            }
+          }
+          p{
+            font-size:12px;
+            &.far{
+              margin-left: 0;
+            }
+            &.center{
+              margin-left: 0;
+            }
+          }
+
+        }
+
+      }
+    }
+  }
+  /*adminB&&adminC*/
+  .contact-info{
+    h3{
+      font-size: 20px;
+    }
+    .form-group{
+      .form-item{
+        label{
+          width: 100px;
+          font-size: 13px;
+          &.special{
+            width: 100px;
+          }
+        }
+      }
+    }
+  }
+  /*adminD*/
+  .shop-reg{
+    .reg-content{
+      h3{
+        font-size: 25px;
+      }
+      p{
+        font-size: 20px;
+      }
+    }
+  }
+  /*--------dashboard---------------*/
+  .dashboard{
+    .dashboard-content{
+      .dashboard-right{
+        ul{
+          li{
+            a{
+              padding: 20px 5px;
+              font-size: 14px;
+              p{
+                margin: 0;
+              }
+              svg{
+                width: 10px;
+                height: 10px;
+              }
+            }
+          }
+        }
+      }
+      .dashboard-left{
+        padding: 30px 10px;
+      }
+
+    }
+
+  }
+  /*--------Footer------------*/
+  footer{
+    height: 90px;
+    .social{
+      a{
+        margin:0;
+        padding:7px;
+        svg{
+          width: 12px;
+          height: 12px;
+        }
+      }
+    }
+    .copyright{
+      font-size:10px;
+    }
+  }
+
+
+}

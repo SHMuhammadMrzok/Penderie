@@ -1,0 +1,182 @@
+
+.login-page,.registration-page,.forget-pass{
+  @extend .block;
+  display: flex;
+  min-height: calc(100VH - 100px);
+  align-items: center;
+  background: url(../images/login.jpg) center center no-repeat;
+  background-size: cover;
+
+  .container,
+  .row {
+    height: 100%;
+    width: 100%;
+  }
+
+  label {
+    font-size: .9rem;
+    margin-bottom: 4px;
+
+  }
+
+  .form-logo {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+    align-items: center;
+    margin-top: 15px;
+
+    img {
+      max-width: 100px;
+      display: block;
+    }
+
+    span {
+      font-size: 1.2rem;
+      padding-left: 12px;
+      color: $gray-font;
+    }
+  }
+
+  .signup-link {
+    margin-bottom: 20px;
+    overflow: hidden;
+    height: auto;
+    width: 100%;
+    text-align: center;
+
+    p {
+      color: $gray-font;
+      font-size: .9rem;
+
+      a {
+        text-transform: uppercase;
+        font-weight: 600;
+        color: #000;
+        font-size: .85rem;
+        text-decoration: underline !important;
+
+      }
+    }
+  }
+
+  .forgotten {
+    width: 100%;
+    font-size: .9rem;
+    text-align: center;
+    color: darken($gray-font, 20%);
+    @include transition(300ms);
+
+    &:hover {
+      color: #000;
+      text-decoration: underline;
+      @include transition(300ms);
+    }
+
+  }
+
+  .login-container {
+    @extend .block;
+    background: #fff;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.12156862745098039);
+
+    .form-group {
+      position: relative;
+
+      p.agree {
+        width: 100%;
+        display: block;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        color: darken($gray-font, 20%);
+
+        a {
+          text-decoration: underline;
+          color: #000;
+        }
+      }
+    }
+
+    .show-password {
+      position: absolute;
+      right: 13px;
+      top: 37px;
+      cursor: pointer;
+
+      .svg-uneye {
+        display: none;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+        fill: #c1c1c1;
+      }
+    }
+  }
+}
+
+.registration-page{
+  background: url(../images/registration.jpg) center center no-repeat;
+}
+.forget-pass{
+  background: url(../images/forget-pass.jpg) center center no-repeat;
+}
+.verifcation-page{
+  @extend .flex;
+  flex-flow: column;
+  text-align: center;
+  padding: 100px 0;
+  h2{
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+  }
+  p{
+    color: darken($gray-font, 30%);
+    display: block;
+    margin-bottom: 30px;
+    span{
+      color: #000;
+    }
+  }
+  form{
+    .inputs-area{
+      flex-flow: row;
+      align-items: center;
+      justify-content: center;
+      input{
+        margin: 0 15px;
+        width: 60px;
+        padding: 15px;
+        text-align: center;
+      }
+     
+    }
+    button{
+      width: auto;
+      color: #fff;
+      margin: auto;
+      margin-top: 30px;
+      border: none;
+      padding: 10px 20px;
+      font-weight: 700;
+  
+      background: $sec-color;
+
+   
+      margin: auto;
+      margin-top: 30px;
+      &:hover{
+        background: $main-color;
+      }
+    }
+   
+  }
+}

@@ -1,0 +1,1303 @@
+.borderRadius {
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+select {
+  font-family: $main-font-family;
+  border: none;
+  color: #fff;
+}
+
+.borderRadiusTp {
+  -moz-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.borderRadiusBtm {
+  -moz-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+}
+
+.ddcommon {
+  position: relative;
+  display: -moz-inline-stack;
+  zoom: 1;
+  display: inline-block;
+  *display: inline;
+  cursor: default;
+}
+
+.ddcommon ul {
+  padding: 0;
+  margin: 0;
+}
+
+.ddcommon ul li {
+  list-style-type: none;
+}
+
+.borderRadiusTp ul li:last-child {
+  -moz-border-radius: 0 0 5px 5px;
+  border-radius: 0 0 5px 5px;
+  border-bottom: 0 none #c3c3c3;
+}
+
+.borderRadiusBtm ul li:first-child {
+  -moz-border-radius: 5px 5px 0 0;
+  border-radius: 5px 5px 0 0;
+  border-bottom: 1 solid #c3c3c3;
+}
+
+.ddcommon .disabled img,
+.ddcommon .disabled span,
+.ddcommon.disabledAll {
+  opacity: 0.5;
+  /* standard: ff gt 1.5, opera, safari */
+  -ms-filter: "alpha(opacity=50)";
+  /* ie 8 */
+  filter: alpha(opacity=50);
+  /* ie lt 7 */
+  -khtml-opacity: 0.5;
+  /* safari 1.x */
+  -moz-opacity: 0.5;
+  /* ff lt 1.5, netscape */
+  color: #999999;
+}
+
+.ddcommon .clear {
+  clear: both;
+}
+
+.ddcommon .shadow {
+  -moz-box-shadow: 5px 5px 5px -5px #888888;
+  -webkit-box-shadow: 5px 5px 5px -5px #888888;
+  box-shadow: 5px 5px 5px -5px #888888;
+}
+
+.ddcommon .text {
+  color: #7e7e7e;
+  padding: 0;
+  position: absolute;
+  background: #fff;
+  display: block;
+  width: 98%;
+  height: 98%;
+  left: 2px;
+  top: 0;
+  border: none;
+}
+
+.ddOutOfVision {
+  position: relative;
+  display: -moz-inline-stack;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+}
+
+.borderRadius .shadow {
+  -moz-box-shadow: 5px 5px 5px -5px #888888;
+  -webkit-box-shadow: 5px 5px 5px -5px #888888;
+  box-shadow: 5px 5px 5px -5px #888888;
+}
+
+.borderRadiusBtm .shadow {
+  -moz-box-shadow: -5px -5px 5px -5px #888888;
+  -webkit-box-shadow: -5px -5px 5px -5px #888888;
+  box-shadow: -5px -5px 5px -5px #888888;
+}
+
+.borderRadiusTp .border,
+.borderRadius .border {
+  border-radius: 0px;
+  box-shadow: 0 0 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.borderRadiusBtm .border {
+   border-radius: 0px 0px 0 0;
+}
+
+img.fnone {
+  float: none !important;
+}
+
+.ddcommon .divider {
+  width: 0;
+  height: 100%;
+  position: absolute;
+}
+
+.ddcommon .arrow {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  right: 4px;
+}
+
+.ddcommon .arrow:hover {
+  background-position: 0 100%;
+}
+
+.ddcommon .ddTitle {
+  padding: 0;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.ddcommon .ddTitle .ddTitleText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ddcommon .ddTitle .ddTitleText .ddTitleText {
+  padding: 0;
+}
+
+.ddcommon .ddTitle .description {
+  display: block;
+}
+
+.ddcommon .ddTitle .ddTitleText img {
+  position: relative;
+  vertical-align: middle;
+  float: left;
+}
+
+.ddcommon .ddChild {
+  position: absolute;
+  display: none;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 120px;
+  zoom: 1;
+
+  margin-top: 4px;
+  border: 0 !important;
+}
+
+.ddcommon .ddChild li {
+  clear: both;
+}
+
+.ddcommon .ddChild li .description {
+  display: block;
+}
+
+.ddcommon .ddChild li img {
+  border: 0 none;
+  position: relative;
+  vertical-align: middle;
+  float: left;
+}
+
+.ddcommon .ddChild li.optgroup {
+  padding: 0;
+}
+
+.ddcommon .ddChild li.optgroup .optgroupTitle {
+  padding: 0 5px;
+}
+
+.ddcommon .ddChild li.optgroup ul li {
+  padding: 5px 5px 5px 15px;
+}
+
+.ddcommon .noBorderTop {
+  border-top: none 0 !important;
+  padding: 0;
+  margin: 0;
+}
+
+/*************** default theme **********************/
+.dd {
+}
+
+.dd .divider {
+  right: 24px;
+}
+
+.dd .arrow {
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  //background: url(../images/msdropdown/skin1/dd_arrow.gif) no-repeat;
+}
+
+.dd .arrow:hover {
+  background-position: 0 100%;
+}
+
+.dd .ddTitle {
+  color: $white-color;
+  font-size: .9rem;
+  font-weight: normal;
+  font-family: $main-font-family;
+}
+
+.dd .ddTitle .ddTitleText {
+  padding: 0;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dd .ddTitle .ddTitleText .ddTitleText {
+  padding: 0;
+}
+
+.dd .ddTitle .description {
+  font-size: 0.9rem;
+  color: $white-color;
+}
+
+.dd .ddTitle .ddTitleText img {
+  padding-right: 5px;
+}
+
+.dd .ddChild {
+  border: none;
+  left: -1px;
+}
+
+.dd .ddChild li {
+  padding: 10px;
+  background-color: #fff;
+  cursor: pointer;
+  border-bottom: 1px solid #e4e4e4;
+}
+
+.dd .ddChild li .description {
+  color: #666;
+}
+
+.dd .ddChild li .ddlabel {
+  color: #333;
+}
+
+.dd .ddChild li.hover {
+  background-color: #f2f2f2;
+}
+
+.dd .ddChild li img {
+  padding: 0 6px 0 0;
+}
+
+.dd .ddChild li.optgroup {
+  padding: 0;
+}
+
+.dd .ddChild li.optgroup .optgroupTitle {
+  padding: 0 5px;
+}
+
+.dd .ddChild li.optgroup ul li {
+  padding: 5px 5px 5px 15px;
+}
+
+.dd .ddChild li.selected {
+  background-color: $five-color;
+  color: #000;
+}
+
+.flag {
+  float: left;
+  padding: 0 !important;
+  margin:-4px 5px 0 0;
+  width: 16px;
+  height: 11px;
+  background: url(../images/msdropdown/icons/flagssprite_small.png) no-repeat;
+}
+
+.flag.ad,.flag.AD {
+  background-position: 0 0 !important;
+}
+
+.flag.ae,.flag.AE {
+  background-position: 0 -11px !important;
+}
+
+.flag.af,.flag.AF {
+  background-position: 0 -22px !important;
+}
+
+.flag.ag,.flag.AG {
+  background-position: 0 -33px !important;
+}
+
+.flag.ai,.flag.AI {
+  background-position: 0 -44px !important;
+}
+
+.flag.al,.flag.AL {
+  background-position: 0 -55px !important;
+}
+
+.flag.am,.flag.AM {
+  background-position: 0 -66px !important;
+}
+
+.flag.an,.flag.AN  {
+  background-position: 0 -77px !important;
+}
+
+.flag.ao,.flag.AO {
+  background-position: 0 -88px !important;
+}
+
+.flag.ar,.flag.AR {
+  background-position: 0 -99px !important;
+}
+
+.flag.as,.flag.AS {
+  background-position: 0 -110px !important;
+}
+
+.flag.at ,.flag.AT{
+  background-position: 0 -121px !important;
+}
+
+.flag.au,.flag.AU {
+  background-position: 0 -132px !important;
+}
+
+.flag.aw,.flag.AW {
+  background-position: 0 -143px !important;
+}
+
+.flag.ax,.flag.AX {
+  background-position: 0 -154px !important;
+}
+
+.flag.az ,.flag.AZ{
+  background-position: 0 -165px !important;
+}
+
+.flag.ba ,.flag.BA{
+  background-position: 0 -176px !important;
+}
+
+.flag.bb,.flag.BB {
+  background-position: 0 -187px !important;
+}
+
+.flag.bd,.flag.BD {
+  background-position: 0 -198px !important;
+}
+
+.flag.be,.flag.BE {
+  background-position: 0 -209px !important;
+}
+
+.flag.bf,.flag.BF {
+  background-position: 0 -220px !important;
+}
+
+.flag.bg,.flag.BG {
+  background-position: 0 -231px !important;
+}
+
+.flag.bh ,.flag.BH{
+  background-position: 0 -242px !important;
+}
+
+.flag.bi,.flag.BI {
+  background-position: 0 -253px !important  ;
+}
+
+.flag.bj,.flag.BJ {
+  background-position: 0 -264px !important;
+}
+
+.flag.bm,.flag.BM {
+  background-position: 0 -275px !important; 
+}
+
+.flag.bn ,.flag.BN{
+  background-position: 0 -286px !important;
+}
+
+.flag.bo ,.flag.BO{
+  background-position: 0 -297px !important;
+}
+
+.flag.br ,.flag.BR{
+  background-position: 0 -308px !important;
+}
+
+.flag.bs,.flag.BS {
+  background-position: 0 -319px !important;
+}
+
+.flag.bt,.flag.BT {
+  background-position: 0 -330px !important;
+}
+
+.flag.bv ,.flag.BV{
+  background-position: 0 -341px !important;
+}
+
+.flag.bw,.flag.BW {
+  background-position: 0 -352px !important;
+}
+
+.flag.by,.flag.BY {
+  background-position: 0 -363px !important;
+}
+
+.flag.bz ,.flag.BZ{
+  background-position: 0 -374px !important;
+}
+
+.flag.ca,.flag.CA {
+  background-position: 0 -385px !important;
+}
+
+.flag.catalonia {
+  background-position: 0 -396px;
+}
+
+.flag.cc ,.flag.CC{
+  background-position: 0 -407px !important;
+}
+
+.flag.cd ,.flag.CD{
+  background-position: 0 -418px !important;
+}
+
+.flag.cf,.flag.CF {
+  background-position: 0 -429px !important;
+}
+
+.flag.cg,.flag.CG {
+  background-position: 0 -440px !important;
+}
+
+.flag.ch,.flag.CH {
+  background-position: 0 -451px !important;
+}
+
+.flag.ci,.flag.CI {
+  background-position: 0 -462px !important;
+}
+
+.flag.ck,.flag.CK {
+  background-position: 0 -473px !important;
+}
+
+.flag.cl ,.flag.CL{
+  background-position: 0 -484px !important;
+}
+
+.flag.cm,.flag.CM {
+  background-position: 0 -495px !important;
+}
+
+.flag.cn,.flag.CN {
+  background-position: 0 -506px !important;
+}
+
+.flag.co,.flag.CO {
+  background-position: 0 -517px !important;
+}
+
+.flag.cu ,.flag.CU{
+  background-position: 0 -528px !important;
+}
+
+.flag.cr,.flag.CR {
+  background-position: 0 -539px !important;
+}
+
+.flag.cs ,.flag.CS{
+  background-position: 0 -550px !important;
+}
+
+.flag.cv ,.flag.CV{
+  background-position: 0 -561px !important;
+}
+
+.flag.cv ,.flag.CV{
+  background-position: 0 -572px !important;
+}
+
+.flag.cy,.flag.CY {
+  background-position: -16px 0 !important;
+}
+
+.flag.cz ,.flag.CZ{
+  background-position: -16px -11px !important;
+}
+
+.flag.de ,.flag.DE {
+  background-position: -16px -22px !important;
+}
+
+.flag.dj,.flag.DJ {
+  background-position: -16px -33px !important;
+}
+
+.flag.dk,.flag.DK {
+  background-position: -16px -44px !important;
+}
+
+.flag.dm ,.flag.DM{
+  background-position: -16px -55px !important;
+}
+
+.flag.do ,.flag.DO{
+  background-position: -16px -66px !important;
+}
+
+.flag.dz,.flag.DZ {
+  background-position: -16px -77px !important;
+}
+
+.flag.ec,.flag.EC {
+  background-position: -16px -88px !important;
+}
+
+.flag.ee,.flag.EE {
+  background-position: -16px -99px !important; 
+}
+
+.flag.eg,.flag.EG {
+  background-position: -16px -110px !important;
+}
+
+.flag.eh,.flag.EH {
+  background-position: -16px -121px !important;
+}
+
+.flag.england,.flag.ENGLAND {
+  background-position: -16px -132px !important;
+}
+
+.flag.er,.flag.ER {
+  background-position: -16px -143px !important;
+}
+
+.flag.es,.flag.ES {
+  background-position: -16px -154px !important;
+}
+
+.flag.et,.flag.ET {
+  background-position: -16px -165px !important;
+}
+
+.flag.eu ,.flag.EU{
+  background-position: -16px -176px !important;
+}
+
+.flag.fam,.flag.FAM {
+  background-position: -16px -187px !important;
+}
+
+.flag.fi,.flag.FI {
+  background-position: -16px -198px !important;
+}
+
+.flag.fj,.flag.FJ {
+  background-position: -16px -209px !important;
+}
+
+.flag.fk,.flag.FK {
+  background-position: -16px -220px !important;
+}
+
+.flag.fm,.flag.FM {
+  background-position: -16px -231px !important;
+}
+
+.flag.fo,.flag.FO {
+  background-position: -16px -242px !important;
+}
+
+.flag.fr,.flag.FR {
+  background-position: -16px -253px !important;
+}
+
+.flag.ga,.flag.GA {
+  background-position: -16px -264px !important;
+}
+
+.flag.gb,.flag.GB {
+  background-position: -16px -275px !important;
+}
+
+.flag.gd,.flag.GD {
+  background-position: -16px -286px !important;
+}
+
+.flag.ge,.flag.GE {
+  background-position: -16px -297px !important;
+}
+
+.flag.gf,.flag.GF {
+  background-position: -16px -308px !important;
+}
+
+.flag.gh ,.flag.GH{
+  background-position: -16px -319px !important;
+}
+
+.flag.gi,.flag.GI {
+  background-position: -16px -330px !important;
+}
+
+.flag.gl,.flag.GL {
+  background-position: -16px -341px !important;
+}
+
+.flag.gm,.flag.GM {
+  background-position: -16px -352px !important;
+}
+
+.flag.gn,.flag.GN {
+  background-position: -16px -363px !important;
+}
+
+.flag.gp,.flag.GP {
+  background-position: -16px -374px !important;
+}
+
+.flag.gq,.flag.GQ {
+  background-position: -16px -385px !important;
+}
+
+.flag.gr,.flag.GR {
+  background-position: -16px -396px !important;
+}
+
+.flag.gs,.flag.GS {
+  background-position: -16px -407px !important;
+}
+
+.flag.gt,.flag.GT {
+  background-position: -16px -418px !important;
+}
+
+.flag.gu,.flag.GU {
+  background-position: -16px -429px !important;
+}
+
+.flag.gw,.flag.GW {
+  background-position: -16px -440px !important;
+}
+
+.flag.gy ,.flag.GY{
+  background-position: -16px -451px !important;
+}
+
+.flag.hk,.flag.HK {
+  background-position: -16px -462px !important;
+}
+
+.flag.hm,.flag.HM {
+  background-position: -16px -473px !important;
+}
+
+.flag.hn,.flag.HN {
+  background-position: -16px -484px !important;
+}
+
+.flag.hr,.flag.HR {
+  background-position: -16px -495px !important;
+}
+
+.flag.ht,.flag.HT {
+  background-position: -16px -506px !important;
+}
+
+.flag.hu,.flag.HU {
+  background-position: -16px -517px !important;
+}
+
+.flag.id,.flag.ID {
+  background-position: -16px -528px !important;
+}
+
+.flag.ie ,.flag.IE{
+  background-position: -16px -539px !important;
+}
+
+.flag.il ,.flag.IL{
+  background-position: -16px -550px !important;
+}
+
+.flag.in,.flag.IN {
+  background-position: -16px -561px !important;
+}
+
+.flag.io,.flag.IO {
+  background-position: -16px -572px !important;
+}
+
+.flag.iq ,.flag.IQ{
+  background-position: -32px 0 !important;
+}
+
+.flag.ir,.flag.IR {
+  background-position: -32px -11px !important;
+}
+
+.flag.is,.flag.IS {
+  background-position: -32px -22px !important;
+}
+
+.flag.it,.flag.IT {
+  background-position: -32px -33px !important;
+}
+
+.flag.jm ,.flag.JM{
+  background-position: -32px -44px !important;
+}
+
+.flag.jo,.flag.JO{
+  background-position: -32px -55px !important;
+}
+
+.flag.jp ,.flag.JP{
+  background-position: -32px -66px !important;
+}
+
+.flag.ke,.flag.KE {
+  background-position: -32px -77px !important;
+}
+
+.flag.kg,.flag.KG {
+  background-position: -32px -88px !important;
+}
+
+.flag.kh ,.flag.KH{
+  background-position: -32px -99px !important;
+}
+
+.flag.ki,.flag.KI {
+  background-position: -32px -110px !important;
+}
+
+.flag.km ,.flag.KM{
+  background-position: -32px -121px !important;
+}
+
+.flag.kn,.flag.KN {
+  background-position: -32px -132px !important;
+}
+
+.flag.kp,.flag.KP {
+  background-position: -32px -143px !important;
+}
+
+.flag.kr ,.flag.KR{
+  background-position: -32px -154px !important;
+}
+
+.flag.kw,.flag.KW {
+  background-position: -32px -165px !important;
+}
+
+.flag.ky,.flag.KY {
+  background-position: -32px -176px !important;
+}
+
+.flag.kz,.flag.KZ {
+  background-position: -32px -187px !important;
+}
+
+.flag.la,.flag.LA {
+  background-position: -32px -198px !important;
+}
+
+.flag.lb,.flag.LB {
+  background-position: -32px -209px !important;
+}
+
+.flag.lc,.flag.LC {
+  background-position: -32px -220px !important;
+}
+
+.flag.li,.flag.LI {
+  background-position: -32px -231px !important;
+}
+
+.flag.lr,.flag.LR {
+  background-position: -32px -242px !important;
+}
+
+.flag.lk,.flag.LK {
+  background-position: -32px -253px !important;
+}
+
+.flag.ls,.flag.LS {
+  background-position: -32px -264px !important;
+}
+
+.flag.lt ,.flag.LT{
+  background-position: -32px -275px !important;
+}
+
+.flag.lu,.flag.LU {
+  background-position: -32px -286px !important;
+}
+
+.flag.lv,.flag.LV {
+  background-position: -32px -297px !important;
+}
+
+.flag.ly,.flag.LY{
+  background-position: -32px -308px !important;
+}
+
+.flag.ma ,.flag.MA{
+  background-position: -32px -319px !important;
+}
+
+.flag.mc,.flag.MC {
+  background-position: -32px -330px !important;
+}
+
+.flag.md ,.flag.MD{
+  background-position: -32px -341px !important;
+}
+
+.flag.me,.flag.ME {
+  background-position: -32px -352px !important;
+}
+
+.flag.mg,.flag.MG {
+  background-position: -32px -363px !important;
+}
+
+.flag.mh,.flag.MH {
+  background-position: -32px -374px !important;
+}
+
+.flag.mk,.flag.MK {
+  background-position: -32px -385px !important;
+}
+
+.flag.ml,.flag.ML {
+  background-position: -32px -396px !important;
+}
+
+.flag.mm,.flag.MM {
+  background-position: -32px -407px !important;
+}
+
+.flag.mn,.flag.MN {
+  background-position: -32px -418px !important;
+}
+
+.flag.mo,.flag.MO {
+  background-position: -32px -429px !important;
+}
+
+.flag.mp ,.flag.MP{
+  background-position: -32px -440px !important;
+}
+
+.flag.mq,.flag.MQ {
+  background-position: -32px -451px !important;
+}
+
+.flag.mr,.flag.MR {
+  background-position: -32px -462px !important;
+}
+
+.flag.ms,.flag.MS {
+  background-position: -32px -473px !important;
+}
+
+.flag.mt,.flag.MT {
+  background-position: -32px -484px !important;
+}
+
+.flag.mu,.flag.MU {
+  background-position: -32px -495px !important;
+}
+
+.flag.mv,.flag.MV {
+  background-position: -32px -506px !important;
+}
+
+.flag.mw,.flag.MW {
+  background-position: -32px -517px !important;
+}
+
+.flag.mx ,.flag.MX{
+  background-position: -32px -528px !important;
+}
+
+.flag.my ,.flag.MY{
+  background-position: -32px -539px !important;
+}
+
+.flag.mz ,.flag.MZ{
+  background-position: -32px -550px !important;
+}
+
+.flag.na,.flag.NA {
+  background-position: -32px -561px !important;
+}
+
+.flag.nc,.flag.NC {
+  background-position: -32px -572px !important;
+}
+
+.flag.ne,.flag.NE {
+  background-position: -48px 0 !important;
+}
+
+.flag.nf,.flag.NF {
+  background-position: -48px -11px !important;
+}
+
+.flag.ng ,.flag.NG{
+  background-position: -48px -22px !important;
+}
+
+.flag.ni,.flag.NI {
+  background-position: -48px -33px !important;
+}
+
+.flag.nl,.flag.NL {
+  background-position: -48px -44px !important;
+}
+
+.flag.no,.flag.NO {
+  background-position: -48px -55px !important;
+}
+
+.flag.np,.flag.NP {
+  background-position: -48px -66px !important;
+}
+
+.flag.nr,.flag.NR {
+  background-position: -48px -77px !important;
+}
+
+.flag.nu,.flag.NU {
+  background-position: -48px -88px !important;
+}
+
+.flag.nz,.flag.NZ {
+  background-position: -48px -99px !important;
+}
+
+.flag.om ,.flag.OM{
+  background-position: -48px -110px !important;
+}
+
+.flag.pa,.flag.PA {
+  background-position: -48px -121px !important;
+}
+
+.flag.pe,.flag.PE {
+  background-position: -48px -132px !important;
+}
+
+.flag.pf ,.flag.PF{
+  background-position: -48px -143px !important;
+}
+
+.flag.pg ,.flag.PG{
+  background-position: -48px -154px !important;
+}
+
+.flag.ph,.flag.PH {
+  background-position: -48px -165px !important;
+}
+
+.flag.pk,.flag.PK {
+  background-position: -48px -176px !important;
+}
+
+.flag.pl,.flag.PL {
+  background-position: -48px -187px !important;
+}
+
+.flag.pm,.flag.PM {
+  background-position: -48px -198px !important;
+}
+
+.flag.pn,.flag.PN {
+  background-position: -48px -209px !important;
+}
+
+.flag.pr,.flag.PR {
+  background-position: -48px -220px !important;
+}
+
+.flag.ps,.flag.PS {
+  background-position: -48px -231px !important;
+}
+
+.flag.pt,.flag.PT {
+  background-position: -48px -242px !important;
+}
+
+.flag.pw,.flag.PW {
+  background-position: -48px -253px !important;
+}
+
+.flag.py,.flag.PY {
+  background-position: -48px -264px !important;
+}
+
+.flag.qa,.flag.QA {
+  background-position: -48px -275px !important;
+}
+
+.flag.re,.flag.RE {
+  background-position: -48px -286px !important;
+}
+
+.flag.ro ,.flag.RO{
+  background-position: -48px -297px !important;
+}
+
+.flag.rs,.flag.RS {
+  background-position: -48px -308px !important;
+}
+
+.flag.ru,.flag.RU {
+  background-position: -48px -319px !important;
+}
+
+.flag.rw,.flag.RW {
+  background-position: -48px -330px !important;
+}
+
+.flag.sa,.flag.SA {
+  background-position: -48px -341px !important;
+  
+}
+
+.flag.sb,.flag.SB{
+  background-position: -48px -352px !important;
+}
+
+.flag.sc,.flag.SC { 
+  background-position: -48px -363px !important;
+}
+
+.flag.scotland {
+  background-position: -48px -374px !important;
+}
+
+.flag.sd,.flag.SD {
+  background-position: -48px -385px !important;
+}
+
+.flag.se,.flag.SE {
+  background-position: -48px -396px !important;
+}
+
+.flag.sg,.flag.SG {
+  background-position: -48px -407px !important;
+}
+
+.flag.sh ,.flag.SH{
+  background-position: -48px -418px !important;
+}
+
+.flag.si,.flag.SI {
+  background-position: -48px -429px !important;
+}
+
+.flag.sj,.flag.SJ {
+  background-position: -48px -440px !important;
+}
+
+.flag.sk,.flag.SK {
+  background-position: -48px -451px !important;
+}
+
+.flag.sl,.flag.SL {
+  background-position: -48px -462px !important;
+}
+
+.flag.sm ,.flag.SM{
+  background-position: -48px -473px !important;
+}
+
+.flag.sn,.flag.SN {
+  background-position: -48px -484px !important;
+}
+
+.flag.so,.flag.SO {
+  background-position: -48px -495px !important;
+}
+
+.flag.sr,.flag.SR {
+  background-position: -48px -506px !important;
+}
+
+.flag.st,.flag.ST {
+  background-position: -48px -517px !important;
+}
+
+.flag.sv ,.flag.SV{
+  background-position: -48px -528px !important;
+}
+
+.flag.sy ,.flag.SY{
+  background-position: -48px -539px !important;
+}
+
+.flag.sz ,.flag.SZ{
+  background-position: -48px -550px !important;
+}
+
+.flag.tc,.flag.TC {
+  background-position: -48px -561px !important;
+}
+
+.flag.td,.flag.TD {
+  background-position: -48px -572px !important;
+}
+
+.flag.tf,.flag.TF {
+  background-position: -64px 0 !important;
+}
+
+.flag.tg,.flag.TG {
+  background-position: -64px -11px !important;
+}
+
+.flag.th,.flag.TH {
+  background-position: -64px -22px !important;
+}
+
+.flag.tj,.flag.TJ {
+  background-position: -64px -33px !important;
+}
+
+.flag.tk,.flag.TK {
+  background-position: -64px -44px !important;
+}
+
+.flag.tl,.flag.TL {
+  background-position: -64px -55px !important;
+}
+
+.flag.tm,.flag.TM {
+  background-position: -64px -66px !important;
+}
+
+.flag.tn,.flag.TN {
+  background-position: -64px -77px !important;
+}
+
+.flag.to ,.flag.TO{
+  background-position: -64px -88px !important;
+}
+
+.flag.tr,.flag.TR {
+  background-position: -64px -99px !important;
+}
+
+.flag.tt ,.flag.TT{
+  background-position: -64px -110px !important;
+}
+
+.flag.tv,.flag.TV {
+  background-position: -64px -121px !important;
+}
+
+.flag.tw,.flag.TW {
+  background-position: -64px -132px !important;
+}
+
+.flag.tz,.flag.TZ{
+  background-position: -64px -143px !important;
+}
+
+.flag.ua ,.flag.UA{
+  background-position: -64px -154px !important;
+}
+
+.flag.ug,.flag.UG {
+  background-position: -64px -165px !important;
+}
+
+.flag.um,.flag.UM {
+  background-position: -64px -176px !important;
+}
+
+.flag.us ,.flag.US {
+  background-position: -64px -187px !important;
+}
+
+.flag.uy,.flag.UY {
+  background-position: -64px -198px !important;
+}
+
+.flag.uz,.flag.UZ {
+  background-position: -64px -209px !important;
+}
+
+.flag.va,.flag.VA {
+  background-position: -64px -220px !important;
+}
+
+.flag.vc,.flag.VC {
+  background-position: -64px -231px !important;
+}
+
+.flag.ve ,.flag.VE{
+  background-position: -64px -242px !important;
+}
+
+.flag.vg ,.flag.VG{
+  background-position: -64px -253px !important;
+}
+
+.flag.vi,.flag.VI {
+  background-position: -64px -264px !important;
+}
+
+.flag.vn ,.flag.VN{
+  background-position: -64px -275px !important;
+}
+
+.flag.vu,.flag.VU {
+  background-position: -64px -286px !important;
+}
+
+.flag.wales ,.flag.WALES {
+  background-position: -64px -297px !important;
+}
+
+.flag.wf,.flag.WF {
+  background-position: -64px -308px  !important;
+}
+
+.flag.ws ,.flag.WS{
+  background-position: -64px -319px !important;
+}
+
+.flag.ye,.flag.YE {
+  background-position: -64px -330px !important;
+}
+
+.flag.yt ,.flag.YT{
+  background-position: -64px -341px !important;
+}
+
+.flag.za,.flag.ZA {
+  background-position: -64px -352px !important;
+}
+
+.flag.zm,.flag.ZM {
+  background-position: -64px -363px !important;
+}
+
+.flag.zw,.flag.ZW {
+  background-position: -64px -374px !important;
+}

@@ -1,0 +1,44 @@
+.breadcrumb {
+  overflow: hidden;
+  height: auto;
+  width: 100%;
+  display: block;
+  padding: 0px !important;
+  background: #ffffff70 !important;
+  border-bottom: 1px solid #f1f1f1;
+  .container-fluid {
+    padding-left: 120px;
+    padding-right: 120px;
+  }
+  ul {
+    list-style: none;
+    li {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      &:after{
+        content: "/";
+        margin-right: 10px;
+        color: #ccc;
+
+      }
+      &:nth-child(1) {
+        a {
+          padding-left: 0;
+        }
+      }
+      &:last-child::after{
+   
+          display: none;
+        }
+      
+
+      a {
+        display: block;
+        color: $main-color !important;
+        padding: 15px 15px;
+        text-decoration: none;
+      }
+    }
+  }
+}

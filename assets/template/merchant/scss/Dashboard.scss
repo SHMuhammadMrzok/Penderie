@@ -1,0 +1,356 @@
+.dashboard{
+  direction: rtl;
+  margin: 30px 0;
+  background: white;
+  .container-fluid{
+    margin-right: 0;
+    margin-left: 10px;
+    max-width: 100%;
+  }
+  .dashboard-content{
+    background-color: white;
+    .dashboard-right{
+      padding: 0;
+      border-left: 1px solid #dedbd8;
+      ul{
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        text-align: right;
+        li{
+          margin: 0;
+          @include transition(0.3);
+          a,.sub-menu-item{
+            padding: 15px;
+            color: #554b43;
+            font-size: 16px;
+            width: 100%;
+            font-weight: bold;
+            letter-spacing: -1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            p{
+              @include transition(0.3);
+              margin: 0;
+            }
+            svg{
+              @include transition(0.3);
+              fill:$MainColor;
+              width: 15px;
+              height: 15px;
+              transform: rotate(270deg);
+            }
+            &:hover{
+              p{
+                @include transition(0.3);
+                color: white;
+              }
+              svg{
+                @include transition(0.3);
+                fill: white;
+              }
+            }
+          }
+          &.active,&:hover{
+            @include transition(0.3);
+            background-color:$MainColor;
+            a{
+              @include transition(0.3);
+              color: white;
+            }
+            &.active{
+              a{
+                svg{
+                  @include transition(0.3);
+                  fill: $MainColor;
+                }
+              }
+            }
+          }
+        }
+        .menu-click{
+          &.activate{
+            @include transition(0.3);
+            background-color: #dddddd;
+            a{
+              @include transition(0.3);
+              color: $MainColor;
+            }
+          }
+        }
+        .sub-menu {
+          display: none;
+          background-color: #f7f7f7;
+          ul{
+            li{
+              span{
+                font-size: 15px;
+              }
+            }
+          }
+        }
+      }
+    }
+    .dashboard-left{
+      padding: 0 30px;
+      min-height: 90vh;
+      ul{
+        padding: 0;
+        border: 1px solid $MainColor;
+        margin: 0;
+        list-style: none;
+        text-align: right;
+        li{
+          .title{
+            background-color: $MainColor;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding:5px 10px;
+            h3{
+              color: white;
+              letter-spacing: -1px;
+              margin: 5px 0;
+              font-size: 20px;
+              font-weight: bold;
+            }
+            button{
+              padding: 0;
+              a{
+                display: inline-block;
+                padding: 5px 20px;
+                color: $MainColor;
+                background-color: white;
+              }
+            }
+          }
+          .right-content{
+            padding: 25px;
+            .list{
+              display: flex;
+              flex-wrap: wrap;
+              margin-bottom: 50px;
+              .relate{
+                text-align: center;
+                margin:  20px 5px;
+                a{
+                  @include transition(0.3);
+                  background-color: #eeeeee;
+                  cursor: pointer;
+                  color: #554b43;
+                  display: block;
+                  padding: 10px 20px;
+                  &.active,&:hover{
+                    @include transition(0.3);
+                    background-color: $MainColor;
+                    color: white;
+                  }
+                }
+              }
+            }
+            .form-group{
+              margin-bottom: 2rem;
+              .form-item{
+                display: flex;
+                align-items: center;
+                label{
+                  width: 100px;
+                  color: #554b43;
+                  font-size: 14px;
+                  font-weight: bold;
+                  margin: 0 5px;
+                  text-transform: uppercase;
+                  letter-spacing: -1px;
+                  &.special{
+                    width: 130px;
+                  }
+                  span{
+                    color: $MainColor;
+                  }
+                }
+                .form-control{
+                  font-size: 14px;
+                  padding: 10px;
+                  border-radius: 0;
+                  @include Placeholder(#aaa);
+                  background-color: #fdfdfd;
+                }
+                select{
+                  height: 43px;
+                  cursor: pointer;
+                  &.form-control{
+                    padding: 0 5px;
+                  }
+                }
+                textarea{
+                  height: 150px;
+                }
+                button{
+                  width: 120px;
+                  height: 40px;
+                  cursor: pointer;
+                  @include transition(0.3);
+                  background-color: $MainColor;
+                  margin: 5px;
+                  color: white;
+                  border: 2px solid $MainColor;
+                  &.cancel{
+                    @include transition(0.3);
+                    background-color: #d51317;
+                    border-color:#d51317;
+                    &:hover{
+                      @include transition(0.3);
+                      background-color: transparent;
+                      color: black;
+                    }
+                  }
+                  &:hover{
+                    @include transition(0.3);
+                    background-color: transparent;
+                    color: black;
+                  }
+                }
+              }
+            }
+            .en-version{
+              direction: ltr;
+              text-align: left;
+            }
+            /*tables*/
+            .table{
+              th{
+                vertical-align: middle;
+                text-align: center;
+                font-size: 15px;
+                border-top: 3px solid $MainColor;
+                padding: 10px 5px;
+              }
+              td{
+                padding: 10px 5px;
+                vertical-align: middle;
+                font-size: 13px;
+                text-align: center;
+                img{
+                  width: 35px;
+                  vertical-align: middle;
+                }
+                i{
+                  color: #fbbd45;
+                }
+                .blue{
+                  background-color: cornflowerblue;
+                  padding: 0 7px;
+                  border-radius: 10px;
+                  color: white;
+                }
+                svg{
+                  width: 20px;
+                  height: 20px;
+                  fill: $MainColor;
+                }
+                .table-buttons{
+                  display: flex;
+                  justify-content: center;
+                  button{
+                    padding: 0;
+                    margin: 2px;
+                    a{
+                      display: inline-block;
+                      padding: 5px 10px;
+                      color: white;
+                      background-color: $MainColor;
+                      &.red{
+                        background-color: darkred;
+                      }
+                      &.green{
+                        background-color: #2ba388;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            /*.pagination*/
+            .NavPageNum{
+              .form-control{
+                font-size: 14px;
+                padding: 10px;
+                border-radius: 0;
+                @include Placeholder(#aaa);
+                background-color: #fdfdfd;
+              }
+              select{
+                height: 43px;
+                cursor: pointer;
+                &.form-control{
+                  padding: 0 5px;
+                }
+              }
+              .pagination{
+                justify-content: center;
+                margin: 15px 0;
+                div{
+                  display: flex;
+                  align-items: center;
+                  cursor: pointer;
+                  span{
+                    width: 30px;
+                    height: 30px;
+                    border: 1px solid #eeeeee;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 50%;
+                    margin: 0 2px;
+                    svg{
+                      width: 12px;
+                      height: 12px;
+                      fill:$MainColor;
+                      transform: rotate(90deg);
+                      &.last{
+                        transform: rotate(270deg);
+                      }
+                    }
+                    &:hover{
+                      @include transition(0.3);
+                      background-color: #eee;
+                    }
+                    &.active{
+                      background-color: #eee;
+                      color: $MainColor;
+                    }
+
+                  }
+                }
+              }
+            }
+            .sumitButton{
+              width: 120px;
+              background-color: $MainColor;
+              cursor: pointer;
+              color: white;
+              display: block;
+              margin: 20px auto;
+              padding: 15px;
+            }
+
+          }
+        }
+      }
+    }
+
+  }
+
+}
+.btn-default{
+  background-color: $GrayColor;
+}
+
+
+
+
+
+
+

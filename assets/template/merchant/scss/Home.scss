@@ -1,0 +1,383 @@
+/*welcome*/
+.welcome{
+  @include background("welcome.png","",920);
+  position: relative;
+  .welcome-content{
+    text-align: center;
+    padding: 165px 0 0 0;
+    h2{
+      color: white;
+      font-weight: bold;
+      font-size: $MainFontSize + 22px;
+      margin: 0;
+      letter-spacing: -1px;
+    }
+    .welcome-border{
+      display: flex;
+      justify-content: center;
+      margin: 25px 0 40px 0;
+      hr{
+        width: 120px;
+        height: 10px;
+        border-color: transparent;
+        margin: 0;
+        &:nth-child(1){
+          background-color: #2e77a8;
+        }
+        &:nth-child(2){
+          background-color: #bc362d;
+        }
+        &:nth-child(3){
+          background-color: #f09c2a;
+        }
+        &:nth-child(4){
+          background-color: #2ba388;
+        }
+        &:nth-child(5){
+          background-color: #93b850;
+        }
+      }
+    }
+    p{
+      font-size: $MainFontSize;
+      color: #fefefe;
+      width: 525px;
+      font-weight: normal;
+      line-height: 2;
+      margin: 0 auto;
+    }
+    button{
+      margin: 80px auto;
+      background-color: transparent;
+      a{
+        border-radius: 40px;
+        font-size: $MainFontSize - 4px;
+        font-weight: bold;
+        background-color: white;
+        @include transition(0.3);
+        color: $MainColor;
+        padding: 22px 70px;
+        &:hover{
+          @include transition(0.3);
+          padding: 18px 60px;
+          color: $SecondColor;
+        }
+      }
+    }
+  }
+  .login{
+    direction: rtl;
+    position: absolute;
+    top: 650px;
+    left:22.75%;
+    width: 54.5%;
+    background-color: white;
+    padding: 50px 80px;
+    margin: 0 auto;
+    border-radius:3px;
+    box-shadow: 0 5px 15px 0px #c2bebe;
+    h5{
+      margin: 0 auto 50px auto;
+      font-size: $MainFontSize;
+      font-weight: normal;
+      color: $SecondColor;
+      text-align: center;
+    }
+    .form-control{
+      background-color: #eaeaea;
+      border-radius: 3px;
+      line-height: 3.5;
+      margin-bottom: 25px;
+      border: none;
+      @include Placeholder(#c6c8cb);
+      &:focus{
+        color: white;
+        @include transition(0.3);
+        box-shadow: none;
+        border-color: transparent;
+        background-color: $SecondColor;
+      }
+    }
+    .forget-pass{
+      text-align: right;
+      font-size: $MainFontSize - 4px;
+      a{
+        color: $SecondColor;
+      }
+    }
+    .checkbox-input {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      label {
+        font-size: 20px;
+        margin:  0 10px 0 0;
+      }
+      .custom-checkbox {
+        -webkit-appearance: none;
+        background-color: #ffffff;
+        padding: 7px;
+        border-radius: 2px;
+        display: inline-block;
+        position: relative;
+        border: 3px solid $MainColor;
+        cursor: pointer;
+
+        &:checked {
+          background-color: $MainColor;
+          &:after {
+            content: '\2714';
+            font-size: 20px;
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            color: #fff;
+          }
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+    .btn{
+      padding: 1.690rem 5.65rem;
+      border-radius: 40px;
+      display: block;
+      font-size: $MainFontSize - 4px;
+      @include transition(0.3);
+      border: 2px solid $MainColor;
+      color: white;
+      line-height: 1.2;
+      &.btn-default{
+        @include transition(0.3);
+        background-color: $MainColor;
+        margin: 50px auto 0 auto;
+      }
+      &:focus{
+       outline: 0;
+        box-shadow: none;
+      }
+      &:hover{
+        @include transition(0.3);
+        background-color: white;
+        color: $MainColor;
+      }
+    }
+  }
+}
+/*why*/
+.why{
+  background-color: $GrayColor;
+  padding: 440px 0 80px 0;
+  direction: rtl;
+  h3{
+    font-size: $MainFontSize + 18px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing:-1px;
+    margin: 0;
+  }
+  hr{
+    width: 245px;
+    height:4px;
+    background-color: $MainColor;
+    border:none;
+    margin: 30px auto 120px auto;
+  }
+  .icon{
+    border: 2px solid $MainColor;
+    border-radius: 50%;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg{
+      width: 60px;
+      height:60px;
+      fill: $MainColor;
+    }
+  }
+  .content{
+    text-align: right;
+    padding-right: 20px;
+    h4{
+      font-size: $MainFontSize;
+      font-weight: bold;
+      margin: 0 0 20px 0;
+      letter-spacing: -1px;
+    }
+    p{
+      font-size: $MainFontSize - 4px;
+      font-weight: normal;
+      color: #6e6e6e;
+      margin-bottom: 60px;
+      line-height: 2;
+    }
+  }
+  button{
+    background-color: transparent;
+    display: block;
+    margin: 40px auto 23px;
+    a{
+      font-size: $MainFontSize - 4px;
+      font-weight: bold;
+      padding: 20px 53px;
+      border: 2px solid $MainColor;
+      @include transition(0.3);
+      background-color: white;
+      color: $MainColor;
+      border-radius: 40px;
+      &:hover{
+        @include transition(0.3);
+        background-color: $MainColor;
+        color: white;
+      }
+    }
+  }
+}
+/*video*/
+.publish-video {
+  position: relative;
+  img{
+    width: 100%;
+    min-height: 200px;
+  }
+  a {
+    outline: 0;
+  }
+  .video-content {
+    position: absolute;
+    right: 0;
+    bottom:0;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    h3 {
+      color: white;
+      font-size: 36px;
+      font-weight: bold;
+      text-transform: uppercase;
+      width: 100%;
+      text-align: center;
+    }
+    .icon{
+      text-align: center;
+      width: 100%;
+      a{
+        display: inline-block;
+        svg{
+          cursor: pointer;
+          width: 170px;
+          height: 170px;
+          display: block;
+          margin:  115px auto 0;
+        }
+      }
+    }
+  }
+}
+/*how*/
+.how{
+  background-color: $GrayColor;
+  padding: 170px 0 110px 0;
+  text-align: center;
+  direction: rtl;
+  position: relative;
+  h3{
+    font-size: $MainFontSize + 18px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing:-1px;
+    margin: 0;
+  }
+  hr{
+    width: 245px;
+    height:4px;
+    background-color: $MainColor;
+    border:none;
+    margin: 30px auto 75px auto;
+  }
+  .how-icon{
+    width: 160px;
+    height: 160px;
+    background: $MainColor;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    position: relative;
+    span{
+      width: 45px;
+      height: 45px;
+      color: white;
+      background: $MainColor;
+      border-radius: 50%;
+      border: 4px solid $GrayColor;
+      position: absolute;
+      top: -22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: $MainColor;
+      font-weight: bold;
+    }
+    svg{
+      width: 75px;
+      height: 75px;
+      fill: white;
+    }
+    hr{
+      position: absolute;
+      right: 110%;
+      bottom: 0;
+      width: 200px;
+      height:1px;
+      background-color: $MainColor;
+      border:none;
+    }
+  }
+  h4{
+    font-size: $MainFontSize;
+    font-weight: bold;
+    letter-spacing: -1px;
+    margin: 50px auto 20px auto;
+  }
+  p{
+    font-size: $MainFontSize - 4px;
+    font-weight: normal;
+    color: #6e6e6e;
+    line-height: 2;
+  }
+
+  button{
+    background-color: transparent;
+    display: block;
+    margin: 70px auto 23px;
+    a{
+      font-size: $MainFontSize - 4px;
+      font-weight: bold;
+      padding: 20px 53px;
+      border: 2px solid $MainColor;
+      @include transition(0.3);
+      background-color: white;
+      color: $MainColor;
+      border-radius: 40px;
+      &:hover{
+        @include transition(0.3);
+        background-color: $MainColor;
+        color: white;
+      }
+    }
+  }
+}
+
+
+
+
+

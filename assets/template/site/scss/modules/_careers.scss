@@ -1,0 +1,134 @@
+.search-section {
+  @extend .block;
+  padding: 100px 0;
+  background: darken($main-color, 3%);
+  background-size: caver;
+
+  h3 {
+    color: #fff;
+    font-weight: bold;
+    width: 100%;
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 15px;
+  }
+
+  form {
+    display: flex;
+    width: 100%;
+
+    input {
+      width: 100%;
+      display: inline-flex;
+      padding: 10px 15px;
+      border: 0;
+      border-radius: 0;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    button {
+      width: 100px;
+      background: $sec-color;
+      color: #fff;
+      border-radius: 0;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      cursor: pointer;
+      border: 0;
+      @include transition(300ms);
+
+      &:hover {
+        background: #000;
+        @include transition(300ms);
+      }
+    }
+  }
+}
+.join-now {
+  @extend .block;
+  text-align: center;
+  padding: 50px 0;
+  h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #000;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  article {
+    color: darken($gray-font, 20%);
+    line-height: 2;
+    font-weight: normal;
+    font-size: 0.95rem;
+  }
+}
+.jobs-row {
+  @extend .block;
+  padding: 50px 0;
+  background: #eee;
+.title{
+    text-align: center;
+    border: 0;
+    h1{
+        font-weight: 900;
+        width: 100%;
+        padding-bottom: 0;
+
+        margin-bottom: 0;
+    }
+}
+  .col-md-6{
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  .job-container {
+    @extend .flex;
+    border: 1px solid $border-color;
+    background: $white-color;
+    padding: 20px;
+    height: 100%;
+ 
+    flex-flow: column;
+    position: relative;
+    @include transition(300ms);
+    &:hover{
+        border: 1px solid $sec-color;
+        @include transition(300ms);
+        h3{
+            color: $sec-color;
+            @include transition(300ms);
+        }
+    }
+    h3 {
+      color: $black-color;
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      @include transition(300ms);
+    }
+    p {
+      color: darken($gray-font, 30%);
+      font-size: 0.9rem;
+    }
+    article {
+      color: darken($gray-font, 30%);
+      font-size: .9rem;
+      margin-top: 10px;
+      font-weight: normal;
+    }
+    a {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 11;
+    }
+  }
+}
