@@ -157,13 +157,13 @@ class Payment_gateways extends CI_Controller {
         elseif($type == 'hyperpay_visa')
         {
             $payment_brand  = 'VISA MASTER';
-            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso);
+            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso, $lang_id);
             echo $form;
         }
         elseif($type == 'mada')
         {
             $payment_brand  = 'MADA';
-            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso);
+            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso, $lang_id);
             echo $form;
         }
 
@@ -202,6 +202,8 @@ class Payment_gateways extends CI_Controller {
     public function process_hyperpay_from_cart($cart_id, $type)
     {
         $this->load->model('shopping_cart_model');
+
+        $lang_id         = $this->data['active_language_row']->id;
         
         $cart_id =  explode('_', $cart_id)[0];
         $order_data   = $this->shopping_cart_model->get_cart_data($cart_id);
@@ -233,28 +235,28 @@ class Payment_gateways extends CI_Controller {
         {
             //$payment_brand  = 'VISA MASTER MADA STC_PAY';
             $payment_brand  = 'VISA MASTER';
-            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_email  ,$payment_brand, $order_data, $user_data, $country_iso);
+            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_email  ,$payment_brand, $order_data, $user_data, $country_iso, $lang_id);
 
             echo $form;
         }
         elseif($type == 'hyperpay_stc_pay')
         {
             $payment_brand  = 'STC_PAY';
-            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso);
+            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso, $lang_id);
 
             echo $form;
         }
         elseif($type == 'mada')
         {
             $payment_brand  = 'MADA';
-            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso);
+            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso, $lang_id);
 
             echo $form;
         }
         elseif($type == 'apple_pay')
         {
             $payment_brand  = 'apple_pay';
-            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso);
+            $form           = $this->hyperpay->prepareCheckout($order_id, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso, $lang_id);
 
             echo $form;
         }
@@ -352,7 +354,7 @@ class Payment_gateways extends CI_Controller {
         }
         elseif($paymentBrand == 'MADA')
         {
-            $payment_method_id = '15';
+            $payment_method_id = '16'; // '15';
         }
 
         $ip_address = $this->input->ip_address();

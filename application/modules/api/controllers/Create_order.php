@@ -396,7 +396,7 @@ deviceId:{length=32,bytes=0xa5f433ca6fffd6db67ac6a229d6ca290...efca0f52f3684667}
                             $template_payment_method = $bank_lang_var." : ".$bank_data->bank."<br>".$bank_account_name_lang_var." : ".$bank_data->account_name."<br>".$bank_account_num_lang_var." : ".$bank_data->account_number;
                         }
                         // else if( in_array($payment_method_id, array(13, 16)))// Basic Code
-                        else if( in_array($payment_method_id, array(13, 16, 17, 18, 19, 20))) // Mrzok Edit = to add MyFatoora payment methods
+                        else if( in_array($payment_method_id, array(13, 15, 16, 17, 18, 19, 20, 21))) // Mrzok Edit = to add MyFatoora payment methods , hyperpay stc pay , Moyasar
                         {
                             $template_payment_method = $this->payment_methods_model->get_payment_method_name($payment_method_id, $lang_id);
                             $products_names = '';
@@ -1356,6 +1356,10 @@ deviceId:{length=32,bytes=0xa5f433ca6fffd6db67ac6a229d6ca290...efca0f52f3684667}
         {
             $url = base_url().'orders/Payment_gateways/process_hyperpay_from_cart/'.$order_id.'/hyperpay_visa';
         }
+        elseif($payment_method_id == 15)     // MOYASAR
+        {
+            $url = base_url().'orders/Payment_gateways/process_moyasar/'.$order_id;
+        }
         elseif($payment_method_id == 16)  //mada
         {
             $url = base_url().'orders/Payment_gateways/process_hyperpay_from_cart/'.$order_id.'/mada';
@@ -1375,6 +1379,10 @@ deviceId:{length=32,bytes=0xa5f433ca6fffd6db67ac6a229d6ca290...efca0f52f3684667}
         elseif($payment_method_id == 20)     // MyFatoora => Mada
         {
             $url = base_url().'orders/Payment_gateways/process_myFatoora_from_cart/'.$order_id.'/myFatoora_mada';
+        }
+        elseif($payment_method_id == 21)     // HyperPay => STC Pay
+        {
+            $url = base_url().'orders/Payment_gateways/process_hyperpay_from_cart/'.$order_id.'/hyperpay_stc_pay';
         }
         else
         {

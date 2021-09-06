@@ -450,16 +450,21 @@ color:#000;
                             </tr>
                             <?php foreach($products_with_serials as $product){?>
                                 <tr>
-                                    <td><?php echo $product->title;?> <br/>
-                                    <?php echo '<br>'.lang('price'). ' : '. $product->final_price.' '.$order_details->currency_symbol;?><br/>
-                                    <?php echo '<br>'.lang('vat_value'). ' : '. $product->vat_value.' '.$order_details->currency_symbol;?><br/>
-                                    <?php echo '<br>'.lang('reward_points') .' : '. $product->reward_points;?></td>
+                                    <td>
+                                        <?php echo $product->title;?> <br/>
+                                        <?php echo '<br>'.lang('price'). ' : '. $product->final_price.' '.$order_details->currency_symbol;?><br/>
+                                        <?php echo '<br>'.lang('vat_value'). ' : '. $product->vat_value.' '.$order_details->currency_symbol;?><br/>
+                                        <?php echo '<br>'.lang('reward_points') .' : '. $product->reward_points;?>
+                                    </td>
+
                                     <td>
                                          <img src="<?php echo base_url();?>assets/uploads/products/<?php echo $product->image;?>" alt="<?php echo $product->title;?>"/>               
                                     </td>
+
                                     <td>
                                         <?php
-                                             if($edit_order && ! isset($product->non_serials_product)){
+                                            if($edit_order && ! isset($product->non_serials_product))
+                                            {
                                                 echo form_open('orders/admin_edit_order/update_quantity');
                                                     $quantity_data = array( 
                                                                             'type'  => 'number', 
@@ -475,10 +480,12 @@ color:#000;
                                                     <input type="hidden" name="product_id" value="<?php echo $product->product_id;?>" />
                                                     <button type="submit" class="button btn btn-primary" style="margin: auto 10px;"><?php echo lang('update_quantity');?></button>
                                                 
-                                            <?php  echo form_close(); 
-                                             }else{?>
+                                                <?php 
+                                                echo form_close(); 
+                                            }else{
+                                                ?>
                                                 <span><?php echo $product->qty;?></span>
-                                            <?php }?>
+                                            <?php } ?>
                                     </td>
                                     <?php /*<td>
                                         <?php if($edit_order){?>
@@ -491,7 +498,77 @@ color:#000;
                                     </td>
                                     */?>
                                 </tr>
-                        <?php }
+
+                                <!------------------------------Product Serials ---------------------------------->
+                                <?php
+                                    if($order_details->order_status_id != 3 && $order_details->order_status_id != 4){
+                                        if(isset($product->serials) && count($product->serials) != 0){?>
+                                            <tr class="header_tr2" style="background:rgb(202, 228, 255); color:#000;">
+
+                                                <td><strong><?php echo lang('price');?></strong></td>
+                                                <td><strong><?php echo lang('serial');?></strong></td>
+                                                <td></td>
+                                            </tr>
+                                            <tbody class="product_serials_<?php echo $product->product_id;?>">
+                                                <?php
+                                                foreach($product->serials as $serial){?>
+                                                    <tr class="serial_row_<?php echo $serial->product_serial_id;?>">
+                                                        <td>
+                                                            <del>
+                                                            <?php
+                                                            echo $product->price != $product->final_price ? $product->price.' '.$order_details->currency_symbol.'<br>' : '';
+                                                            ?>
+                                                            </del>
+                                                            <?php echo $product->final_price.' '.$order_details->currency_symbol;?>
+                                                        </td>
+                                                        <td colspan="2" style="text-align: center;">
+                                                            <?php echo $serial->dec_serial;?>
+                                                            <?php /*
+                                                            <?php if($serial->invalid == 0){?>
+                                                            <div class="serial_<?php echo $serial->product_serial_id;?>">
+                                                                <button type="button" class="btn yellow-crusta invalid_serial serial_<?php echo $serial->product_serial_id;?>" value="<?php echo $serial->product_serial_id;?>" name="serial_id" data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>" ><?php echo lang('invalid_serial');?></button>
+                                                                <span style="display: block; font-size: 12px; font-family: tahoma;" class="msg_span serial_<?php echo $serial->product_serial_id;?>"><?php echo lang('invalid_serial_will_be_replaced');?></span>
+                                                                <div><select style="display: none;" name="pocket_invalid_options" id="pocket_invalid_options<?php echo $serial->product_serial_id;?>" class="pocket_invalid_options"  data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>"></select></div>
+                                                                <div><select style="display: none;" class="invalid_options" id="invalid_options<?php echo $serial->product_serial_id;?>" data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>"></select></div>
+                                                            </div>
+                                                            <?php }else{?>
+                                                                <span style="color: red;"> <?php echo lang('invalid_serial');?> </span>
+                                                            <?php }?>
+                                                            */?>
+                                                        </td>
+                                                    </tr>
+                                                <?php }?>
+                                            </tbody>
+
+                                        <?php }
+                                    }
+                                ?>
+                                
+                                <!------------------------------Product Selected Optional Options---------------------------------->
+                                <?php
+                                if(isset($product->user_optional_fields) && count($product->user_optional_fields) != 0) { ?>
+
+                                        <?php foreach($product->user_optional_fields as $field){?>
+
+                                            <tr style="border: solid;">
+                                                <td >
+                                                    <label><?php echo $field->label;?></label>
+                                                </td>
+                                                <td colspan="2">
+                                                    <label><?php echo $field->product_optional_field_value;?></label>
+                                                    <?php if($field->has_qty == 1){?>
+                                                        <span>( <?php echo lang('quantity').' : '. $field->qty;?> )</span>
+                                                    <?php }?>
+                                                </td>
+                                            </tr>
+
+                                        <?php }?>
+
+                                    <?php 
+                                } ?>
+                                <!---------------------------------------------------------------->
+                                
+                            <?php }
                         }?>
                         
                         <tr>

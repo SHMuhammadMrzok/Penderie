@@ -566,84 +566,91 @@ color:#000;
                                                 <span><?php echo $product->qty;?></span>
                                             <?php }?>
                                         </td>
-                                        <?php if($product->return_status != 0){?>
-                                            <td>
-                                              <?php echo lang('returned_product');?><br />
-                                              <?php echo '( '.lang('quantity').' '.$product->returned_qty.' )';?><br />
-                                              <?php
-                                              if($get_order_message->notes != '')
-                                              {
-                                                echo lang('notes').' : '.$get_order_message->notes;
-                                              }
-                                              ?>
-                                            </td>
-
-                                            <td>
-                                              <?php if($product->return_status == 1){
-                                                $return_modals_array[] = $product->order_product_id; ?>
-                                                  <a href="#return_modal_<?php echo $product->order_product_id;?>" data-toggle="modal" data-oredr_product_id="<?php echo $product->order_product_id;?>" class="btn red-sunglo" style="margin-top: 3px;"><?php echo lang('update_return_status');?></a>
-                                              <?php }else if($product->return_status == 2){?>
-                                                  <span class="label label-success"><?php echo lang('accept');?></span>
-                                              <?php }else if($product->return_status == 3){?>
-                                                <span class="label label-danger"><?php echo lang('reject');?></span>
-                                            <?php }?>
-                                          </td>
-
-                                        <?php }?>
                                         <?php if($edit_order){?>
                                             <td width='7%' style="background: #e9f2fc;;"><button type="button" class="btn red-sunglo remove_product"  name="serial_id"  data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $product->product_id;?>" data-price="<?php echo $product->price;?>" ><?php echo lang('remove_product');?></button></td>
                                         <?php }?>
                                     </tr>
 
-                                    <!------------------------------------------------------------------------------------------------------->
+                                    <!---------------------- Product Return ----------------->
+                                    <?php if($product->return_status != 0){?>
+                                        <tr class="title_h1" >
+                                                <td>
+                                                <?php echo lang('returned_product');?><br />
+                                                <?php echo '( '.lang('quantity').' '.$product->returned_qty.' )';?><br />
+                                                <?php
+                                                if($get_order_message->notes != '')
+                                                {
+                                                    echo lang('notes').' : '.$get_order_message->notes;
+                                                }
+                                                ?>
+                                                </td>
+
+                                                <td colspan="2">
+                                                <?php if($product->return_status == 1){
+                                                    $return_modals_array[] = $product->order_product_id; ?>
+                                                    <a href="#return_modal_<?php echo $product->order_product_id;?>" data-toggle="modal" data-oredr_product_id="<?php echo $product->order_product_id;?>" class="btn red-sunglo" style="margin-top: 3px;"><?php echo lang('update_return_status');?></a>
+                                                <?php }else if($product->return_status == 2){?>
+                                                    <span class="label label-success"><?php echo lang('accept');?></span>
+                                                <?php }else if($product->return_status == 3){?>
+                                                    <span class="label label-danger"><?php echo lang('reject');?></span>
+                                                <?php }?>
+                                            </td>
+                                        </tr>
+                                    <?php }?>
+
+                                    <!------------------------------Product Serials ---------------------------------->
 
                                     <?php
-                                     if($order_details->order_status_id != 3 && $order_details->order_status_id != 4){
-                                     if(isset($product->serials)){?>
-                                        <tr class="header_tr2" style="background:rgb(202, 228, 255); color:#000;">
+                                    if($order_details->order_status_id != 3 && $order_details->order_status_id != 4){
+                                        if(isset($product->serials) && count($product->serials) != 0){?>
+                                            <tr class="header_tr2" style="background:rgb(202, 228, 255); color:#000;">
 
-                                            <td><strong><?php echo lang('price');?></strong></td>
-                                            <td><strong><?php echo lang('serial');?></strong></td>
-                                            <td></td>
-                                        </tr>
-                                        <tbody class="product_serials_<?php echo $product->product_id;?>">
-                                            <?php
-                                             //if(isset($product->serials)){
-                                             foreach($product->serials as $serial){?>
-                                                <tr class="serial_row_<?php echo $serial->product_serial_id;?>">
-                                                    <td>
-                                                        <del>
-                                                        <?php
-                                                          echo $product->price != $product->final_price ? $product->price.' '.$order_details->currency_symbol.'<br>' : '';
-                                                        ?>
-                                                        </del>
-                                                        <?php echo $product->final_price.' '.$order_details->currency_symbol;?>
-                                                    </td>
-                                                    <td style="text-align: center;"><?php echo $serial->dec_serial;?></td>
-                                                    <?php /*
-                                                    <td style="text-align: center;">
-                                                        <?php if($serial->invalid == 0){?>
-                                                           <div class="serial_<?php echo $serial->product_serial_id;?>">
-                                                               <button type="button" class="btn yellow-crusta invalid_serial serial_<?php echo $serial->product_serial_id;?>" value="<?php echo $serial->product_serial_id;?>" name="serial_id" data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>" ><?php echo lang('invalid_serial');?></button>
-                                                               <span style="display: block; font-size: 12px; font-family: tahoma;" class="msg_span serial_<?php echo $serial->product_serial_id;?>"><?php echo lang('invalid_serial_will_be_replaced');?></span>
-                                                               <div><select style="display: none;" name="pocket_invalid_options" id="pocket_invalid_options<?php echo $serial->product_serial_id;?>" class="pocket_invalid_options"  data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>"></select></div>
-                                                               <div><select style="display: none;" class="invalid_options" id="invalid_options<?php echo $serial->product_serial_id;?>" data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>"></select></div>
-                                                           </div>
-                                                        <?php }else{?>
-                                                            <span style="color: red;"> <?php echo lang('invalid_serial');?> </span>
-                                                        <?php }?>
-                                                    </td>
-                                                    */?>
-                                                </tr>
-                                            <?php }?>
-                                        </tbody>
+                                                <td><strong><?php echo lang('price');?></strong></td>
+                                                <td><strong><?php echo lang('serial');?></strong></td>
+                                                <td></td>
+                                            </tr>
+                                            <tbody class="product_serials_<?php echo $product->product_id;?>">
+                                                <?php
+                                                //if(isset($product->serials)){
+                                                foreach($product->serials as $serial){?>
+                                                    <tr class="serial_row_<?php echo $serial->product_serial_id;?>">
+                                                        <td>
+                                                            <del>
+                                                            <?php
+                                                            echo $product->price != $product->final_price ? $product->price.' '.$order_details->currency_symbol.'<br>' : '';
+                                                            ?>
+                                                            </del>
+                                                            <?php echo $product->final_price.' '.$order_details->currency_symbol;?>
+                                                        </td>
+                                                        <td colspan="2" style="text-align: center;">
+                                                            <?php echo $serial->dec_serial;?>
+                                                            <?php /*
+                                                            <?php if($serial->invalid == 0){?>
+                                                            <div class="serial_<?php echo $serial->product_serial_id;?>">
+                                                                <button type="button" class="btn yellow-crusta invalid_serial serial_<?php echo $serial->product_serial_id;?>" value="<?php echo $serial->product_serial_id;?>" name="serial_id" data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>" ><?php echo lang('invalid_serial');?></button>
+                                                                <span style="display: block; font-size: 12px; font-family: tahoma;" class="msg_span serial_<?php echo $serial->product_serial_id;?>"><?php echo lang('invalid_serial_will_be_replaced');?></span>
+                                                                <div><select style="display: none;" name="pocket_invalid_options" id="pocket_invalid_options<?php echo $serial->product_serial_id;?>" class="pocket_invalid_options"  data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>"></select></div>
+                                                                <div><select style="display: none;" class="invalid_options" id="invalid_options<?php echo $serial->product_serial_id;?>" data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>"></select></div>
+                                                            </div>
+                                                            <?php }else{?>
+                                                                <span style="color: red;"> <?php echo lang('invalid_serial');?> </span>
+                                                            <?php }?>
+                                                            */?>
+                                                        </td>
+                                                    </tr>
+                                                <?php }?>
+                                            </tbody>
 
-                                <?php }
-                                    }
+                                        <?php }
+                                    } ?>
 
-                                    if(isset($product->user_optional_fields) && count($product->user_optional_fields) != 0){?>
 
-                                            <?php foreach($product->user_optional_fields as $field){?>
+                                    <!------------------------------Product Selected Optional Options---------------------------------->
+
+                                    <?php
+                                        if(isset($product->user_optional_fields) && count($product->user_optional_fields) != 0){
+                                            foreach($product->user_optional_fields as $field){
+                                                ?>
 
                                                 <tr style="border: solid;">
                                                     <td >
@@ -655,14 +662,13 @@ color:#000;
                                                             <span>( <?php echo lang('quantity').' : '. $field->qty;?> )</span>
                                                         <?php }?>
                                                     </td>
-
                                                 </tr>
+                                            <?php 
+                                            }
+                                        }
+                                    ?>
 
-                                            <?php }?>
-
-                                        <?php }
-
-
+                                    <?php 
                                 }
                             }
                         }
@@ -784,7 +790,7 @@ color:#000;
                         </tr>
 
                         <tr>
-                        	<td class="all"><a target="_blank" href="<?php echo base_url();?>orders/order/get_grouped_orders_reciept/<?php echo $order_details->orders_number;?>"><?php echo lang('order_receipt');?></a></td>
+                        	<td class="all" colspan="6"><a  class="btn yellow-crusta" target="_blank" href="<?php echo base_url();?>orders/order/get_grouped_orders_reciept/<?php echo $order_details->orders_number;?>"><?php echo lang('order_receipt');?></a></td>
                         </tr>
 
                         <?php if($order_details->notes != ''){?>

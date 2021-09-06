@@ -96,7 +96,7 @@ $( "body" ).on( "click", '#bank_payment_selection', function() {
                             echo form_error('payment_option_id');
                         ?>
                         <label for="options_input_<?php echo $option->id;?>"><?php echo $option->name;?>
-                            <?php if($option->image != ''){?> <img height="20" src="<?php echo base_url();?>assets/uploads/<?php echo $option->image;?>" /><?php }?>
+                            <?php if($option->image != ''){?> <img height="50" src="<?php echo base_url();?>assets/uploads/<?php echo $option->image;?>" /><?php }?>
                         </label>
                       </div>
                       <?php echo form_error('bank_id'); ?>
@@ -209,7 +209,12 @@ $( "body" ).on( "click", '#bank_payment_selection', function() {
 
                       echo form_radio($payment_method_data);
                       ?>
-                      <label for="m-2"><?php echo $option->name;?></label>
+                      <label for="m-2">
+                        <?php echo $option->name;?>
+                        <?php if($option->image != ''){?> 
+                          <img height="50" src="<?php echo base_url();?>assets/uploads/<?php echo $option->image;?>" />
+                        <?php }?>
+                      </label>
 
                     </div>
                     <div class="col-md-6">

@@ -119,6 +119,9 @@ class Global_model extends CI_Model
   {
         $this->db->select('image');
         $this->db->where('active', 1);
+        
+        $this->db->order_by('payment_methods.sort','asc');
+        
         $result = $this->db->get('payment_methods');
 
         if($result)

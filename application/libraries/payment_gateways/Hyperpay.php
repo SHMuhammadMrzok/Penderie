@@ -42,7 +42,7 @@ class Hyperpay
 		// $this->test_mode          = 'EXTERNAL';
     }
 
-	public function prepareCheckout($order_id, $final_total, $currency_symbol, $user_ip , $user_email , $payment_brand, $order_data, $user_data, $country_iso)
+	public function prepareCheckout($order_id, $final_total, $currency_symbol, $user_ip , $user_email , $payment_brand, $order_data, $user_data, $country_iso , $lang_id)
 	{
         if($payment_brand == 'apple_pay')
         {
@@ -56,6 +56,11 @@ class Hyperpay
         {
             $entity_id = $this->entity_id;
         } 
+
+        $lang_local = "en";
+        if ($lang_id == 2){
+            $lang_local = "ar";
+        }
      
         $order_id = $order_id.'_'.time();
         
@@ -65,6 +70,8 @@ class Hyperpay
         }
       
 	    $final_total = ceil($final_total);
+        // echo "Order Final_total : $final_total";
+        
     	$request_payment_url    = $this->payment_host_name."/v1/checkouts";
     	$request_payment_data   =
         //"authentication.userId=".$this->payment_user_id.
@@ -127,54 +134,55 @@ class Hyperpay
                 if($payment_brand == 'MADA')
                 {
                     $return_url = $this->paymentReturnURL.'/'.$payment_brand;
-                    $mada_form = '<script src="https://code.jquery.com/jquery.js" type="text/javascript"></script>
+                    $mada_form  = '<script src="https://code.jquery.com/jquery.js" type="text/javascript"></script>
                                     <style>
 
-                                    .wpwl-form-card
-                                    {
-                                    min-height: 0px !important;
-                                    }
+                                        .wpwl-form-card
+                                        {
+                                            min-height: 0px !important;
+                                        }
 
-                                    .wpwl-label-brand{
-                                    display: none !important;
-                                    }
-                                    .wpwl-control-brand{
-                                    display: none !important;
-                                    }
+                                        .wpwl-label-brand{
+                                            display: none !important;
+                                        }
+                                        .wpwl-control-brand{
+                                            display: none !important;
+                                        }
 
-                                    .wpwl-brand-card
-                                    {
-                                        display: block;
-                                        visibility: visible;
-                                        position: absolute;
-                                        right: 178px;
-                                        top: 40px;
-                                        width: 67px;
-                                        z-index: 10;
-                                    }
+                                        .wpwl-brand-card
+                                        {
+                                            display: block;
+                                            visibility: visible;
+                                            position: absolute;
+                                            right: 178px;
+                                            top: 40px;
+                                            width: 67px;
+                                            z-index: 10;
+                                        }
 
-                                    .wpwl-brand-MASTER
-                                    {
-                                    margin-top: -10;
-                                    margin-right: -10;
-                                    }
+                                        .wpwl-brand-MASTER
+                                        {
+                                            margin-top: -10;
+                                            margin-right: -10;
+                                        }
 
                                     </style>
 
                                     <script>
 
-                                    var wpwlOptions = {
-                                    locale: "en", //check if the store is in Arabic or English
+                                        var wpwlOptions = {
+                                            locale: "'.$lang_local.'", //check if the store is in Arabic or English
 
-                                    onReady: function(){
-                                    if (wpwlOptions.locale == "ar") {
-                                    $(".wpwl-group").css('."direction".', '."ltr".');
-                                    $(".wpwl-control-cardNumber").css({'."direction".': '."ltr".' , "text-align":"right"});
-                                    $(".wpwl-brand-card").css('."right".', '."200px".');
-                                    }
-                                    }}
+                                            onReady: function(){
+                                                if (wpwlOptions.locale == "ar") {
+                                                    $(".wpwl-group").css("direction", "ltr");
+                                                    $(".wpwl-control-cardNumber").css({"direction": "ltr" , "text-align":"right"});
+                                                    $(".wpwl-brand-card").css("right", "200px");
+                                                }
+                                            }}
+                                        }
                                     </script>
-                                    ';
+                                ';
                 }
 
                 /**
