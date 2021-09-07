@@ -131,7 +131,8 @@ class Shopping_cart
             'default_add' => 1
         );
         $default_address = $this->CI->users_model->get_result_data_where('user_addresses', 'row', $conditions_array);
-        if(count($default_address) != 0)
+        // if(count($default_address) != 0)
+        if(!empty($default_address))
         {
           $user_address_id = $default_address->id;
         }
