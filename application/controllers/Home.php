@@ -115,7 +115,8 @@ class Home extends CI_Controller {
             $product_details = $this->products_model->get_product_row_details($product->product_id, $this->data['lang_id'], $this->data['country_id']);
   //          $product_details = $this->products_model->get_product_row_details(118, $this->data['lang_id'], $this->data['country_id']);
 
-            if(count($product_details) != 0)
+            // if(count($product_details) != 0)
+            if(!empty($product_details))
             {
               if($product_details->quantity_per_serial == 1)
               {
