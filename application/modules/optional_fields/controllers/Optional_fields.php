@@ -191,6 +191,7 @@ class Optional_fields extends CI_Controller
                                     'has_weight'    => (isset( $_POST['has_weight']))? $_POST['has_weight']:0,
                                     'has_qty'       => (isset( $_POST['has_qty']))? $_POST['has_qty']:0,
                                     //'secondary'     => isset($_POST['secondary']) ? '1' : '0',
+                                    'has_sku'       => (isset( $_POST['has_sku']))? $_POST['has_sku']:0,
                                     'unix_time'     => time()
                                   );
             
@@ -323,6 +324,7 @@ class Optional_fields extends CI_Controller
                                         'has_weight'    => (isset( $_POST['has_weight']))? $_POST['has_weight']:0,
                                         'has_qty'       => (isset( $_POST['has_qty']))? $_POST['has_qty']:0,
                                         //'secondary'     => isset($_POST['secondary']) ? '1' : '0',
+                                        'has_sku'       => (isset( $_POST['has_sku']))? $_POST['has_sku']:0,
                                         'unix_time'     => time()
                                       );
                 
@@ -378,7 +380,7 @@ class Optional_fields extends CI_Controller
                         $option_values   = $this->input->post('new_option_value');
                         $option_priority = $this->input->post('new_sort');
                         
-                        if(count($option_priority) != 0)
+                        if(!empty($option_priority)) // (count($option_priority) != 0)
                         {
                             foreach($option_priority as $key=>$value)
                             {

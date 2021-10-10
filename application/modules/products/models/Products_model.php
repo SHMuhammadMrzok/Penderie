@@ -2643,6 +2643,27 @@ class Products_model extends CI_Model
         }
     }
 
+    public function get_user_order_product_options_sku_parts_data($product_id, $options_id = array() )
+    {
+        $this->db->select('products_optional_fields_options_costs.id ,products_optional_fields_options_costs.product_id ,products_optional_fields_options_costs.option_id , products_optional_fields_options_costs.sku ');
+
+        $this->db->where('products_optional_fields_options_costs.product_id', $product_id);
+        $this->db->where_in('products_optional_fields_options_costs.option_id', $options_id);
+
+        $this->db->order_by('products_optional_fields_options_costs.id', 'asc');
+
+        $result = $this->db->get('products_optional_fields_options_costs');
+
+        if($result)
+        {
+            return $result->result();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public function get_product_optional_field_cost_sec($product_id, $field_id, $lang_id, $primary_id=0)
     {
         $this->db->select('products_optional_fields_options_costs.*, optional_fields_options_translation.*');

@@ -12,16 +12,20 @@ class Shipping_gateways extends CI_Controller {
         $this->load->library('shipping_gateways/aramex_curl');
         $this->load->library('shipping_gateways/quick_curl');
         $this->load->library('shipping_gateways/aymakan_curl');
+        $this->load->library('shipping_gateways/zajil_api');
+        $this->load->library('shipping_gateways/salasa');
 
         require(APPPATH . 'includes/global_vars.php');
     }
 
     public function create_shipping_request()
     {
-        $order_id            = intval($this->input->post('order_id', true));
-        $shipping_company_id = intval($this->input->post('shipping_company_id', true));
+        $order_id               = intval($this->input->post('order_id', true));
+        $shipping_company_id    = intval($this->input->post('shipping_company_id', true));
 
-        $order_data = $this->orders_model->get_order_details($order_id, $this->data['lang_id']);/*get_order_main_details*/
+        $grouped_order          = intval($this->input->post('grouped_order', true));
+
+        // $order_data = $this->orders_model->get_order_details($order_id, $this->data['lang_id']);/*get_order_main_details*/
 
 
         if($shipping_company_id == 1) //SMSA
@@ -44,8 +48,18 @@ class Shipping_gateways extends CI_Controller {
         {
             $this->create_Quick_request();
         }
+        else if($shipping_company_id == 6) // Salasa
+        {
+            $this->create_Salasa_request();
+        }
 
-        redirect('orders/admin_order/view_order/'.$order_id, 'refresh');
+        if($grouped_order) {
+            redirect('orders/admin_order/view_grouped_order/'.$order_id, 'refresh');
+        }
+        else {
+            redirect('orders/admin_order/view_order/'.$order_id, 'refresh');
+        }
+
     }
 
     public function create_smsa_request()
@@ -448,14 +462,149 @@ class Shipping_gateways extends CI_Controller {
 
     }
 
+    public function create_Salasa_request()
+    {
+        $post_order_id          = intval($this->input->post('order_id', true));
+        $shipping_company_id    = intval($this->input->post('shipping_company_id', true));
+
+        $grouped_order          = intval($this->input->post('grouped_order', true));
+        
+        $date = strtotime($_POST['preferred_receipt_time']);
+
+        $sent_date  = date('d / m / Y' , $date);
+        $lang_id    = 1 ; //  $this->data['lang_id']; // Set default to English
+        
+        
+        //echo"<pre>";print_r($_POST);die();
+
+        if($grouped_order) {
+            $order_data     = $this->orders_model->get_user_grouped_order_basic_data($this->data['user_id'], $lang_id, $post_order_id, 1); 
+        }
+        else {
+            $order_data     = $this->orders_model->get_order_details($post_order_id, $lang_id);
+        }
+
+        if($order_data->delivered == 0 )
+        {
+            $order_products = array();
+            if($grouped_order) {
+                // $related_orders_ids         = json_decode($order_data->related_orders_ids);
+                // foreach($related_orders_ids as $order_id)
+                // {
+                //     $related_order_products = $this->orders_model->get_order_products($order_id, $lang_id);
+                //     $order_products         = array_merge($order_products, $related_order_products);
+                // }
+                $required_order_status = array
+                (
+                    12    , // order status => Out for delivery
+                );
+
+                $order_products = $this->orders_model->get_grouped_orders_products($post_order_id, $lang_id);
+            }
+            else{
+                $order_products = $this->orders_model->get_order_products($post_order_id, $lang_id);
+            }
+
+            foreach($order_products as $product)
+            {
+                if($product->product_id != 0)
+                {
+                    $serials_array  = array();
+                    if($product->quantity_per_serial == 1)
+                    {
+                        $orders_serials = $this->orders_model->get_admin_product_serials($product->product_id, $product->order_id, $product->order_product_id);
+
+                        foreach($orders_serials as $serial)
+                        {
+
+                            $secret_key    = $this->config->item('new_encryption_key');
+                            $secret_iv     = md5('serial_iv');
+
+                            $dec_serials   = $this->encryption->decrypt($serial->serial, $secret_key, $secret_iv);
+
+                            $serial->{'dec_serial'}     = $dec_serials;
+                            $serials_array[] = $serial;
+
+                            $product->{'sku'}           = $serial->full_sku;
+                        }
+
+                        $product->{'serials'}   = $serials_array;
+                    }
+                    else
+                    {
+                        $product->{'non_serials_product'}   = 1;
+                        $product->{'sku'}                   = $product->code;
+                    }
+                }
+            }
+            
+            $cod_amount = $order_data->payment_method_id == 10 ? $order_data->final_total : 0 ;
+
+            // echo "<br />Admin Shipping_gateways - create_Salasa_request || post_order_id : $post_order_id <br /> <pre>";
+            // echo "<br />Admin Shipping_gateways - create_Salasa_request || grouped_order : $grouped_order <br /> <pre>";
+            // echo "<br />Admin Shipping_gateways - create_Salasa_request || sent_date : $sent_date <br /> <pre>";
+            // echo "<br />Admin Shipping_gateways - create_Salasa_request || cod_amount : $cod_amount <br /> <pre>";
+            // echo "<br />Admin Shipping_gateways - create_Salasa_request || order_data : <br /> <pre>";
+            // print_r($order_data);
+            // echo "<br />Admin Shipping_gateways - create_Salasa_request || order_products : <br /> <pre>";
+            // print_r($order_products);
+            // die();
+
+            $add_result = $this->salasa->addShipment($post_order_id, $grouped_order, $sent_date, $cod_amount, $order_data, $order_products );
+
+            if(isset($add_result['status']))
+            {
+                if ($add_result['status'] == false){
+                    $_SESSION['custom_error_msg'] = $add_result['message'];
+                    $this->session->mark_as_flash('custom_error_msg');
+                }
+                else
+                {
+                    $salasa_created_order_id = $add_result['data']['order_id'];
+                    $updated_data = array(
+                                            'tracking_number'   => $salasa_created_order_id,
+                                            'delivered'         => 1
+                                       );
+
+                    if($grouped_order) {
+                        // Update All Related Order with Shipment Order id
+                        $related_orders_ids         = json_decode($order_data->related_orders_ids);
+                        $this->orders_model->updated_orders_related_orders($related_orders_ids, $updated_data);
+                    }else{
+                        // Update Selected Order with Shipment Order id
+                        $this->orders_model->update_order_data($post_order_id, $updated_data);
+                    }
+
+                    $_SESSION['success'] = lang('order_successfully_start_track');
+                    $this->session->mark_as_flash('success');
+                }
+            }
+            else
+            {
+                // Error while connecting to gateway
+                $_SESSION['custom_error_msg'] = lang('faild')."<br />".$add_result['message'];
+                $this->session->mark_as_flash('custom_error_msg');
+            }
+
+            // echo "<br />Admin Shipping_gateways - create_Salasa_request || add_result : <br /> <pre>";
+            // print_r($add_result);
+
+        }
+        else
+        {
+            // order already has a shippment_request
+
+            $_SESSION['custom_error_msg'] = lang('order_already_has_track_request');
+            $this->session->mark_as_flash('custom_error_msg');
+        }
+    }
+
     public function get_shipping_info()
     {
         $order_id = intval($this->input->post('order_id', true));
         $admin    = isset($_POST['admin']) ? 1 : 0;
 
         $order_data = $this->orders_model->get_order_data($order_id, $this->data['lang_id']);
-
-
 
         if($order_data->delivered == 1 && $order_data->tracking_number != 0)
         {
@@ -501,6 +650,27 @@ class Shipping_gateways extends CI_Controller {
 
                 $this->orders_model->insert_shipping_log($log_data);
             }
+            else if($order_data->shipping_company_id == 4)//Aymakan
+            {
+                $order_data = $this->orders_model->get_order_details($order_id, $this->data['lang_id']);
+
+                $tracking_number = $order_data->tracking_number;
+
+                $info =  $this->aymakan_curl->track_shipment($tracking_number);
+
+                $log_data = array(
+                                    'order_id'           => $order_id                                           ,
+                                    'shipping_method_id' => $order_data->shipping_company_id                    ,
+                                    'status_id'          => ''                                                  ,
+                                    'admin'              => 1                                                   ,
+                                    'AWB_number'         => $order_data->tracking_number                        ,
+                                    'feed_back_text'     => json_encode($info['sucsess']['tracking_info']['0']) ,
+                                    'unix_time'          => time()
+                                 );
+
+                $this->orders_model->insert_shipping_log($log_data);
+
+            }
             else if($order_data->shipping_company_id == 5)//Quick
             {
                 $order_data = $this->orders_model->get_order_details($order_id, $this->data['lang_id']);
@@ -523,26 +693,25 @@ class Shipping_gateways extends CI_Controller {
                 $this->orders_model->insert_shipping_log($log_data);
 
             }
-            else if($order_data->shipping_company_id == 4)//Aymakan
+            else if($order_data->shipping_company_id == 6)  //Salasa
             {
-                $order_data = $this->orders_model->get_order_details($order_id, $this->data['lang_id']);
+                $info = $this->salasa->getTracking($order_data->tracking_number);
 
-                $tracking_number = $order_data->tracking_number;
+                // $status = $this->smsa->handel_status($info->Activity);
+                // $status_id = $this->_get_status_id($status);
 
-                $info =  $this->aymakan_curl->track_shipment($tracking_number);
-
+                // insert in shipping log
                 $log_data = array(
-                                    'order_id'           => $order_id                                           ,
-                                    'shipping_method_id' => $order_data->shipping_company_id                    ,
-                                    'status_id'          => ''                                                  ,
-                                    'admin'              => 1                                                   ,
-                                    'AWB_number'         => $order_data->tracking_number                        ,
-                                    'feed_back_text'     => json_encode($info['sucsess']['tracking_info']['0']) ,
+                                    'order_id'           => $order_id                       ,
+                                    'shipping_method_id' => $order_data->shipping_company_id,
+                                    'status_id'          => '', // $status_id                      ,
+                                    'admin'              => $admin                          ,
+                                    'AWB_number'         => $order_data->tracking_number    ,
+                                    'feed_back_text'     => json_encode($info),
                                     'unix_time'          => time()
                                  );
 
                 $this->orders_model->insert_shipping_log($log_data);
-
             }
         }
         else
@@ -578,6 +747,10 @@ class Shipping_gateways extends CI_Controller {
         elseif($shipping_company_id == 5) // quick
         {
             $this->cancel_quick_shipment();
+        }
+        elseif($shipping_company_id == 6) // salasa
+        {
+            $this->cancel_salasa_shipment();
         }
     }
 
@@ -674,6 +847,76 @@ class Shipping_gateways extends CI_Controller {
         $this->orders_model->insert_shipping_log($log_data);
 
         redirect('orders/admin_order/view_order/'.$order_id, 'refresh');
+
+    }
+
+    public function cancel_salasa_shipment()
+    {
+        $post_order_id      = intval($this->input->post('order_id', true));
+        $grouped_order      = intval($this->input->post('grouped_order', true));
+        $reason             = strip_tags($this->input->post('cancel_reason', true));
+
+        $lang_id            = 1 ; //  $this->data['lang_id']; // Set default to English
+
+        // $order_data = $this->orders_model->get_order_data($order_id, $this->data['lang_id']);
+        if($grouped_order) {
+            $order_data     = $this->orders_model->get_user_grouped_order_basic_data($this->data['user_id'], $lang_id, $post_order_id, 1); 
+        }
+        else {
+            // $order_data     = $this->orders_model->get_order_details($post_order_id, $lang_id);
+            $order_data     = $this->orders_model->get_order_data($post_order_id, $lang_id);
+        }
+
+
+
+        $track_number       = $order_data->tracking_number;
+
+        $resultData         = $this->salasa->cancelShipment($track_number, $reason);
+
+
+        // insert in shipping log
+        if($grouped_order) {
+            // Update All Related Order with Shipment Order id
+            $related_orders_ids         = json_decode($order_data->related_orders_ids);
+            $this->orders_model->updated_orders_related_orders($related_orders_ids, $updated_data);
+
+            foreach($related_orders_ids as $order_id)
+            {
+                $log_data = array(
+                                'order_id'           => $order_id                       ,
+                                'shipping_method_id' => $order_data->shipping_company_id,
+                                'status_id'          => 5                      ,
+                                'admin'              => 1                          ,
+                                'AWB_number'         => $order_data->tracking_number    ,
+                                'feed_back_text'     => json_encode($resultData),
+                                'unix_time'          => time()
+                            );
+                $this->orders_model->insert_shipping_log($log_data);
+            }
+            
+        }else{
+            // Update Selected Order with Shipment Order id
+            $log_data = array(
+                            'order_id'           => $post_order_id                       ,
+                            'shipping_method_id' => $order_data->shipping_company_id,
+                            'status_id'          => 5                      ,
+                            'admin'              => 1                          ,
+                            'AWB_number'         => $order_data->tracking_number    ,
+                            'feed_back_text'     => json_encode($resultData),
+                            'unix_time'          => time()
+                        );
+            $this->orders_model->insert_shipping_log($log_data);
+        }
+
+        // redirect('orders/admin_order/view_order/'.$order_id, 'refresh');
+
+
+        if($grouped_order) {
+            redirect('orders/admin_order/view_grouped_order/'.$post_order_id, 'refresh');
+        }
+        else {
+            redirect('orders/admin_order/view_order/'.$post_order_id, 'refresh');
+        }
 
     }
 

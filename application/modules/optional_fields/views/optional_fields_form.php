@@ -111,42 +111,75 @@
                     echo form_checkbox($has_weight_data);
                  ?>
                 </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-3"><?php echo lang('has_qty');?></label>
-            <div class="col-md-4">
-             <?php
-                $has_qty_value = false ;
-
-                if(isset($general_data->has_qty))
-                {
-                    if($general_data->has_qty == 1)
-                    {
-                        $has_qty_value = true;
-                    }
-                    if($general_data->has_qty == 0)
-                    {
-                        $has_qty_value = false;
-                    }
-                }
-
-                $has_qty_data = array(
-                            'name'           => "has_qty",
-                            'class'          => 'make-switch',
-                            'data-on-color'  => 'danger',
-                            'data-off-color' => 'default',
-                            'value'          => 1,
-                            'checked'        => set_checkbox("has_qty", $has_qty_value, $has_qty_value),
-                            'data-on-text'   => lang('yes'),
-                            'data-off-text'  => lang('no'),
-                            );
-                echo form_checkbox($has_qty_data);
-             ?>
             </div>
-        </div>
 
-<?php /*
+            <div class="form-group">
+                <label class="control-label col-md-3"><?php echo lang('has_qty');?></label>
+                <div class="col-md-4">
+                <?php
+                    $has_qty_value = false ;
+
+                    if(isset($general_data->has_qty))
+                    {
+                        if($general_data->has_qty == 1)
+                        {
+                            $has_qty_value = true;
+                        }
+                        if($general_data->has_qty == 0)
+                        {
+                            $has_qty_value = false;
+                        }
+                    }
+
+                    $has_qty_data = array(
+                                'name'           => "has_qty",
+                                'class'          => 'make-switch',
+                                'data-on-color'  => 'danger',
+                                'data-off-color' => 'default',
+                                'value'          => 1,
+                                'checked'        => set_checkbox("has_qty", $has_qty_value, $has_qty_value),
+                                'data-on-text'   => lang('yes'),
+                                'data-off-text'  => lang('no'),
+                                );
+                    echo form_checkbox($has_qty_data);
+                ?>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-md-3"><?php echo lang('has_sku');?></label>
+                <div class="col-md-4">
+                 <?php
+                    $has_sku_value = false ;
+
+                    if(isset($general_data->has_sku))
+                    {
+                        if($general_data->has_sku == 1)
+                        {
+                            $has_sku_value = true;
+                        }
+                        if($general_data->has_sku == 0)
+                        {
+                            $has_sku_value = false;
+                        }
+                    }
+
+                    $has_sku_data = array(
+                                'name'           => "has_sku",
+                                'class'          => 'make-switch',
+                                'data-on-color'  => 'danger',
+                                'data-off-color' => 'default',
+                                'value'          => 1,
+                                'checked'        => set_checkbox("has_sku", $has_sku_value, $has_sku_value),
+                                'data-on-text'   => lang('yes'),
+                                'data-off-text'  => lang('no'),
+                                );
+                    echo form_checkbox($has_sku_data);
+                 ?>
+                </div>
+            </div>
+
+            <?php /*
             <div class="form-group">
                <label class="control-label col-md-3"><?php echo lang('secondary');?></label>
                <div class="col-md-4">
@@ -185,6 +218,7 @@
                 </div>
             </div>
             */?>
+
             <?php foreach($data_languages as $key=> $lang){?>
 
                 <div class="form-group">
@@ -330,7 +364,7 @@
                     </div>
 
                 </div>
-             </div>
+            </div>
 
             <?php echo isset($id) ? form_hidden('id', $id) : '';?>
             <div class="form-actions">

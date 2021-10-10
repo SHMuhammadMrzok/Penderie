@@ -974,7 +974,7 @@ class Cart extends CI_Controller
         if($payment_option_id ==0) return 0;
 
         $option_data = $this->payment_methods_model->get_option_data($payment_option_id);
-        if(count($option_data) != 0)
+        if(!empty($option_data)) // count($option_data) != 0
         {
             $tax_percent = round(($option_data->extra_fees_percent * $total), 2)/ 100;
             $tax_amount  = $this->currency->convert_from_default_currency($option_data->extra_fees, $this->data['country_id']);

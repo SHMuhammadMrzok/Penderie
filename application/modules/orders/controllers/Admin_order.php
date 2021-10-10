@@ -97,6 +97,7 @@ class Admin_order extends CI_Controller
 
 
         $this->data['columns']           = array(
+                                                     lang('grouped_order')         ,
                                                      lang('order_number')           ,
 													 lang('order_details')          ,
                                                      lang('username')               ,
@@ -272,6 +273,7 @@ class Admin_order extends CI_Controller
           $payment_filter_id, $search_field_id, $shipping_way_filter, $stores_filter_id, $this->stores_ids, $this->driver_id);
 
         $db_columns = array(
+                             'orders_number'    ,
                              'id'               ,
 							 'order_details'    ,
                              'username'         ,
@@ -298,7 +300,16 @@ class Admin_order extends CI_Controller
         {
             foreach($db_columns as $column)
             {
-				if($column == 'order_details')
+                if($column == 'orders_number')
+                {
+                    $grouped_orders = '<a class="btn btn-sm green table-group-action-submit" href="'.base_url().'orders/admin_order/view_grouped_order/'.$row->orders_number.'">'.$row->orders_number.'</a>';
+                    if($row->order_status_id == 4 || $row->orders_number == 0)
+                    {
+                        $grouped_orders = '';
+                    }
+                    $new_grid_data[$key][$column] = $grouped_orders;
+                }
+				elseif($column == 'order_details')
                 {
                     $details = '<a class="btn btn-sm blue table-group-action-submit" href="'.base_url().'orders/admin_order/view_order/'.$row->id.'">'.lang('order_details').'</a>';
                     if($row->order_status_id == 4)
@@ -313,7 +324,7 @@ class Admin_order extends CI_Controller
 
                      $new_grid_data[$key][$column] = $shipping_type;
                 }
-               else if($column == 'country')
+                else if($column == 'country')
                 {
                     $country = $this->countries_model->get_country_name($row->country_id, $lang_id);
                     if($row->order_status_id == 4)
@@ -457,10 +468,10 @@ class Admin_order extends CI_Controller
         $output_data = $this->load->view($this->view_folder.'/grid/grid_data', $this->data, true);
 
         echo json_encode(array($output_data, $count_data, $search_word));
-     }
+    }
 
-     public function view_order($order_id)
-     {
+    public function view_order($order_id)
+    {
 
         $this->data['form_action'] = $this->data['module'] . "/" . $this->data['controller'] . "/update";
         $order_id = intval($order_id);
@@ -469,9 +480,7 @@ class Admin_order extends CI_Controller
 
         if($order_id)
         {
-            $display_lang_id = $this->data['active_language']->id;
-            $order_details   = $this->orders_model->get_order_details($order_id, $display_lang_id);
-
+            $order_details   = $this->orders_model->get_order_details($order_id, $lang_id);
 
             // check driver primissions
             $allowed_order = true;
@@ -506,15 +515,15 @@ class Admin_order extends CI_Controller
                         $cards_array = $this->orders_model->get_recharge_card($order_id, $this->data['lang_id']);
                     }
 
-                    $order_products               = $this->orders_model->get_order_products($order_id, $display_lang_id);
-                    $order_log                    = $this->orders_model->get_orders_log($order_id, $display_lang_id);
+                    $order_products               = $this->orders_model->get_order_products($order_id, $lang_id);
+                    $order_log                    = $this->orders_model->get_orders_log($order_id, $lang_id);
                     $wholesaler_customer_group_id = $this->config->item('wholesaler_customer_group_id');
 
-                    $payment_method = $this->payment_methods_model->get_row_data($order_details->payment_method_id, $display_lang_id);//get_payment_method_name($order_details->payment_method_id, $display_lang_id);
+                    $payment_method = $this->payment_methods_model->get_row_data($order_details->payment_method_id, $lang_id);//get_payment_method_name($order_details->payment_method_id, $lang_id);
 
                     if($order_details->payment_method_id == 3)
                     {
-                        $bank_data               = $this->payment_methods_model->get_bank_data($order_details->bank_id, $display_lang_id);
+                        $bank_data               = $this->payment_methods_model->get_bank_data($order_details->bank_id, $lang_id);
                         $this->data['bank_data'] = $bank_data;
                     }
 
@@ -560,7 +569,7 @@ class Admin_order extends CI_Controller
                                 $product->{'non_serials_product'} = 1;
                             }
 
-                            $user_product_optional_fields = $this->products_model->get_user_order_product_optional_fields_data($product->order_product_id, $display_lang_id);
+                            $user_product_optional_fields = $this->products_model->get_user_order_product_optional_fields_data($product->order_product_id, $lang_id);
 
                             if(count($user_product_optional_fields) != 0)
                             {
@@ -568,7 +577,7 @@ class Admin_order extends CI_Controller
                                 {
                                     if($field->has_options == 1)
                                     {
-                                        $option_options = $this->optional_fields_model->get_optional_field_options($field->optional_field_id, $display_lang_id);
+                                        $option_options = $this->optional_fields_model->get_optional_field_options($field->optional_field_id, $lang_id);
                                         foreach($option_options as $option)
                                         {
                                             if($option->id == $field->product_optional_field_value)
@@ -604,7 +613,7 @@ class Admin_order extends CI_Controller
                         $this->data['maintenance_product'] = true;
                     }
 
-                    $status         = $this->order_status_model->get_all_statuses($display_lang_id);
+                    $status         = $this->order_status_model->get_all_statuses($lang_id);
                     $status_options = array();
 
                     foreach($status as $row)
@@ -633,8 +642,8 @@ class Admin_order extends CI_Controller
                         $user_points = $this->encryption->decrypt($order_details->user_points, $secret_key, $secret_iv);
                     }
 
-                    $customer_group_name = $this->customer_groups_model->get_customer_group_translation($order_details->customer_group_id, $display_lang_id);
-                    $country             = $this->countries_model->get_country_name($order_details->country_id, $display_lang_id);
+                    $customer_group_name = $this->customer_groups_model->get_customer_group_translation($order_details->customer_group_id, $lang_id);
+                    $country             = $this->countries_model->get_country_name($order_details->country_id, $lang_id);
                     $user_previous_count = $this->orders_model->get_user_previous_orders_count($order_details->user_id, $order_id);
 
 
@@ -701,7 +710,7 @@ class Admin_order extends CI_Controller
                     }
 
                     $invalid_options = $this->invalid_serials_model->get_invalid_status($lang_id);
-                    $invalid_options_select = '<option valie="">-----</option>';
+                    $invalid_options_select = '<option value="">-----</option>';
 
                     foreach ($invalid_options as $option)
                     {
@@ -779,7 +788,7 @@ class Admin_order extends CI_Controller
 
                     if($order_details->send_as_gift == 1)
                     {
-                        $wrapping_data = $this->admin_wrapping_model->get_wrapping_data($order_details->wrapping_id, $this->data['lang_id']);
+                        $wrapping_data = $this->admin_wrapping_model->get_wrapping_data($order_details->wrapping_id, $lang_id);
                         $this->data['wrapping_data'] = $wrapping_data;
                     }
 
@@ -812,7 +821,7 @@ class Admin_order extends CI_Controller
                         else
                         {
                             $tracking_array = array();
-                            $tracking_data  = $this->orders_model->get_order_tracking_log_data($order_id, $this->data['lang_id']);
+                            $tracking_data  = $this->orders_model->get_order_tracking_log_data($order_id, $lang_id);
 
                             foreach($tracking_data as $row)
                             {
@@ -898,10 +907,529 @@ class Admin_order extends CI_Controller
             }
             $this->load->view($this->view_folder.'/main_frame',$this->data);
         }
-     }
+    }
 
-     public function update_status()
-     {
+    public function view_grouped_order($group_order_id)
+    {
+
+        $this->data['form_action'] = $this->data['module'] . "/" . $this->data['controller'] . "/update";
+        $group_order_id = intval($group_order_id);
+        $lang_id  = $this->data['active_language']->id;
+        $this->data['is_driver'] = $this->is_driver;
+
+        if($group_order_id)
+        {
+            $grouped_orders_data    = $this->orders_model->get_user_grouped_order_basic_data($this->data['user_id'], $lang_id, $group_order_id, 1); 
+
+            // Set Basic Data Of Grouped Order For all Orders
+
+            // Set User Data
+            $secret_key   = $this->config->item('new_encryption_key');
+            $secret_iv    = $order_details->user_id;
+
+            if($order_details->user_balance == '')
+            {
+                $user_balance = 0;
+            }
+            else
+            {
+                $user_balance = $this->encryption->decrypt($grouped_orders_data->user_balance, $secret_key, $secret_iv);
+            }
+
+            if($order_details->user_balance == '')
+            {
+                $user_points = 0;
+            }
+            else
+            {
+                $user_points = $this->encryption->decrypt($grouped_orders_data->user_points, $secret_key, $secret_iv);
+            }
+
+            $customer_group_name = $this->customer_groups_model->get_customer_group_translation($grouped_orders_data->customer_group_id, $lang_id);
+            $country             = $this->countries_model->get_country_name($grouped_orders_data->country_id, $lang_id);
+            $user_previous_count = $this->orders_model->get_user_previous_orders_count($grouped_orders_data->user_id, $order_id);
+
+
+
+            $grouped_orders_data->{'user_balance'}         = $user_balance;
+            $grouped_orders_data->{'user_points'}          = $user_points;
+            $grouped_orders_data->{'user_customer_group'}  = $customer_group_name;
+            $grouped_orders_data->{'country'}              = $country;
+            $grouped_orders_data->{'user_previous_orders'} = $user_previous_count;
+            
+            /**
+             * shipping_types
+             *   1 => Delivery
+             *   2 => Recieve from shop
+
+            */
+
+            $shipping_type = '';
+            switch ($grouped_orders_data->shipping_type)
+            {
+                case 1 :
+                    $shipping_type = lang('deliver_home');
+                    break;
+                case 2 :
+                    $shipping_type = lang('recieve_from_shop');
+                    break;
+                case 3 :
+                    $shipping_type = lang('shipping');
+                    break;
+                case 4 :
+                    $shipping_type = lang('user_address');
+                    break;
+                default :
+                    break;
+
+            }
+
+            $grouped_orders_data->{'shipping_type_lang'} = $shipping_type;
+
+            // Set Wrapping Data
+            if($grouped_orders_data->send_as_gift == 1)
+            {
+                $wrapping_data = $this->admin_wrapping_model->get_wrapping_data($grouped_orders_data->wrapping_id, $lang_id);
+                $this->data['wrapping_data'] = $wrapping_data;
+            }
+
+            // Set Bank Data
+            if($grouped_orders_data->payment_method_id == 3)
+            {
+                $bank_data               = $this->payment_methods_model->get_bank_data($grouped_orders_data->bank_id, $lang_id);
+                $this->data['bank_data'] = $bank_data;
+            }
+            // Set Payment Method Data
+            $payment_method = $this->payment_methods_model->get_row_data($grouped_orders_data->payment_method_id, $lang_id);//get_payment_method_name($order_details->payment_method_id, $lang_id);
+
+
+            // echo "<br />Admin Order - view_grouped_order || grouped_orders_data : <br /> <pre>";
+            // print_r($grouped_orders_data);
+            // die();
+
+
+            // check driver primissions
+            $allowed_order = true;
+            if($this->driver_id != 0)
+            {
+                if($grouped_orders_data->driver_id != $this->data['user_id'])
+                {
+                    $allowed_order = false;
+                }
+            }
+
+            if($grouped_orders_data && $allowed_order)
+            {
+                $related_orders_ids         = json_decode($grouped_orders_data->related_orders_ids);
+
+                $related_orders_details     = array(); 
+                $related_orders_products    = array();  
+                
+                $products_with_serials = array();
+                $order_products_ids    = array();    
+                $cards_array       = array();
+
+                /**
+                 * enable_request_shipment flag variable will be used to show shippment form if there is at least one of the related orders is "on delivery state => 12" 
+                 * and it's products need shipping
+                 *  */ 
+                $enable_request_shipment = false; 
+
+                foreach($related_orders_ids as $order_id)
+                {
+                    // Get Data of each order seperatly
+                    $order_details          = $this->orders_model->get_order_details($order_id, $lang_id);
+
+                    // echo "<br />Admin Order - view_grouped_order || order_details : $related_orders_ids[0] <br /> <pre>";
+                    // print_r($order_details);
+                    // die();
+
+                    // $cards_array       = array();
+                    $charge_card       = false;
+                    $edit_order        = false;
+
+                    if(($order_details->order_status_id == 2 || $order_details->order_status_id == 8) && $order_details->payment_method_id != 1 && $order_details->payment_method_id != 2)
+                    {
+                        $edit_order = true;
+                    }
+
+                    $charge_card_count = $this->orders_model->get_recharge_cards_count($order_id);
+
+                    if($charge_card_count > 0)
+                    {
+                        $charge_card = true;
+                        $cards_array = $this->orders_model->get_recharge_card($order_id, $this->data['lang_id']);
+                    }
+
+                    $order_products               = $this->orders_model->get_order_products($order_id, $lang_id);
+                    $wholesaler_customer_group_id = $this->config->item('wholesaler_customer_group_id');
+
+                    // if($order_details->payment_method_id == 3)
+                    // {
+                    //     $bank_data               = $this->payment_methods_model->get_bank_data($order_details->bank_id, $lang_id);
+                    //     $this->data['bank_data'] = $bank_data;
+                    // }
+
+                    if ($this->ion_auth->in_group($wholesaler_customer_group_id))
+                    {
+                        $wholesaler_options = true;
+                    }
+                    else
+                    {
+                        $wholesaler_options = false;
+                    }
+
+                    $main_cat_id = $this->settings->maintenance_cat_id;
+                    // $products_with_serials = array();
+                    // $order_products_ids    = array();
+
+                    foreach($order_products as $product)
+                    {
+                        if($product->product_id != 0)
+                        {
+                            $serials_array  = array();
+                            if($product->quantity_per_serial == 1)
+                            {
+                                $orders_serials = $this->orders_model->get_admin_product_serials($product->product_id, $product->order_id, $product->order_product_id);
+
+                                foreach($orders_serials as $serial)
+                                {
+
+                                    $secret_key    = $this->config->item('new_encryption_key');
+                                    $secret_iv     = md5('serial_iv');
+
+                                    $dec_serials   = $this->encryption->decrypt($serial->serial, $secret_key, $secret_iv);
+
+                                    $serial->{'dec_serial'}  = $dec_serials;
+                                    $serials_array[] = $serial;
+                                }
+
+                                $product->{'serials'} = $serials_array;
+                            }
+                            else
+                            {
+                                $product->{'non_serials_product'} = 1;
+                            }
+
+                            $user_product_optional_fields = $this->products_model->get_user_order_product_optional_fields_data($product->order_product_id, $lang_id);
+
+                            if(count($user_product_optional_fields) != 0)
+                            {
+                                foreach($user_product_optional_fields as $field)
+                                {
+                                    if($field->has_options == 1)
+                                    {
+                                        $option_options = $this->optional_fields_model->get_optional_field_options($field->optional_field_id, $lang_id);
+                                        foreach($option_options as $option)
+                                        {
+                                            if($option->id == $field->product_optional_field_value)
+                                            {
+                                                $field->product_optional_field_value = $option->field_value;
+                                                if($option->image != '')
+                                                {
+                                                  $product->{'image'} = $option->image;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if($field->field_type_id == 9)
+                                    {
+                                        $field->product_optional_field_value = '<a href="'.base_url().'orders/admin_order/download/'.$field->product_optional_field_value.'">'.$field->product_optional_field_value.'</a>';
+                                    }
+
+                                    $product->user_optional_fields = $user_product_optional_fields;
+                                }
+                            }
+
+
+                            // Edits
+                            $product->{'store_name'} = $order_details->store_name;
+                            $product->{'order_status_id'} = $order_details->order_status_id;
+                            //////
+
+
+                            $products_with_serials[] = $product;
+                            $order_products_ids[]    = $product->product_id;
+                        }
+
+                    }
+
+                    // $maintenance_products  = array();
+                    // $check_maintenance_products_exist = $this->orders_model->check_maintenance_products_exist($order_id, $main_cat_id);
+                    // if($check_maintenance_products_exist)
+                    // {
+                    //     $this->data['maintenance_product'] = true;
+                    // }
+                    //Cancel Order Auto_cancel
+                    //$settings         = $this->global_model->get_config();
+                    $auto_cancel_time = $this->settings->min_order_hours * 60 * 60;
+                    $allowed_time     = time() - $auto_cancel_time;
+                    $order_time       = $order_details->unix_time;
+
+                    $allow_cancel_auto_cancel = 'true';
+
+                    if($order_time < $allowed_time)
+                    {
+                        $allow_cancel_auto_cancel = 'false';
+                    }
+
+                    // $sms_templates = $this->templates_model->get_user_templates($lang_id);
+
+                    // $product_new_array = array();
+                    // $country_other_products = $this->products_model->get_country_other_products($order_products_ids, $order_details->country_id, $lang_id, $order_details->store_id);
+
+                    // if(count($country_other_products) != 0)
+                    // {
+                    //     foreach($country_other_products as $product)
+                    //     {
+                    //         $product_new_array[$product->product_id] = $product->title;
+                    //     }
+                    // }
+
+                    // // Set Order Log for each order
+                    // $order_log                    = $this->orders_model->get_orders_log($order_id, $lang_id);
+                    // $orders_log_array = array();
+                    // foreach($order_log as $log)
+                    // {
+                    //     if($log->status_id == 1)
+                    //     {
+                    //         $class = 'success';
+                    //     }
+                    //     elseif($log->status_id == 2)
+                    //     {
+                    //         $class = 'warning';
+                    //     }
+                    //     elseif($log->status_id == 3)
+                    //     {
+                    //         $class = 'danger';
+                    //     }
+                    //     elseif($log->status_id == 4)
+                    //     {
+                    //         $class = 'danger';
+                    //     }
+                    //     else
+                    //     {
+                    //         $class = 'info';
+                    //     }
+
+                    //     $log->{'class'} = $class;
+
+                    //     $orders_log_array[] = $log;
+                    // }
+
+                    // $invalid_options = $this->invalid_serials_model->get_invalid_status($lang_id);
+                    // $invalid_options_select = '<option value="">-----</option>';
+
+                    // foreach ($invalid_options as $option)
+                    // {
+                    //     $invalid_options_select .= '<option value='.$option->status_id.'>'.$option->status.'</option>';
+                    // }
+
+                    // if($order_details->payment_method_id == 1)
+                    // {
+                    //     $pocket_invalid_options = '<option>-----</option><option value="1">'.lang('recovery').'</option><option value="2">'.lang('compensation').'</option><option value="3">'.lang('return_with_invalid').'</option>';
+
+                    //     $this->data['pocket_invalid_options'] = $pocket_invalid_options;
+                    // }
+
+                    //admin edit order data
+
+                    // $user_edit_order_data = $this->orders_model->get_order_edit_data($order_id);
+
+                    // $user_previous_orders = $this->orders_model->get_user_previous_orders_data($order_details->user_id, $order_id, $lang_id);
+                    // $pre_orders_array = array();
+                    // $products_names = '';
+                    // foreach($user_previous_orders as $order)
+                    // {
+                    //     $products_data      = $this->orders_model->get_order_products($order->id, $lang_id);
+                    //     $order_charge_cards = $this->orders_model->get_recharge_card($order->id);
+                    //     $products_names = '';
+                    //     foreach($products_data as $item)
+                    //     {
+                    //         $products_names .= $item->qty." X ".$item->title." <br> ";
+                    //     }
+                    //     foreach($order_charge_cards as $card)
+                    //     {
+                    //         $products_names .= lang('recharge_card')." X ".$card->price;
+                    //     }
+
+                    //     $order->{'product_names'} = $products_names;
+
+                    //     $pre_orders_array[]     = $order;
+                    // }
+
+                    if($order_details->total_weight != 0)
+                    {
+                        $weight_in_kg = $order_details->total_weight / 1000;
+                        $order_details->total_weight = $weight_in_kg;
+                    }
+
+                    /**
+                     * shipping_types
+                     *   1 => Delivery
+                     *   2 => Recieve from shop
+
+                    */
+
+                    $shipping_type = '';
+
+                    if($order_details->shipping_type == 1)
+                    {
+                        $shipping_type = lang('deliver_home');
+                    }
+                    elseif($order_details->shipping_type == 2)
+                    {
+                        $shipping_type = lang('recieve_from_shop');
+                    }
+                    else if($order_details->shipping_type == 3)
+                    {
+                        $shipping_type = lang('shipping');
+                    }
+                    else if($order_details->shipping_type == 4)
+                    {
+                        $shipping_type = lang('user_address'); // lang('address');
+                    }
+
+                    $order_details->{'shipping_type_lang'} = $shipping_type;
+                    
+
+
+                    // updated data
+                    $related_orders_details[] = $order_details;
+                    $related_orders_products[] = $order_products;
+
+                    if($order_details->order_status_id == 12 && $order_details->needs_shipping == 1){
+                        $enable_request_shipment = true; 
+                    }
+                }
+
+                $status         = $this->order_status_model->get_all_statuses($lang_id);
+                $status_options = array();
+
+                foreach($status as $row)
+                {
+                    $status_options[$row->id] = $row->name;
+                }
+
+                // $order_notes = $this->orders_model->get_order_notes($group_order_id);
+
+                // if($order_details->send_as_gift == 1)
+                // {
+                //     $wrapping_data = $this->admin_wrapping_model->get_wrapping_data($order_details->wrapping_id, $lang_id);
+                //     $this->data['wrapping_data'] = $wrapping_data;
+                // }
+
+                //if($order_details->order_status_id == 1) // Old code => deal with order status "complete"
+                if($grouped_orders_data->order_status_id == 12) // Show Request for tracking no. when order status is "Out for delivery" => Mrzok edit
+                {
+                    if($grouped_orders_data->delivered == 0)
+                    {
+                        if($grouped_orders_data->shipping_company_id == 1)
+                        {
+                            //SMSA
+                            $cities = $this->orders_model->get_shipping_cities('smsa');
+                            foreach($cities as $city)
+                            {
+                                $cities_array[$city->city] = $city->city;
+                            }
+                            $this->data['cities_list'] = $cities_array;
+                        }
+                        else if($grouped_orders_data->shipping_company_id == 3)
+                        {
+                            //ARAMEX
+                            $cities_aramex = $this->orders_model->get_shipping_cities('aramex');
+                            foreach($cities_aramex as $city)
+                            {
+                                $aramex_cities_array[$city->city] = $city->city;
+                            }
+                            $this->data['cities_list'] = $aramex_cities_array;
+                        }
+                    }
+                    // else
+                    // {
+                    //     $tracking_array = array();
+                    //     $tracking_data  = $this->orders_model->get_order_tracking_log_data($group_order_id, $lang_id);
+
+                    //     foreach($tracking_data as $row)
+                    //     {
+                    //         $text         = '';
+                    //         $decoded_text = json_decode($row->feed_back_text);
+
+                    //         foreach($decoded_text as $key=>$val)
+                    //         {
+                    //             $text .= $key.' : '.$val.'<br />';
+                    //         }
+
+                    //         $row->{'decoded_response'} = $text;
+
+                    //         $tracking_array[] = $row;
+                    //     }
+
+                    //     $this->data['tracking_data'] = $tracking_data;
+
+                    // }
+                }
+
+                $shipping_companies = $this->Companies_model->get_companies_data($lang_id, array('shipping_companies.active'=>1));
+
+                $drivers_group_id = $this->config->item('drivers_group_id');
+                $drivers = $this->user_model->get_group_users($drivers_group_id);
+
+                $drivers_array = array();
+                $shipping_companies_array = array();
+
+                foreach($drivers as $row)
+                {
+                    $drivers_array[$row->id] = $row->first_name.' '.$row->last_name;
+                }
+
+                foreach($shipping_companies as $row)
+                {
+                    $shipping_companies_array[$row->id]  = $row->name;
+                }
+
+                // $get_orders_return  = $this->orders_model->get_orders_return($order_id);
+                // $get_shipping_log  = $this->orders_model->get_order_tracking_log_data($order_id, $lang_id);
+
+                $this->data['order_details']          = $related_orders_details; // $order_details;
+                $this->data['payment_method']         = $payment_method;
+                $this->data['order_products']         = $related_orders_products ; //$order_products;
+                $this->data['products_with_serials']  = $products_with_serials;
+                $this->data['wholesaler_options']     = $wholesaler_options;
+                // $this->data['order_log']              = $orders_log_array;
+                $this->data['status_options']         = $status_options;
+                $this->data['charge_card']            = $charge_card;
+                $this->data['cards_data']             = $cards_array;
+                $this->data['order_auto_cancel']      = $allow_cancel_auto_cancel;
+                // $this->data['sms_templates']          = $sms_templates;
+                $this->data['edit_order']             = false;//$edit_order;
+                // $this->data['country_other_products'] = $product_new_array; // used with edit order
+                // $this->data['invalid_options_select'] = $invalid_options_select;
+                // $this->data['edit_order_data']        = $user_edit_order_data;
+                // $this->data['pre_orders_array']       = $pre_orders_array;
+                // $this->data['order_notes']            = $order_notes;
+                $this->data['drivers']                = $drivers_array;
+                // $this->data['get_order_message']      = $get_orders_return;
+                // $this->data['get_shipping_log']       = $get_shipping_log;
+                $this->data['shipping_compinies']     = $shipping_companies_array;
+
+                $this->data['grouped_orders_data']     = $grouped_orders_data;
+                $this->data['enable_request_shipment'] = $enable_request_shipment;
+                
+            }
+            else
+            {
+                $this->data['error_msg'] = lang('no_data_about_this_order');
+            }
+
+            $this->data['content'] = $this->load->view('admin_grouped_order_details', $this->data, true);
+            $this->load->view($this->view_folder.'/main_frame',$this->data);
+        }
+    }
+
+    public function update_status()
+    {
         $this->form_validation->set_rules('status_id', lang('status_id'), 'required');
         if($this->form_validation->run() == false)
         {
@@ -1007,19 +1535,19 @@ class Admin_order extends CI_Controller
 
             redirect('orders/admin_order/view_order/'.$order_data->id, 'refresh');
         }
-     }
+    }
 
-     public function do_action()
-     {
+    public function do_action()
+    {
         $action = $this->input->post('action');
         if($action == 'delete')
         {
             $this->delete();
         }
-     }
+    }
 
-     public function send_notification($order_id, $user_id, $lang_id)
-     {
+    public function send_notification($order_id, $user_id, $lang_id)
+    {
         // send notification
         $userdata = $this->users_model->get_user($user_id);
         $username = $userdata->first_name. ' ' . $user_data->last_name;
@@ -1042,10 +1570,10 @@ class Admin_order extends CI_Controller
         {
             $this->session->set_flashdata('notification_error',lang('sms_insert_order_not_sent'));
         }
-     }
+    }
 
-     public function stream()
-     {
+    public function stream()
+    {
         /**************************************/
         $this->stores   = $this->admin_bootstrap->get_user_available_stores($_POST['index_method_id']);
         $store_id_array = array();
@@ -1111,6 +1639,9 @@ class Admin_order extends CI_Controller
                         		<div class="checker"><span><input type="checkbox" class="group-checkable checkbox" name="row_id[]" value="'.$new_row_data->id.'"></span></div>
                         	</td>
 
+                            <td style="text-align: center;">
+                                <a class="btn btn-sm green table-group-action-submit" href="'.base_url().'orders/admin_order/view_grouped_order/'.$new_row_data->orders_number.'">'.$new_row_data->orders_number.'</a>
+                            </td>
                             <td style="text-align: center;"><a href="'.base_url().'orders/admin_order/view_order/'.$new_row_data->id.'">'.$new_row_data->id.'</a></td>
                             <td style="text-align: center;">
                       			<a class="btn btn-sm blue table-group-action-submit" href="'.base_url().'orders/admin_order/view_order/'.$new_row_data->id.'">'.lang('order_details').'</a>
@@ -1144,10 +1675,10 @@ class Admin_order extends CI_Controller
         {
             echo '0';
         }
-     }
+    }
 
-     public function send_sms()
-     {
+    public function send_sms()
+    {
         $order_id = $this->input->post('order_id');
         if($order_id)
         {
@@ -1178,10 +1709,10 @@ class Admin_order extends CI_Controller
 
         }
         redirect('orders/admin_order/view_order/'.$order_id, 'refresh');
-     }
+    }
 
-     public function delete_order($order_id=0)
-     {
+    public function delete_order($order_id=0)
+    {
         if($order_id == 0)
         {
             $order_id = $_POST['row_id'];
@@ -1200,10 +1731,10 @@ class Admin_order extends CI_Controller
 
         //redirect('orders/admin_order/', 'refresh');
         echo '1';
-     }
+    }
 
-     public function delete($order_id=0)
-     {
+    public function delete($order_id=0)
+    {
 
         if($order_id == 0)
         {
@@ -1266,11 +1797,11 @@ class Admin_order extends CI_Controller
 
         $this->orders_model->delete_order_data($ids_array);
         */
-     }
+    }
 
 
-     public function _approve_order($order_id, $order_data, $order_products, $secret_key, $secret_iv, $status_id)
-     {
+    public function _approve_order($order_id, $order_data, $order_products, $secret_key, $secret_iv, $status_id)
+    {
         $this->load->model('currencies/currency_model');
         $this->load->model('stores/stores_model');
 
@@ -1353,7 +1884,7 @@ class Admin_order extends CI_Controller
           if($package_check > 0)
           {
               $order_package = $this->orders_model->get_recharge_card($order_id, $this->data['lang_id'], 'package', 'row');
-//print_r($order_package); die();
+              //print_r($order_package); die();
               //update user data
               $user_new_account_data = array(
                 'customer_group_id' => $order_package->package_id,
@@ -1509,7 +2040,7 @@ class Admin_order extends CI_Controller
                                       <td>'.lang('price').'</td>
                                   </tr>';
               $sms_msg  = '';
-//echo '<pre>'; print_r($serials_data); die();
+              //echo '<pre>'; print_r($serials_data); die();
               if(count($serials_data) != 0)
               {
                   foreach($serials_data as $serial)
@@ -1603,7 +2134,7 @@ class Admin_order extends CI_Controller
                                   'payment_method'        => $payment_method->name                                ,
                                   'status'                => $status                                              ,
                                   'order_id'              => $order_data->id                                      ,
-                                  'logo_path'             => $this->images_path.$this->config->item('logo'), //base_url().'assets/uploads/'.$this->config->item('logo') ,
+                                  'logo_path'             => $this->data['images_path'].$this->config->item('logo'), //base_url().'assets/uploads/'.$this->config->item('logo') ,
                                   'img_path'              => base_url().'assets/template/site/img/'               ,
                                   'order_time'            => date('Y/m/d H:i', $order_data->unix_time)            ,
                                   'order_details_email'   => $email_msg                                           ,
@@ -1621,10 +2152,10 @@ class Admin_order extends CI_Controller
         }
 
         $this->_insert_order_log($order_id, $status_id);
-     }
+    }
 
-     private function _canceled_orders_operations($order_id, $country_id, $status_id, $order_products)
-     {
+    private function _canceled_orders_operations($order_id, $country_id, $status_id, $order_products)
+    {
         $order_data = $this->orders_model->get_order($order_id);
 
         //if order payment method = balance ... return user balance
@@ -1651,7 +2182,7 @@ class Admin_order extends CI_Controller
             $this->user_balance_model->insert_balance_log($balance_log_data);
 
         }
-        else if($order_data->payment_method_id = 2)  //if order payment method = reward points ... return user reward points
+        else if($order_data->payment_method_id == 2)  //if order payment method = reward points ... return user reward points
         {
             $order_points = $this->admin_bootstrap->convert_into_reward_points($order_data->country_id, $order_data->final_total);
 
@@ -1694,16 +2225,16 @@ class Admin_order extends CI_Controller
                                 'unix_time'    => time(),
                                 'username'     => $username,
                                 'order_id'     => $order_id,
-                                'logo_path'    => $this->images_path.$this->config->item('logo'), //base_url().'assets/uploads/'.$this->config->item('logo'),
+                                'logo_path'    => $this->data['images_path'].$this->config->item('logo'), //base_url().'assets/uploads/'.$this->config->item('logo'),
                                 'order_time'   => date('Y/m/d H:i', $order_data->unix_time),
                                 'year'         => date('Y')
                               );
                               
         $this->notifications->create_notification('cancel_order', $template_data, $emails, $mobile_number);
-     }
+    }
 
-     private function _insert_order_log($order_id, $status_id)
-     {
+    private function _insert_order_log($order_id, $status_id)
+    {
         $log_data = array(
                             'order_id'  => $order_id  ,
                             'status_id' => $status_id ,
@@ -1711,10 +2242,10 @@ class Admin_order extends CI_Controller
                          );
 
         $this->orders_model->insert_order_log($log_data);
-     }
+    }
 
-     public function add()
-     {
+    public function add()
+    {
         $validation_msg = false;
 
         if(strtoupper($_SERVER['REQUEST_METHOD']) == 'POST')
@@ -1888,10 +2419,10 @@ class Admin_order extends CI_Controller
 
             redirect('orders/admin_order/order_optional_fields/'.$order_id, 'refresh');
         }
-     }
+    }
 
-     private function _add_form($validation_msg)
-     {
+    private function _add_form($validation_msg)
+    {
         if($validation_msg)
         {
             $this->data['validation_msg'] = lang('fill_required_fields');
@@ -1945,10 +2476,10 @@ class Admin_order extends CI_Controller
 
         $this->data['content']           = $this->load->view('orders_form', $this->data, true);
         $this->load->view('Admin/main_frame',$this->data);
-     }
+    }
 
-     public function check_qty()
-     {
+    public function check_qty()
+    {
         $status_array           = array();
         $optional_fields_html   = '';
 
@@ -2117,10 +2648,10 @@ class Admin_order extends CI_Controller
            * $status = 4 --> cant add more than one of this product
 
         **/
-     }
+    }
 
-     public function order_optional_fields($order_id)
-     {
+    public function order_optional_fields($order_id)
+    {
         $lang_id         = $this->data['active_language']->id;
         $optional_fields = $this->check_optional_fields($order_id);
 
@@ -2225,20 +2756,20 @@ class Admin_order extends CI_Controller
                 redirect('orders/admin_order/finish_order/'.$order_id, 'refresh');
             }
         }
-     }
+    }
 
-     private function _order_optional_fields_form($order_id, $optional_fields, $validation_msg)
-     {
+    private function _order_optional_fields_form($order_id, $optional_fields, $validation_msg)
+    {
         $this->data['form_action']                  = $this->data['module'] . "/" . $this->data['controller'] . "/order_optional_fields/".$order_id;
         $this->data['order_id']                     = $order_id;
         $this->data['products_optional_fields']     = $optional_fields;
 
         $this->data['content'] = $this->load->view('order_optional_fields_form', $this->data, true);
         $this->load->view('Admin/main_frame',$this->data);
-     }
+    }
 
-     public function finish_order($order_id)
-     {
+    public function finish_order($order_id)
+    {
         /**************************************/
         if($this->data['method_id'] == 0)
         {
@@ -2309,10 +2840,10 @@ class Admin_order extends CI_Controller
             $this->load->view('Admin/main_frame',$this->data);
         }
 
-     }
+    }
 
-     public function get_order_prices()
-     {
+    public function get_order_prices()
+    {
         $order_id = $this->input->post('order_id');
         $order_id = intval($order_id);
 
@@ -2321,10 +2852,10 @@ class Admin_order extends CI_Controller
         $result_array = array($order_data->total, $order_data->discount, $order_data->coupon_discount, $order_data->tax, $order_data->final_total);
 
         echo json_encode($result_array);
-     }
+    }
 
-     public function get_payment_methods($final_total, $country_id, $user_id)
-     {
+    public function get_payment_methods($final_total, $country_id, $user_id)
+    {
         $secret_key           = $this->config->item('new_encryption_key');
         $secret_iv            = $user_id;
 
@@ -2409,8 +2940,8 @@ class Admin_order extends CI_Controller
 
     }
 
-     public function get_country_products()
-     {
+    public function get_country_products()
+    {
         $lang_id                   = $this->lang_row->id;
         $country_id                = $this->input->post('country_id');
         $user_id                   = $this->input->post('user_id');
@@ -2432,9 +2963,9 @@ class Admin_order extends CI_Controller
 
         echo $countries_products;
 
-     }
+    }
 
-     public function total($product_ids=array(), $country_id=0, $quantity=array(), $user_id=0, $mode='0')
+    public function total($product_ids=array(), $country_id=0, $quantity=array(), $user_id=0, $mode='0')
     {
         $product_ids = $this->input->post('product_id');
         $country_id  = $this->input->post('country_id');
@@ -2650,8 +3181,8 @@ class Admin_order extends CI_Controller
         }
     }
 
-     private function _check_coupon($order_id, $order_data, $coupon_data, $user_id)
-     {
+    private function _check_coupon($order_id, $order_data, $coupon_data, $user_id)
+    {
         $order_total_discount   = 0;
         $discount_on_product    = 0;
         $coupon_products_exist  = false;
@@ -3022,7 +3553,7 @@ class Admin_order extends CI_Controller
                                         'status'           => $status,
                                         'order_time'       => date('Y/m/d H:i', time()),
                                         'order_id'         => $order_id,
-                                        'logo_path'        => $this->images_path.$this->config->item('logo'), //base_url().'assets/uploads/'.$this->config->item('logo'),
+                                        'logo_path'        => $this->data['images_path'].$this->config->item('logo'), //base_url().'assets/uploads/'.$this->config->item('logo'),
                                         'user_order_link'  => base_url()."orders/order/view_order_details/".$order_id
                                       );
 
@@ -3145,7 +3676,7 @@ class Admin_order extends CI_Controller
                 $product_data   = $this->products_model->get_row_data($serial->product_id, $lang_id);
                 $product_name   = $product_data->title;
                 //$img_path       = base_url().'assets/uploads/products/'.$product_data->image; // => Set Image From Server uploads
-                $img_path       = $this->images_path.$product_data->image; // =>Set image from Amazon S3 Bucket 
+                $img_path       = $this->data['images_path'].$product_data->image; // =>Set image from Amazon S3 Bucket 
 
                 $secret_key  = $this->config->item('new_encryption_key');
                 $secret_iv   = md5('serial_iv');
@@ -3172,7 +3703,7 @@ class Admin_order extends CI_Controller
                                     'username'     => $user_data->username,
                                     'status'       => lang('completed'),
                                     'order_id'     => $order_id,
-                                    'logo_path'    => $this->images_path.$this->config->item('logo'), //base_url().'assets/uploads/'.$this->config->item('logo'),
+                                    'logo_path'    => $this->data['images_path'].$this->config->item('logo'), //base_url().'assets/uploads/'.$this->config->item('logo'),
                                     'order_time'   => date('Y/m/d H:i', $order_data->unix_time),
                                     'user_order_link'     => base_url()."orders/order/view_order_details/".$order_id,
                                     'order_details_email' => $email_msg,
@@ -3470,9 +4001,10 @@ class Admin_order extends CI_Controller
         $note     = strip_tags($this->input->post('admin_note'));
 
         $order_note_data = array(
-                                    'order_id' => $order_id,
+                                    'order_id'  => $order_id,
                                     'user_id'   => $this->data['user_id'],
-                                    'comment'   => $note
+                                    'comment'   => $note,
+                                    'unix_time' => time()
                                 );
         //$updated_data['admin_note'] = strip_tags($this->input->post('admin_note'));
         $this->orders_model->insert_order_note($order_note_data);
