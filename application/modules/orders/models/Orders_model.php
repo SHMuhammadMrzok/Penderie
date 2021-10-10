@@ -63,6 +63,7 @@ class Orders_model extends CI_Model
                             shipping_cities_translation.name as shipping_city, payment_methods_translation.name as payment_method, user_addresses.lat, user_addresses.lng,
                             user_addresses.address as shipping_address, user_addresses.city as shipping_city, user_addresses.title as shipping_district'
                             .',orders.shipping_city as order_shipping_city, orders.shipping_town as order_shipping_town, orders.shipping_district as orders_shipping_district, orders.shipping_address as order_shipping_address ' // only This row, Mrzok Edits
+                            .', user_nationality_translation.name as country_name'
                             ); // , user_addresses.*
 
         $this->db->join('orders_log', 'orders.id = orders_log.order_id', 'left');
@@ -87,6 +88,8 @@ class Orders_model extends CI_Model
         $this->db->join('payment_methods_translation', 'orders.payment_method_id = payment_methods_translation.payment_method_id
                         AND payment_methods_translation.lang_id ='.$display_lang_id, 'left');
         $this->db->join('countries', 'orders.country_id = countries.id');
+        
+        $this->db->join('user_nationality_translation', 'users.Country_ID = user_nationality_translation.user_nationality_id AND user_nationality_translation.lang_id = '.$display_lang_id);
 
 
         $this->db->where('orders.id', $order_id);
@@ -197,7 +200,7 @@ class Orders_model extends CI_Model
         }
     }
 
-    public function get_grouped_orders_products($orders_number, $display_lang_id)
+    public function get_grouped_orders_products($orders_number, $display_lang_id, $required_order_status = array())
     {
         $this->db->select('orders_products.*, products.*, products_translation.title, orders_products.id as order_product_id, orders_products.product_id as product_id');
 
@@ -208,6 +211,9 @@ class Orders_model extends CI_Model
 
         $this->db->where('orders.orders_number', $orders_number);
         //$this->db->where('orders.id', $orders_number);
+        if(!empty($required_order_status)){
+            $this->db->where_in('orders.order_status_id', $required_order_status);
+        }
 
         $result = $this->db->get('orders_products');
 
@@ -356,6 +362,12 @@ class Orders_model extends CI_Model
 
         $this->db->where('orders_serials.product_id', $product_id);
         $this->db->where('orders_serials.order_id', $order_id);
+
+        // Mrzok Edit 9/2021 => to get serials of specific order_product_id
+        if($order_product_id != 0){
+            $this->db->where('orders_serials.order_product_id', $order_product_id);
+        }
+        ///
 
         $result = $this->db->get('orders_serials');
 
@@ -2682,7 +2694,7 @@ class Orders_model extends CI_Model
     }*/
 
     public function get_user_grouped_order_data($user_id, $display_lang_id, $orders_number, $is_admin=0)
-   {
+    {
         $this->db->select('orders.*, order_status_translation.name, orders.id as id, order_status_translation.name as status,
                             payment_methods_translation.name as payment_method, SUM(orders.total) as total, SUM(orders.discount) as discount,
                             SUM(orders.coupon_discount) as coupon_discount, SUM(orders.tax) as tax, SUM(orders.shipping_cost) as shipping_cost,
@@ -2696,6 +2708,66 @@ class Orders_model extends CI_Model
                                                         AND payment_methods_translation.lang_id = '.$display_lang_id);
         $this->db->join('shipping_companies_translation', 'orders.shipping_company_id = shipping_companies_translation.shipping_company_id
                                                         AND shipping_companies_translation.lang_id = '.$display_lang_id, 'left');
+
+
+        $this->db->where('orders.admin_not_completed_order != 1');
+        if(! $is_admin)
+        {
+          $this->db->where('orders.user_id', $user_id);
+        }
+        $this->db->where('order_status_translation.lang_id', $display_lang_id);
+        
+        $this->db->where('orders.orders_number', $orders_number);
+
+        $this->db->order_by('orders.id', 'desc');
+
+        //$this->db->group_by('orders.orders_number');
+
+
+        $query = $this->db->get('orders');
+
+        if($query)
+        {
+            return $query->row();
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    public function get_user_grouped_order_basic_data($user_id, $display_lang_id, $orders_number, $is_admin=0)
+    {
+        $this->db->select('orders.*, users.*, order_status_translation.name, orders.id as id, order_status_translation.name as status,
+                            payment_methods_translation.name as payment_method, SUM(orders.total) as total, SUM(orders.discount) as discount,
+                            SUM(orders.coupon_discount) as coupon_discount, SUM(orders.tax) as tax, SUM(orders.shipping_cost) as shipping_cost,
+                            SUM(orders.final_total) as final_total, SUM(orders.wrapping_cost) as wrapping_cost ,
+                            users.first_name, users.last_name, shipping_companies_translation.name as shipping_company, 
+                            shipping_costs_translation.country as shipping_country, cities_translation.name as city_name,
+                            shipping_cities_translation.name as shipping_city, branches_translation.name as branch_name'
+                            .', user_addresses.lat, user_addresses.lng, user_addresses.address as shipping_address, user_addresses.city as shipping_city, user_addresses.title as shipping_district'
+                            .',orders.shipping_city as order_shipping_city, orders.shipping_town as order_shipping_town, orders.shipping_district as orders_shipping_district, orders.shipping_address as order_shipping_address '
+                            .', user_nationality_translation.name as country_name'
+                        );
+
+        $this->db->join('order_status_translation', 'orders.order_status_id = order_status_translation.status_id');
+        $this->db->join('user_addresses', 'orders.address_id = user_addresses.id', 'left');
+        $this->db->join('users', 'orders.user_id = users.id', 'left');
+        $this->db->join('payment_methods_translation', 'orders.payment_method_id = payment_methods_translation.payment_method_id
+                                                        AND payment_methods_translation.lang_id = '.$display_lang_id);
+        $this->db->join('shipping_companies_translation', 'orders.shipping_company_id = shipping_companies_translation.shipping_company_id
+                                                        AND shipping_companies_translation.lang_id = '.$display_lang_id, 'left');
+        $this->db->join('shipping_costs_translation', 'orders.shipping_country_id = shipping_costs_translation.shipping_cost_id
+                        AND shipping_costs_translation.lang_id ='.$display_lang_id, 'left');
+        $this->db->join('cities_translation', 'orders.shipping_city = cities_translation.city_id
+                        AND cities_translation.lang_id ='.$display_lang_id, 'left');
+        $this->db->join('shipping_cities_translation', 'orders.shipping_city = shipping_cities_translation.city_id
+                        AND shipping_cities_translation.lang_id ='.$display_lang_id, 'left');
+        $this->db->join('branches_translation', 'orders.branch_id = branches_translation.branch_id
+                        AND branches_translation.lang_id ='.$display_lang_id, 'left');
+                        
+        $this->db->join('user_nationality_translation', 'users.Country_ID = user_nationality_translation.user_nationality_id AND user_nationality_translation.lang_id = '.$display_lang_id);
 
 
         $this->db->where('orders.admin_not_completed_order != 1');

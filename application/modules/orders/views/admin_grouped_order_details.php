@@ -63,16 +63,16 @@ color:#000;
     font-weight: bold;
 }
  </style>
- <?php
-    if($order_details->payment_method_id == 14)
+ <?php /*
+    if($grouped_orders_data->payment_method_id == 14)
     {
  ?>
     <center>
         <div class="col-md-12">
-            <a href="<?php echo base_url();?>orders/later_payment/add_bill/<?php echo $order_details->id; ?>" style="border-radius: 20px;" class="btn green-meadow"><?php echo lang('add_bill');?></a>
+            <a href="<?php echo base_url();?>orders/later_payment/add_bill/<?php echo $grouped_orders_data->orders_number; ?>" style="border-radius: 20px;" class="btn green-meadow"><?php echo lang('add_bill');?></a>
         </div>
     </center>
-    <?php }?>
+    <?php } */ ?>
  <?php if(isset($error_msg)){?>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     	<div class="row no-margin">
@@ -88,9 +88,9 @@ color:#000;
         	<div class="iner_page">
 
 
-                <?php if($order_details->is_pay_later_bill == 1){?>
+                <?php if($grouped_orders_data->is_pay_later_bill == 1){?>
                     <div class="row no-margin margin-top-20px">
-                    	<h1 class="title_order_page">( <?php echo lang('order_bill').' #'.$order_details->main_order_id;?> )</h1>
+                    	<h1 class="title_order_page">( <?php echo lang('order_bill').' #'.$grouped_orders_data->main_order_id;?> )</h1>
                     </div>
                 <?php }?>
 
@@ -98,100 +98,100 @@ color:#000;
                 	<h1 class="title_order_page"><?php echo lang('user_details');?></h1>
                     <div class="row no-margin table_order">
                     	<table class="table table-striped table-hover table-bordered">
-                            <?php if($order_details->username != ''){?>
+                            <?php if($grouped_orders_data->username != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('username');?></td>
-                                    <td><?php echo $order_details->first_name.' '.$order_details->last_name;?></td>
+                                    <td><?php echo $grouped_orders_data->first_name.' '.$grouped_orders_data->last_name;?></td>
                                 </tr>
 
-                            <?php }if($order_details->email != ''){?>
+                            <?php }if($grouped_orders_data->email != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('email');?></td>
-                                    <td><?php echo $order_details->email;?></td>
+                                    <td><?php echo $grouped_orders_data->email;?></td>
                                 </tr>
 
-                            <?php }if($order_details->phone != ''){?>
+                            <?php }if($grouped_orders_data->phone != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('phone');?></td>
-                                    <td><?php echo $order_details->phone;?></td>
+                                    <td><?php echo $grouped_orders_data->phone;?></td>
                                 </tr>
 
-                            <?php }if($order_details->address != ''){?>
+                            <?php }if($grouped_orders_data->address != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('address');?></td>
-                                    <td><?php echo $order_details->address;?></td>
+                                    <td><?php echo $grouped_orders_data->address;?></td>
                                 </tr>
 
-                            <?php }if($order_details->country != ''){?>
+                            <?php }if($grouped_orders_data->country != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('country');?></td>
-                                    <td><?php echo $order_details->country;?></td>
+                                    <td><?php echo $grouped_orders_data->country;?></td>
                                 </tr>
 
-                            <?php }if($order_details->ip_address != ''){?>
+                            <?php }if($grouped_orders_data->ip_address != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('ip_address');?></td>
-                                    <td><?php echo $order_details->ip_address;?></td>
+                                    <td><?php echo $grouped_orders_data->ip_address;?></td>
                                 </tr>
 
-                             <?php }if($order_details->agent != ''){?>
+                             <?php }if($grouped_orders_data->agent != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('agent');?></td>
-                                    <td><?php echo $order_details->agent;?></td>
+                                    <td><?php echo $grouped_orders_data->agent;?></td>
                                 </tr>
 
-                             <?php }if($order_details->created_on != ''){?>
+                             <?php }if($grouped_orders_data->created_on != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('user_created_on');?></td>
-                                    <td><?php echo date('Y/m/d', $order_details->created_on);?></td>
+                                    <td><?php echo date('Y/m/d', $grouped_orders_data->created_on);?></td>
                                 </tr>
 
-                            <?php }if($order_details->last_login != ''){?>
+                            <?php }if($grouped_orders_data->last_login != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('user_last_login');?></td>
-                                    <td><?php echo date('Y/m/d', $order_details->last_login);?></td>
+                                    <td><?php echo date('Y/m/d', $grouped_orders_data->last_login);?></td>
                                 </tr>
 
-                            <?php }if($order_details->company != ''){?>
+                            <?php }if($grouped_orders_data->company != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('company');?></td>
-                                    <td><?php echo $order_details->company;?></td>
+                                    <td><?php echo $grouped_orders_data->company;?></td>
                                 </tr>
 
-                            <?php }if($order_details->user_customer_group != ''){?>
+                            <?php }if($grouped_orders_data->user_customer_group != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('customer_group');?></td>
-                                    <td><?php echo $order_details->user_customer_group;?></td>
+                                    <td><?php echo $grouped_orders_data->user_customer_group;?></td>
                                 </tr>
 
                             <?php }?>
 
                             <tr>
                             	<td><?php echo lang('pocket_money');?></td>
-                                <td><?php echo $order_details->user_balance;?></td>
+                                <td><?php echo $grouped_orders_data->user_balance;?></td>
                             </tr>
 
                             <tr>
                             	<td><?php echo lang('reward_points');?></td>
-                                <td><?php echo $order_details->user_points;?></td>
+                                <td><?php echo $grouped_orders_data->user_points;?></td>
                             </tr>
 
-                            <?php if($order_details->user_previous_orders != ''){?>
+                            <?php if($grouped_orders_data->user_previous_orders != ''){?>
 
                                 <tr>
                                 	<td><?php echo lang('user_previous_orders');?></td>
-                                    <td><?php echo $order_details->user_previous_orders;?></td>
+                                    <td><?php echo $grouped_orders_data->user_previous_orders;?></td>
                                 </tr>
 
                             <?php }?>
@@ -229,9 +229,15 @@ color:#000;
                 	<h1 class="title_order_page"><?php echo lang('order_details');?></h1>
                     <div class="row no-margin table_order">
                     	<table class="table table-striped table-hover table-bordered">
+                            <?php /*
                             <tr>
                             	<td><?php echo lang('order_number');?></td>
                                 <td>#<?php echo $order_details->id;?></td>
+                            </tr>
+
+                            <tr>
+                            	<td><?php echo lang('order_status');?></td>
+                                <td><?php echo $order_details->status;?></td>
                             </tr>
 
                             <?php if($order_details->main_order_id != 0){?>
@@ -244,21 +250,6 @@ color:#000;
                                     </td>
                                 </tr>
                             <?php }?>
-                            
-                            <?php if($order_details->cart_id != 0){?>
-                                <tr>
-                                	<td><?php echo lang('transaction_id');?></td>
-                                    <td>
-                                        <?php echo $order_details->cart_id;?>
-                                    </td>
-                                </tr>
-                            <?php }?>
-
-
-                            <tr>
-                            	<td><?php echo lang('order_status');?></td>
-                                <td><?php echo $order_details->status;?></td>
-                            </tr>
 
                             <tr>
                             	<td><?php echo lang('name_of_store');?></td>
@@ -271,199 +262,209 @@ color:#000;
                                     <td><?php echo $order_details->status_note;?></td>
                                 </tr>
                             <?php }?>
+                            */ ?>
+                            
+                            <?php if($grouped_orders_data->cart_id != 0){?>
+                                <tr>
+                                	<td><?php echo lang('transaction_id');?></td>
+                                    <td>
+                                        <?php echo $grouped_orders_data->cart_id;?>
+                                    </td>
+                                </tr>
+                            <?php }?>
 
                             <tr>
                             	<td><?php echo lang('order_date');?></td>
-                                <td><?php echo date('Y/m/d H:i',$order_details->unix_time);?></td>
+                                <td><?php echo date('Y/m/d H:i',$grouped_orders_data->unix_time);?></td>
                             </tr>
                             <tr>
                             	<td><?php echo lang('payment_method');?></td>
                                 <td><?php echo $payment_method->name;?><?php if($payment_method->image){?> <img height="20" src="<?php echo $this->data['images_path'] . $payment_method->image;?>" /><?php }?></td>
                             </tr>
-                            <?php if($order_details->payment_method_id == 3){?>
+                            <?php if($grouped_orders_data->payment_method_id == 3){?>
                                 <tr>
                                 	<td><?php echo lang('bank_name');?></td>
                                     <td><?php echo $bank_data->bank; ?></td>
                                 </tr>
                                 <tr>
                                 	<td><?php echo lang('account_name');?></td>
-                                    <td><?php echo $order_details->bank_account_name; ?></td>
+                                    <td><?php echo $grouped_orders_data->bank_account_name; ?></td>
                                 </tr>
-                                <?php if($order_details->bank_statement != ''){?>
+                                <?php if($grouped_orders_data->bank_statement != ''){?>
                                   <tr>
                                   	<td><?php echo lang('bank_statement');?></td>
                                     <td>
 
-                                        <img width="250px" src="<?php echo $this->data['images_path'].$order_details->bank_statement;?>" />
+                                        <img width="250px" src="<?php echo $this->data['images_path'].$grouped_orders_data->bank_statement;?>" />
 
                                     </td>
                                   </tr>
                               <?php }?>
-                            <?php }elseif($order_details->voucher != ''){?>
+                            <?php }elseif($grouped_orders_data->voucher != ''){?>
                                 <tr>
                                 	<td><?php echo lang('voucher_number');?></td>
-                                    <td><?php echo $order_details->voucher;?></td>
+                                    <td><?php echo $grouped_orders_data->voucher;?></td>
                                 </tr>
                             <?php }?>
 
-                            <?php if($order_details->shipping_type != 0){?>
+                            <?php if($grouped_orders_data->shipping_type != 0){?>
                                 <tr>
                                 	<td><?php echo lang('shipping_way');?></td>
-                                    <td><?php echo $order_details->shipping_type_lang;?></td>
+                                    <td><?php echo $grouped_orders_data->shipping_type_lang;?></td>
                                 </tr>
                             <?php }?>
 
-                            <?php if($order_details->shipping_company_id != 0){?>
+                            <?php if($grouped_orders_data->shipping_company_id != 0){?>
                                 <tr>
                                 	<td><?php echo lang('shipping_company');?></td>
-                                    <td><?php echo $order_details->shipping_company;?></td>
+                                    <td><?php echo $grouped_orders_data->shipping_company;?></td>
                                 </tr>
                             <?php }?>
 
-                            <?php if($order_details->shipping_country_id != 0){?>
+                            <?php if($grouped_orders_data->shipping_country_id != 0){?>
                                 <tr>
                                 	<td><?php echo lang('shipping_country');?></td>
-                                    <td><?php echo $order_details->shipping_country;?></td>
+                                    <td><?php echo $grouped_orders_data->shipping_country;?></td>
                                 </tr>
                             <?php }?>
 
-                            <?php if($order_details->shipping_city != ''){?>
+                            <?php if($grouped_orders_data->shipping_city != ''){?>
                                 <tr>
                                 	<td><?php echo lang('shipping_city');?></td>
-                                    <td><?php echo $order_details->shipping_city;?></td>
+                                    <td><?php echo $grouped_orders_data->shipping_city;?></td>
                                 </tr>
                             <?php }?>
 
-                            <?php if($order_details->shipping_district != ''){?>
+                            <?php if($grouped_orders_data->shipping_district != ''){?>
                                 <tr>
                                 	<td><?php echo lang('shipping_district');?></td>
-                                    <td><?php echo $order_details->shipping_district;?></td>
+                                    <td><?php echo $grouped_orders_data->shipping_district;?></td>
                                 </tr>
                             <?php }?>
 
-                            <?php if($order_details->shipping_address != ''){?>
+                            <?php if($grouped_orders_data->shipping_address != ''){?>
                                 <tr>
                                 	<td><?php echo lang('address');?></td>
-                                    <td><?php echo $order_details->shipping_address;?></td>
+                                    <td><?php echo $grouped_orders_data->shipping_address;?></td>
                                 </tr>
                             <?php }?>
 
-                            <?php if($order_details->lat != '' || $order_details->lng != ''){?>
+                            <?php if($grouped_orders_data->lat != '' || $grouped_orders_data->lng != ''){?>
                                 <tr>
                                 	<td><?php echo lang('delivery_location');?></td>
-                                    <td><a href="<?php echo 'https://www.google.com/maps/place/'.$order_details->lat.','.$order_details->lng;?>" target="_blank"><?php echo 'https://www.google.com/maps/place/'.$order_details->lat.','.$order_details->lng;?></a></td>
+                                    <td><a href="<?php echo 'https://www.google.com/maps/place/'.$grouped_orders_data->lat.','.$grouped_orders_data->lng;?>" target="_blank"><?php echo 'https://www.google.com/maps/place/'.$grouped_orders_data->lat.','.$grouped_orders_data->lng;?></a></td>
                                 </tr>
                             <?php }?>
 
-                            <?php if($order_details->tracking_number && $order_details->tracking_number != ''){?>
+                            <?php if($grouped_orders_data->tracking_number && $grouped_orders_data->tracking_number != ''){?>
                                 <tr>
                                 	<td><?php echo lang('tracking_number');?></td>
-                                    <td><?php echo $order_details->tracking_number;?></td>
+                                    <td><?php echo $grouped_orders_data->tracking_number;?></td>
                                 </tr>
 
                             <?php }?>
 
 
-                            <?php if($order_details->notes != ''){?>
+                            <?php if($grouped_orders_data->notes != ''){?>
                                 <tr>
                                 	<td><?php echo lang('notes');?></td>
-                                    <td><?php echo $order_details->notes;?></td>
+                                    <td><?php echo $grouped_orders_data->notes;?></td>
                                 </tr>
                             <?php }?>
 
                             <?php //delivery
-                            if($order_details->shipping_type == 1){?>
+                            if($grouped_orders_data->shipping_type == 1){?>
                                 <tr>
                                 	<td><?php echo lang('shipping_city');?></td>
-                                    <td><?php echo $order_details->city_name;?></td>
+                                    <td><?php echo $grouped_orders_data->city_name;?></td>
                                 </tr>
 
                                 <tr>
                                 	<td><?php echo lang('phone');?></td>
-                                    <td><?php echo $order_details->shipping_phone;?></td>
+                                    <td><?php echo $grouped_orders_data->shipping_phone;?></td>
                                 </tr>
 
                                 <tr>
                                 	<td><?php echo lang('name');?></td>
-                                    <td><?php echo $order_details->shipping_name;?></td>
+                                    <td><?php echo $grouped_orders_data->shipping_name;?></td>
                                 </tr>
 
                                 <tr>
                                 	<td><?php echo lang('address');?></td>
-                                    <td><?php echo $order_details->shipping_address;?></td>
+                                    <td><?php echo $grouped_orders_data->shipping_address;?></td>
                                 </tr>
                             <?php }
-                            elseif($order_details->shipping_type == 2){?>
+                            elseif($grouped_orders_data->shipping_type == 2){?>
                                 <tr>
                                 	<td><?php echo lang('branch');?></td>
-                                    <td><?php echo $order_details->branch_name;?></td>
+                                    <td><?php echo $grouped_orders_data->branch_name;?></td>
                                 </tr>
                             <?php }
                             // Mrzok Edits
-                            elseif($order_details->shipping_type == 3){?>
+                            elseif($grouped_orders_data->shipping_type == 3){?>
 
-                                <?php if($order_details->order_shipping_city != '' && !is_int($order_details->order_shipping_city)){?>
+                                <?php if($grouped_orders_data->order_shipping_city != '' && !is_int($grouped_orders_data->order_shipping_city)){?>
                                     <tr>
                                         <td><?php echo lang('shipping_city');?></td>
-                                        <td><?php echo $order_details->order_shipping_city;?></td>
+                                        <td><?php echo $grouped_orders_data->order_shipping_city;?></td>
                                     </tr>
                                 <?php }?>
 
-                                <?php if($order_details->order_shipping_district != ''){?>
+                                <?php if($grouped_orders_data->order_shipping_district != ''){?>
                                     <tr>
                                         <td><?php echo lang('shipping_district');?></td>
-                                        <td><?php echo $order_details->order_shipping_district;?></td>
+                                        <td><?php echo $grouped_orders_data->order_shipping_district;?></td>
                                     </tr>
                                 <?php }?>
 
-                                <?php if($order_details->order_shipping_town != ''){?>
+                                <?php if($grouped_orders_data->order_shipping_town != ''){?>
                                     <tr>
                                         <td><?php echo lang('shipping_town');?></td>
-                                        <td><?php echo $order_details->order_shipping_town;?></td>
+                                        <td><?php echo $grouped_orders_data->order_shipping_town;?></td>
                                     </tr>
                                 <?php }?>
 
-                                <?php if($order_details->order_shipping_address != ''){?>
+                                <?php if($grouped_orders_data->order_shipping_address != ''){?>
                                     <tr>
                                         <td><?php echo lang('shipping_address');?></td>
-                                        <td><?php echo $order_details->order_shipping_address;?></td>
+                                        <td><?php echo $grouped_orders_data->order_shipping_address;?></td>
                                     </tr>
                                 <?php }?>
 
-                                <?php if($order_details->shipping_name != ''){?>
+                                <?php if($grouped_orders_data->shipping_name != ''){?>
                                     <tr>
                                         <td><?php echo lang('name');?></td>
-                                        <td><?php echo $order_details->shipping_name;?></td>
+                                        <td><?php echo $grouped_orders_data->shipping_name;?></td>
                                     </tr>
                                 <?php }?>
 
-                                <?php if($order_details->shipping_phone != ''){?>
+                                <?php if($grouped_orders_data->shipping_phone != ''){?>
                                     <tr>
                                         <td><?php echo lang('phone');?></td>
-                                        <td><?php echo $order_details->shipping_phone;?></td>
+                                        <td><?php echo $grouped_orders_data->shipping_phone;?></td>
                                     </tr>
                                 <?php }?>
                             <?php }
                             // End Edits
-                            elseif($order_details->shipping_type == 4){?>
+                            elseif($grouped_orders_data->shipping_type == 4){?>
 
-                                <?php if(isset($order_details->title) && $order_details->title != ''){?>
+                                <?php if(isset($grouped_orders_data->title) && $grouped_orders_data->title != ''){?>
                                     <tr>
                                         <td><?php echo lang('title');?></td>
-                                        <td><?php echo $order_details->title;?></td>
+                                        <td><?php echo $grouped_orders_data->title;?></td>
                                     </tr>
                                 <?php }?>
 
-                                <?php if(isset($order_details->address) && $order_details->address != ''){?>
+                                <?php if(isset($grouped_orders_data->address) && $grouped_orders_data->address != ''){?>
                                     <tr>
                                         <td><?php echo lang('address');?></td>
-                                        <td><?php echo $order_details->address;?></td>
+                                        <td><?php echo $grouped_orders_data->address;?></td>
                                     </tr>
                                 <?php }?>
                                 
                             <?php }?>
                             
-                            <?php if($order_details->send_as_gift == 1 && isset($wrapping_data) && count($wrapping_data) != 0){?>
+                            <?php if($grouped_orders_data->send_as_gift == 1 && isset($wrapping_data) && count($wrapping_data) != 0){?>
                                 <?php if(isset($wrapping_data->wrapping_type)){ ?>
                                 <tr>
                                     <td><?php echo lang('wrapping_type');?></td>
@@ -494,13 +495,13 @@ color:#000;
                                 
                                 <?php /*<tr>
                                     <td><?php echo lang('wrapping_cost');?></td>
-                                    <td><?php echo $order_details->wrapping_cost. ' '. $order_details->currency_symbol;?></td>
+                                    <td><?php echo $grouped_orders_data->wrapping_cost. ' '. $grouped_orders_data->currency_symbol;?></td>
                                 </tr>*/?>
                                 
-                                <?php if(isset($order_details->gift_msg)){ ?>
+                                <?php if(isset($grouped_orders_data->gift_msg)){ ?>
                                 <tr>
                                     <td><?php echo lang('gift_msg');?></td>
-                                    <td><?php echo $order_details->gift_msg;?></td>
+                                    <td><?php echo $grouped_orders_data->gift_msg;?></td>
                                 </tr>
                                 <?php } ?>
                             <?php }?>
@@ -516,7 +517,8 @@ color:#000;
                         <?php $return_modals_array= array();
                         if(count($products_with_serials) != 0)
                         {
-                        	 foreach($products_with_serials as $product){
+                        	foreach($products_with_serials as $product)
+                            {
                         	   if($product->product_id == 0){?>
                                 <tr class="header_tr">
                                 	 <td></td>
@@ -531,14 +533,23 @@ color:#000;
                                     <tr class="header_tr" style="background: rgb(108, 174, 241); color:#fff;">
                                         <td>
                                             <strong><?php echo $product->title;?></strong>
+
+                                            <strong style="color:black;">
+                                                <?php echo '<br>'.lang('name_of_store'). ' : '. $product->store_name;?>
+                                            </strong>
+
+                                            <strong style="color:brown;">
+                                                <?php echo '<br>'.lang('order_number'). ' : #'. $product->order_id;?>
+                                            </strong>
+
                                             <span>
-                                                <?php echo '<br>'.lang('price'). ' : '. $product->final_price.' '.$order_details->currency_symbol;?>
+                                                <?php echo '<br>'.lang('price'). ' : '. $product->final_price.' '.$grouped_orders_data->currency_symbol;?>
                                             </span>
                                             <span>
-                                                <?php echo '<br>'.lang('final_total'). ' : '. $product->final_price*$product->qty.' '.$order_details->currency_symbol;?>
+                                                <?php echo '<br>'.lang('final_total'). ' : '. $product->final_price*$product->qty.' '.$grouped_orders_data->currency_symbol;?>
                                             </span>
                                             <span>
-                                                <?php echo '<br>'.lang('vat_value'). ' ( '.$product->vat_percent.'% ) : '. $product->vat_value.' '.$order_details->currency_symbol.' <br />';?>
+                                                <?php echo '<br>'.lang('vat_value'). ' ( '.$product->vat_percent.'% ) : '. $product->vat_value.' '.$grouped_orders_data->currency_symbol.' <br />';?>
                                                 <?php echo ($product->vat_type == 1)?lang('inclusive_vat'):lang('exclusive_vat');?>
                                             </span>
                                             <span>
@@ -552,27 +563,27 @@ color:#000;
                                     	   <td>
                                             <span><?php echo lang('quantity');?></span> :
                                             <?php
-                                             if($edit_order && ! isset($product->non_serials_product)){
+                                             if($edit_order && ! isset($product->non_serials_product)){ /*
                                                 echo form_open('orders/admin_edit_order/update_quantity');
                                                     $quantity_data = array('type'=>'number', 'name'=> "quantity", 'class'=>"quantity_input", 'value'=>$product->qty, 'min'=> 1);
                                                     echo form_input($quantity_data);?>
-                                                    <input type="hidden" name="order_id" value="<?php echo $order_details->id;?>" />
-                                                    <input type="hidden" name="country_id" value="<?php echo $order_details->country_id;?>" />
+                                                    <input type="hidden" name="order_id" value="<?php echo $product->order_id;?>" />
+                                                    <input type="hidden" name="country_id" value="<?php echo $grouped_orders_data->country_id;?>" />
                                                     <input type="hidden" name="product_id" value="<?php echo $product->product_id;?>" />
                                                     <button type="submit" class="btn btn-primary" style="margin: auto 10px;"><?php echo lang('update_quantity');?></button>
 
-                                            <?php  echo form_close();
+                                            <?php  echo form_close(); */
                                              }else{?>
                                                 <span><?php echo $product->qty;?></span>
                                             <?php }?>
                                         </td>
                                         <?php if($edit_order){?>
-                                            <td width='7%' style="background: #e9f2fc;;"><button type="button" class="btn red-sunglo remove_product"  name="serial_id"  data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $product->product_id;?>" data-price="<?php echo $product->price;?>" ><?php echo lang('remove_product');?></button></td>
+                                            <td width='7%' style="background: #e9f2fc;"><button type="button" class="btn red-sunglo remove_product"  name="serial_id"  data-order_id="<?php echo $product->order_id;?>" data-product_id="<?php echo $product->product_id;?>" data-price="<?php echo $product->price;?>" ><?php echo lang('remove_product');?></button></td>
                                         <?php }?>
                                     </tr>
 
                                     <!---------------------- Product Return ----------------->
-                                    <?php if($product->return_status != 0){?>
+                                    <?php /* if($product->return_status != 0){?>
                                         <tr class="title_h1" >
                                                 <td>
                                                 <?php echo lang('returned_product');?><br />
@@ -596,12 +607,12 @@ color:#000;
                                                 <?php }?>
                                             </td>
                                         </tr>
-                                    <?php }?>
+                                    <?php } */ ?>
 
                                     <!------------------------------Product Serials ---------------------------------->
 
                                     <?php
-                                    if($order_details->order_status_id != 3 && $order_details->order_status_id != 4){
+                                    if($product->order_status_id != 3 && $product->order_status_id != 4){
                                         if(isset($product->serials) && count($product->serials) != 0){?>
                                             <tr class="header_tr2" style="background:rgb(202, 228, 255); color:#000;">
 
@@ -617,20 +628,20 @@ color:#000;
                                                         <td>
                                                             <del>
                                                             <?php
-                                                            echo $product->price != $product->final_price ? $product->price.' '.$order_details->currency_symbol.'<br>' : '';
+                                                            echo $product->price != $product->final_price ? $product->price.' '.$grouped_orders_data->currency_symbol.'<br>' : '';
                                                             ?>
                                                             </del>
-                                                            <?php echo $product->final_price.' '.$order_details->currency_symbol;?>
+                                                            <?php echo $product->final_price.' '.$grouped_orders_data->currency_symbol;?>
                                                         </td>
                                                         <td style="text-align: center;">
                                                             <?php echo $serial->dec_serial;?>
                                                             <?php /*
                                                             <?php if($serial->invalid == 0){?>
                                                             <div class="serial_<?php echo $serial->product_serial_id;?>">
-                                                                <button type="button" class="btn yellow-crusta invalid_serial serial_<?php echo $serial->product_serial_id;?>" value="<?php echo $serial->product_serial_id;?>" name="serial_id" data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>" ><?php echo lang('invalid_serial');?></button>
+                                                                <button type="button" class="btn yellow-crusta invalid_serial serial_<?php echo $serial->product_serial_id;?>" value="<?php echo $serial->product_serial_id;?>" name="serial_id" data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $product->order_id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>" ><?php echo lang('invalid_serial');?></button>
                                                                 <span style="display: block; font-size: 12px; font-family: tahoma;" class="msg_span serial_<?php echo $serial->product_serial_id;?>"><?php echo lang('invalid_serial_will_be_replaced');?></span>
-                                                                <div><select style="display: none;" name="pocket_invalid_options" id="pocket_invalid_options<?php echo $serial->product_serial_id;?>" class="pocket_invalid_options"  data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>"></select></div>
-                                                                <div><select style="display: none;" class="invalid_options" id="invalid_options<?php echo $serial->product_serial_id;?>" data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $order_details->id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>"></select></div>
+                                                                <div><select style="display: none;" name="pocket_invalid_options" id="pocket_invalid_options<?php echo $serial->product_serial_id;?>" class="pocket_invalid_options"  data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $product->order_id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>"></select></div>
+                                                                <div><select style="display: none;" class="invalid_options" id="invalid_options<?php echo $serial->product_serial_id;?>" data-serial_id="<?php echo $serial->product_serial_id;?>" data-order_id="<?php echo $product->order_id;?>" data-product_id="<?php echo $serial->product_id;?>" data-price="<?php echo $product->price;?>"></select></div>
                                                             </div>
                                                             <?php }else{?>
                                                                 <span style="color: red;"> <?php echo lang('invalid_serial');?> </span>
@@ -676,9 +687,10 @@ color:#000;
                                 }
                             }
                         }
-                        if($charge_card){?>
+                        if($charge_card)
+                        {?>
                         <tr><td colspan="4"></td></tr>
-                        <?php foreach($cards_data as $row){?>
+                            <?php foreach($cards_data as $row){?>
                                 <tr class="header_tr">
                                 	 <?php if($row->type == 'recharge_card'){?>
                                      <td style="text-align: center;">
@@ -691,16 +703,16 @@ color:#000;
                                      </td>
                                      <td> <?php echo lang('renew_membership').' '. $row->title;?></td>
                                    <?php }?>
-                                   <td><?php echo lang('group_price')." ".$row->price." ".$order_details->currency_symbol;?></td>
+                                   <td><?php echo lang('group_price')." ".$row->price." ".$grouped_orders_data->currency_symbol;?></td>
                                 </tr>
-                        <?php }
+                            <?php }
                         }?>
 
                         <?php /*
                          if($edit_order){
                          $att=array('class'=> 'form-horizontal form-bordered');
                          echo form_open('orders/admin_edit_order/add_products', $att);
-                        ?>
+                                ?>
                                 <div class="form-body">
 
                                     <span><?php echo lang('add_product');?></span>
@@ -713,8 +725,8 @@ color:#000;
                                         </div>
                                     </div>
 
-                                    <?php echo form_hidden('order_id', $order_details->id);?>
-                                    <?php echo form_hidden('country_id', $order_details->country_id);?>
+                                    <?php echo form_hidden('order_id', $product->order_id);?>
+                                    <?php echo form_hidden('country_id', $grouped_orders_data->country_id);?>
 
 
                                     <div class="row" style="margin: 5px;">
@@ -735,72 +747,72 @@ color:#000;
 
                         <tr>
                         	<td class="all"><?php echo lang('total');?></td>
-                            <td colspan="5" class="all_td2"><span class="total"><?php echo $order_details->total." ".$order_details->currency_symbol;?></span></td>
+                            <td colspan="5" class="all_td2"><span class="total"><?php echo $grouped_orders_data->total." ".$grouped_orders_data->currency_symbol;?></span></td>
                         </tr>
 
-                        <?php if($order_details->discount != 0){?>
+                        <?php if($grouped_orders_data->discount != 0){?>
                             <tr>
                             	<td class="all"><?php echo lang('total_discount');?></td>
-                                <td colspan="5" class="all_td2">- <?php echo $order_details->discount." ".$order_details->currency_symbol;?></td>
+                                <td colspan="5" class="all_td2">- <?php echo $grouped_orders_data->discount." ".$grouped_orders_data->currency_symbol;?></td>
                             </tr>
                         <?php }?>
 
 
-                        <?php if($order_details->coupon_discount != 0){?>
+                        <?php if($grouped_orders_data->coupon_discount != 0){?>
                             <tr>
                             	<td class="all"><?php echo lang('coupon_discount');?></td>
-                                <td colspan="5" class="all_td2"><?php echo $order_details->coupon_discount." ".$order_details->currency_symbol;?></td>
+                                <td colspan="5" class="all_td2"><?php echo $grouped_orders_data->coupon_discount." ".$grouped_orders_data->currency_symbol;?></td>
                             </tr>
                         <?php }?>
 
-                        <?php if($order_details->maintenance_cost != 0){?>
+                        <?php if($grouped_orders_data->maintenance_cost != 0){?>
                             <tr>
                             	<td class="all"><?php echo lang('maintenance_cost');?></td>
-                                <td colspan="5" class="all_td2"><?php echo $order_details->maintenance_cost." ".$order_details->currency_symbol;?></td>
+                                <td colspan="5" class="all_td2"><?php echo $grouped_orders_data->maintenance_cost." ".$grouped_orders_data->currency_symbol;?></td>
                             </tr>
                         <?php }?>
 
-                        <?php if($order_details->shipping_cost != 0){?>
+                        <?php if($grouped_orders_data->shipping_cost != 0){?>
                             <tr>
                             	<td   class="all"><?php echo lang('shipping_cost');?></td>
-                                <td   colspan="5" class="all_td2"><?php echo $order_details->shipping_cost." ".$order_details->currency_symbol;?></td>
+                                <td   colspan="5" class="all_td2"><?php echo $grouped_orders_data->shipping_cost." ".$grouped_orders_data->currency_symbol;?></td>
                             </tr>
                         <?php }?>
 
-                        <?php if($order_details->tax != 0){?>
+                        <?php if($grouped_orders_data->tax != 0){?>
                             <tr>
                             	<td   class="all"><?php echo lang('tax');?></td>
-                                <td   colspan="5" class="all_td2"><?php echo $order_details->tax." ".$order_details->currency_symbol;?></td>
+                                <td   colspan="5" class="all_td2"><?php echo $grouped_orders_data->tax." ".$grouped_orders_data->currency_symbol;?></td>
                             </tr>
                         <?php }?>
 
-                        <?php if($order_details->wrapping_cost != 0){?>
+                        <?php if($grouped_orders_data->wrapping_cost != 0){?>
                             <tr>
                             	<td   class="all"><?php echo lang('wrapping_cost');?></td>
-                                <td   colspan="5" class="all_td2"><?php echo $order_details->wrapping_cost." ".$order_details->currency_symbol;?></td>
+                                <td   colspan="5" class="all_td2"><?php echo $grouped_orders_data->wrapping_cost." ".$grouped_orders_data->currency_symbol;?></td>
                             </tr>
                         <?php }?>
 
-                        <?php if($order_details->vat_value != 0){?>
+                        <?php if($grouped_orders_data->vat_value != 0){?>
                           <tr>
                             <td class="all"><?php echo lang('vat_value');?></td>
-                            <td colspan="5" class="all_td2"><?php echo $order_details->vat_value." ".$order_details->currency_symbol;?></td>
+                            <td colspan="5" class="all_td2"><?php echo $grouped_orders_data->vat_value." ".$grouped_orders_data->currency_symbol;?></td>
                           </tr>
                         <?php }?>
 
                         <tr>
                         	<td   class="all"><?php echo lang('final_total');?></td>
-                            <td   colspan="5"  class="all_td2"><span class="final_total"><?php echo $order_details->final_total." ".$order_details->currency_symbol;?></span></td>
+                            <td   colspan="5"  class="all_td2"><span class="final_total"><?php echo $grouped_orders_data->final_total." ".$grouped_orders_data->currency_symbol;?></span></td>
                         </tr>
 
                         <tr>
-                        	<td class="all" colspan="6"><a  class="btn yellow-crusta" target="_blank" href="<?php echo base_url();?>orders/order/get_grouped_orders_reciept/<?php echo $order_details->orders_number;?>"><?php echo lang('order_receipt');?></a></td>
+                        	<td class="all" colspan="6"><a  class="btn yellow-crusta" target="_blank" href="<?php echo base_url();?>orders/order/get_grouped_orders_reciept/<?php echo $grouped_orders_data->orders_number;?>"><?php echo lang('order_receipt');?></a></td>
                         </tr>
 
-                        <?php if($order_details->notes != ''){?>
+                        <?php if($grouped_orders_data->notes != ''){?>
                             <tr>
                             	<td   class="all"><?php echo lang('notes');?></td>
-                                <td   colspan="5" class="all_td2"><?php echo $order_details->notes;?></td>
+                                <td   colspan="5" class="all_td2"><?php echo $grouped_orders_data->notes;?></td>
                             </tr>
                         <?php }?>
 
@@ -809,6 +821,8 @@ color:#000;
 
 
                 </div><!--row-->
+
+                <?php /*
                 <h1 class="title_h1"><?php echo lang('order_log');?></h1>
                 <div class="row no-margin margin-top-20px">
                 	<table class="table table-striped table-hover table-bordered" id="table">
@@ -826,8 +840,9 @@ color:#000;
 
                     </table>
                 </div><!--row-->
+                */ ?>
 
-                <?php if(count($edit_order_data) != 0){?>
+                <?php /* if(count($edit_order_data) != 0){?>
                     <h1 class="title_h1"><?php echo lang('order_edit_log');?></h1>
                     <div class="row no-margin margin-top-20px">
                     	<table class="table table-striped table-hover table-bordered" id="table">
@@ -846,20 +861,15 @@ color:#000;
 
                         </table>
                     </div><!--row-->
-                <?php }?>
+                <?php } */ ?>
 
-                <?php  //if($order_details->order_status_id != 1 && $order_details->order_status_id != 3){?>
-                <div class="row no-margin margin-top-20px">
+                <?php /* //if($order_details->order_status_id != 1 && $order_details->order_status_id != 3){?>
+                    <div class="row no-margin margin-top-20px">
                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                            <a href="#sms_modal" data-toggle="modal" class="btn red-sunglo" style="margin-top: 3px;"><?php echo lang('send_sms');?></a>
                            <!--<button type="button" class="btn red-sunglo" id="sms_modal" name="" ><?php echo ('send_sms');?></button>-->
                       </div><!--row-->
-                   </div><!--row-->
-
-
-
-
-
+                    </div><!--row-->
 
                     <h1 class="title_h1"><?php echo lang('notes');?></h1>
                     <div class="row no-margin margin-top-20px">
@@ -920,9 +930,10 @@ color:#000;
                            </div><!--row-->
                         </form>
                     </div><!--row-->
+                <?php } */ ?>
 
                 <!--maintenance cost form -->
-                <?php  if($order_details->order_status_id == 9 && isset($maintenance_product)){?>
+                <?php /* if($order_details->order_status_id == 9 && isset($maintenance_product)){?>
                     <h1 class="title_h1"><?php echo lang('maintenance_cost');?></h1>
                     <div class="row no-margin margin-top-20px">
                         <form action="<?php echo base_url()."orders/admin_edit_order/insert_maintenance_cost"?>" method="post">
@@ -954,7 +965,7 @@ color:#000;
                             </div><!--row-->
                         </form>
                     </div><!--row-->
-                <?php }?>
+                <?php } */ ?>
 
                 <?php /*if(! $is_driver){?>
                 <h1 class="title_h1"><?php echo lang('add_driver');?></h1>
@@ -1009,10 +1020,10 @@ color:#000;
                         </div><!--row-->
                     </form>
                 </div><!--row-->
-              <?php }*/?>
+                <?php }*/?>
 
 
-                <?php  if($order_details->order_status_id == 2 || $order_details->order_status_id == 8 || $order_details->order_status_id == 9 || ($order_details->order_status_id == 1)||$order_details->order_status_id == 12){?>
+                <?php /* if($order_details->order_status_id == 2 || $order_details->order_status_id == 8 || $order_details->order_status_id == 9 || ($order_details->order_status_id == 1)||$order_details->order_status_id == 12){?>
                     <h1 class="title_h1"><?php echo lang('change_staus');?></h1>
                     <div class="row no-margin margin-top-20px">
                         <form action="<?php echo base_url()."orders/admin_order/update_status"?>" method="post">
@@ -1115,38 +1126,38 @@ color:#000;
                             </div><!--row-->
                         </form>
                     </div><!--row-->
-                <?php }?>
+                <?php } */ ?>
 
                 <?php // if($order_details->order_status_id == 1 && $order_details->needs_shipping == 1){ // Old code => deal with order status "complete" ?>
-                <?php if($order_details->order_status_id == 12 && $order_details->needs_shipping == 1){ // Show Request for tracking no. when order status is "Out for delivery" => Mrzok edit?>
+                <?php if($enable_request_shipment) { // ($order_details->order_status_id == 12 && $order_details->needs_shipping == 1){ // Show Request for tracking no. when order status is "Out for delivery" => Mrzok edit?>
 
                 <h1 class="title_h1" id="shipping_data"><?php echo lang('shipment_status');?></h1>
                 <div class="row no-margin margin-top-20px">
-                     <?php if($order_details->delivered == 0){?>
+                    <?php if($grouped_orders_data->delivered == 0){?>
                        <?php
                        $ship_date = 'none';
-                        if($order_details->shipping_company_id == 1)//smsa
+                        if($grouped_orders_data->shipping_company_id == 1)//smsa
                         {
                             $shipping_city          = 'block';
                             $preferred_receipt_time = 'block';
                         }
-                        else if($order_details->shipping_company_id == 2)//zajil
+                        else if($grouped_orders_data->shipping_company_id == 2)//zajil
                         {
                             $shipping_city          = 'none';
                             $preferred_receipt_time = 'none';
                         }
-                        else if($order_details->shipping_company_id == 3)//aramex
+                        else if($grouped_orders_data->shipping_company_id == 3)//aramex
                         {
                             $shipping_city          = 'block';
                             $preferred_receipt_time = 'block';
                             $ship_date = 'block';
                         }
-                        else if($order_details->shipping_company_id == 4)//aymakan
+                        else if($grouped_orders_data->shipping_company_id == 4)//aymakan
                         {
                             $shipping_city          = 'none';
                             $preferred_receipt_time = 'block';
                         }
-                        else if($order_details->shipping_company_id == 6)//Salasa
+                        else if($grouped_orders_data->shipping_company_id == 6)//Salasa
                         {
                             $shipping_city          = 'none';
                             $preferred_receipt_time = 'none';
@@ -1162,7 +1173,7 @@ color:#000;
                                     <div class="col-lg-7 col-md-8 col-sm-8 col-xs-10">
                                         <?php
                                           echo form_error("city");
-                                          $city_id = isset($order_details->shipping_city) ? $order_details->shipping_city : set_value('shipping_city') ;
+                                          $city_id = isset($grouped_orders_data->shipping_city) ? $grouped_orders_data->shipping_city : set_value('shipping_city') ;
                                           echo form_dropdown('shipping_city', $cities_list, $city_id, 'class="form-control select2"');
                                         ?>
                                     </div><!--col-->
@@ -1186,20 +1197,20 @@ color:#000;
                                     </div>
                                 </div><br />
 
-                                <input type="hidden" name="order_id" value="<?php echo $order_details->id;?>" />
-                                <input type="hidden" name="grouped_order" value="0" />
-                                <input type="hidden" name="shipping_company_id" value="<?php echo $order_details->shipping_company_id;?>" />
+                                <input type="hidden" name="order_id" value="<?php echo $grouped_orders_data->orders_number;?>" />
+                                <input type="hidden" name="grouped_order" value="1" />
+                                <input type="hidden" name="shipping_company_id" value="<?php echo $grouped_orders_data->shipping_company_id;?>" />
                                 <button class="btn btn-sm green filter-submit margin-bottom"><?php echo lang('create_shipping_request');?></button>
                             </form>
                         </div>
 
-                        <?php }else{?>
+                    <?php }else{?>
 
                             <div class="row no-margin margin-top-20px">
                                 <div class="form-group" style="margin: 15px 0px;">
                                    <label class="control-label col-md-3"><?php echo lang('tracking_number');?></label>
                                    <div class="col-md-4">
-                                      <span><?php echo $order_details->tracking_number;?></span>
+                                      <span><?php echo $grouped_orders_data->tracking_number;?></span>
                                    </div>
                                 </div><!--cost div-->
                             </div>
@@ -1208,7 +1219,7 @@ color:#000;
                             // $tracking_data = array();
 
 
-                             if(count($tracking_data) != 0){
+                             /* if(count($tracking_data) != 0){
                             ?>
                                 <table class="table table-striped table-hover table-bordered" style="margin: 10px;" >
                                 	<tr class="header_tr">
@@ -1218,8 +1229,8 @@ color:#000;
                                     </tr>
 
                                     <?php
-                             //echo"<pre>";print_r($tracking_data);die();
-                             foreach($tracking_data as $row){?>
+                                    //echo"<pre>";print_r($tracking_data);die();
+                                    foreach($tracking_data as $row){?>
                                         <tr>
                                             <?php //<td><?php //echo $row->status_name;</td>?>
                                             <td> <?php echo date('Y/m/d H:i', $row->unix_time);?></td>
@@ -1228,57 +1239,74 @@ color:#000;
                                     <?php }?>
 
                                 </table>
-                            <?php }?>
-                            <?php if(isset($get_shipping_log['0']) && $get_shipping_log['0']->status_id == 5){ $disblay = 'none';}else{$disblay = 'block';} ?>
+                            <?php } */ ?>
+                                <?php /* if(isset($get_shipping_log['0']) && $get_shipping_log['0']->status_id == 5){ $disblay = 'none';}else{$disblay = 'block';} ?>
                                 <div class="row no-margin margin-top-20px" style="margin: 10px;display:<?php echo $disblay; ?> ;">
                                     <form method="post" action="<?php echo base_url();?>orders/shipping_gateways/get_shipping_info">
-                                        <input type="hidden" name="order_id" value="<?php echo $order_details->id;?>" />
+                                        <input type="hidden" name="order_id" value="<?php echo $grouped_orders_data->related_orders_ids;?>" />
                                         <input type="hidden" name="admin" value="1" />
                                         <button class="btn btn-sm blue table-group-action-submit"><?php echo lang('shipment_status');?></button>
                                     </form>
                                 </div>
+                                <?php */ ?>
 
                                 <?/*<form style="display:<?php echo $disblay; ?> ;" method="post" action="<?php echo base_url();?>orders/shipping_gateways/aramex_print">
                                     <input type="hidden" name="order_id" value="<?php echo $order_details->id;?>" />
                                     <button style="margin: 10px;" class="btn btn-sm red table-group-action-submit"><?php echo lang('print_policy');?></button>
                                 </form>*/?>
-                            <?php if($order_details->shipping_company_id == 3){?>
-                                <a class="btn btn-sm red table-group-action-submit" target="_blank" href="<?php echo base_url();?>orders/shipping_gateways/aramex_print/<?php echo $order_details->id;?>"><?php echo lang('print_policy');?></a>
+                            <?php if($grouped_orders_data->shipping_company_id == 3){?>
+                                <a class="btn btn-sm red table-group-action-submit" target="_blank" href="<?php echo base_url();?>orders/shipping_gateways/aramex_print/<?php echo $grouped_orders_data->orders_number;?>"><?php echo lang('print_policy');?></a>
                             <?php } ?>
 
                             <h1 style="display:<?php echo $disblay; ?> ;" class="title_h1" id="shipping_data"><?php echo lang('cancel_shipment');?></h1>
                             <div style="display:<?php echo $disblay; ?> ;" class="row no-margin line_2" >
-                              <?php if($order_details->shipping_company_id == 1){ //smsa?>
-                                <form method="post" action="<?php echo base_url();?>orders/shipping_gateways/cancel_smsa_shipment">
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-4">
-                                        <label><?php echo lang('cancel_reason');?></label>
-                                    </div>
-                                    <div class="col-lg-7 col-md-8 col-sm-8 col-xs-10">
-                                        <textarea required="required" name="cancel_reason" class="form-control" cols="6" rows="3"></textarea>
-                                    </div>
-                                    <input type="hidden" name="order_id" value="<?php echo $order_details->id;?>" />
-                                    <input type="hidden" name="admin" value="1" />
-                                    <button class="btn btn-sm red table-group-action-submit"><?php echo lang('cancel_shipment');?></button>
-                                </form>
-                              <?php }elseif($order_details->shipping_company_id == 3){ //aramex?>
-                                <form method="post" action="<?php echo base_url();?>orders/shipping_gateways/cancel_aramex_shipment">
-                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-4">
-                                        <label><?php echo lang('cancel_reason');?></label>
-                                    </div>
-                                    <div class="col-lg-7 col-md-8 col-sm-8 col-xs-10">
-                                        <textarea required="required" name="cancel_reason" class="form-control" cols="6" rows="3"></textarea>
-                                    </div>
-                                    <input type="hidden" name="order_id" value="<?php echo $order_details->id;?>" />
-                                    <input type="hidden" name="admin" value="1" />
-                                    <button class="btn btn-sm red table-group-action-submit"><?php echo lang('cancel_shipment');?></button>
-                                </form>
-                              <?php }elseif($order_details->shipping_company_id == 5){ //quick?>
-                                    <form method="post" action="<?php echo base_url();?>orders/shipping_gateways/cancel_quick_shipment">
-                                        <input type="hidden" name="order_id" value="<?php echo $order_details->id;?>" />
+                                <?php if($grouped_orders_data->shipping_company_id == 1){ //smsa?>
+                                    <form method="post" action="<?php echo base_url();?>orders/shipping_gateways/cancel_smsa_shipment">
+                                        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-4">
+                                            <label><?php echo lang('cancel_reason');?></label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8 col-sm-8 col-xs-10">
+                                            <textarea required="required" name="cancel_reason" class="form-control" cols="6" rows="3"></textarea>
+                                        </div>
+                                        <input type="hidden" name="order_id" value="<?php echo $grouped_orders_data->orders_number;?>" />
                                         <input type="hidden" name="admin" value="1" />
                                         <button class="btn btn-sm red table-group-action-submit"><?php echo lang('cancel_shipment');?></button>
                                     </form>
-                              <?php } ?>
+                                <?php }
+                                elseif($grouped_orders_data->shipping_company_id == 3){ //aramex?>
+                                    <form method="post" action="<?php echo base_url();?>orders/shipping_gateways/cancel_aramex_shipment">
+                                        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-4">
+                                            <label><?php echo lang('cancel_reason');?></label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8 col-sm-8 col-xs-10">
+                                            <textarea required="required" name="cancel_reason" class="form-control" cols="6" rows="3"></textarea>
+                                        </div>
+                                        <input type="hidden" name="order_id" value="<?php echo $grouped_orders_data->orders_number;?>" />
+                                        <input type="hidden" name="admin" value="1" />
+                                        <button class="btn btn-sm red table-group-action-submit"><?php echo lang('cancel_shipment');?></button>
+                                    </form>
+                                <?php }
+                                elseif($grouped_orders_data->shipping_company_id == 5){ //quick?>
+                                    <form method="post" action="<?php echo base_url();?>orders/shipping_gateways/cancel_quick_shipment">
+                                        <input type="hidden" name="order_id" value="<?php echo $grouped_orders_data->related_orders_ids;?>" />
+                                        <input type="hidden" name="admin" value="1" />
+                                        <button class="btn btn-sm red table-group-action-submit"><?php echo lang('cancel_shipment');?></button>
+                                    </form>
+                                <?php }
+                                elseif($grouped_orders_data->shipping_company_id == 6){ // Cancel Salasa Shipment ?>
+                                    <form method="post" action="<?php echo base_url();?>orders/shipping_gateways/cancel_salasa_shipment">
+                                        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-4">
+                                            <label><?php echo lang('cancel_reason');?></label>
+                                        </div>
+                                        <div class="col-lg-7 col-md-8 col-sm-8 col-xs-10">
+                                            <textarea required="required" name="cancel_reason" class="form-control" cols="6" rows="3"></textarea>
+                                        </div>
+                                        <input type="hidden" name="order_id" value="<?php echo $grouped_orders_data->orders_number;?>" />
+                                        <input type="hidden" name="grouped_order" value="1" />
+                                        <input type="hidden" name="admin" value="1" />
+                                        <button class="btn btn-sm red table-group-action-submit"><?php echo lang('cancel_shipment');?></button>
+                                    </form>
+                                <?php } ?>
                             </div>
 
 
@@ -1360,6 +1388,7 @@ color:#000;
   </div>
 <?php }?>
 
+<?php /*
 <div id="sms_modal" class="modal fade" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -1371,8 +1400,8 @@ color:#000;
 				<div class="scroller" style="height:300px" data-always-visible="1" data-rail-visible1="1">
 					<div class="row">
 						<div class="col-md-12">
-                <form action="<?php echo base_url();?>orders/admin_order/send_sms" method="post" id="sms_form">
-                  <p><?php echo lang('phone');?></p>
+                            <form action="<?php echo base_url();?>orders/admin_order/send_sms" method="post" id="sms_form">
+                                <p><?php echo lang('phone');?></p>
     							<p>
     								<input type="text" class="col-md-12 form-control" name="phone" value="<?php echo $order_details->phone;?>" readonly="readonly" />
     							</p>
@@ -1416,6 +1445,7 @@ color:#000;
 		</div>
 	</div>
 </div>
+*/ ?>
 
 <script>
 ///////////////////////Edit Products//////////////////////////

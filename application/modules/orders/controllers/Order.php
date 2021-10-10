@@ -110,9 +110,9 @@ class Order extends CI_Controller
         $this->form_validation->set_message('greater_than', lang('required').' : %s ');
 
         if($this->form_validation->run() == FALSE)
-  		  {
-  		     $error_msg      = validation_errors();
-           $order_error    = true;
+  		{
+            $error_msg      = validation_errors();
+            $order_error    = true;
         }
 
 
@@ -753,7 +753,7 @@ class Order extends CI_Controller
 
             $user_orders_data = $this->orders_model->get_user_grouped_order_data($user_id, $display_lang_id, $orders_number, $is_admin);            
 
-            if(count($user_orders_data) != 0)
+            if(!empty($user_orders_data)) // (count($user_orders_data) != 0)
             {
                 $orders_products = $this->orders_model->get_grouped_orders_products($orders_number, $display_lang_id);
 

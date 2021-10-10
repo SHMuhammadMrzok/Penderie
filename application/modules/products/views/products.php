@@ -962,9 +962,9 @@
                               <button class="btn btn-sm red filter-cancel btn-warning remove_option" value="<?php echo $field->id;?>" data-toggle="confirmation"><i class="fa fa-times"></i><span><?php echo lang('delete');?></span></button>
 
                   						<div class="row bg-gray">
-                  							<div class="col-md-6">
+                  							<div class="col-md-5">
                   								<div class="form-group" >
-                  									<div class="col-md-6">
+                  									<div class="col-md-4">
                   									   <label class="control-label"><?php echo lang('optional_fields');?></label>
                   									</div>
 
@@ -983,9 +983,10 @@
                   								   </div>
                   								</div>
                   							</div><!--col-->
-                  							<div class="col-md-6">
+                                              
+                  							<div class="col-md-5">
                   							   <div class="form-group" >
-                          						<div class="col-md-6">
+                          						<div class="col-md-4">
                            								<label class="control-label"><?php echo lang('is_required');?></label>
                            					    </div>
 
@@ -1046,140 +1047,293 @@
 
                                 <?php }else{?>
 
-                          <?php foreach($field->cost as $item){?>
-                              <div class="row-flex-1re">
-                                  <div class="col-md-4">
-								     <div class="form-group ">
-                                        <div class="col-md-6 no-padding">
-    										<label class="control-label"><?php echo $item->field_value;?></label>
-    									</div>
+                                    <?php foreach($field->cost as $item){?>
+                                        <?php /* //Basic Code
+                                        <div class="row-flex-1re">
+                                            <div class="col-md-4">
+                                                <div class="form-group ">
+                                                    <div class="col-md-6 no-padding">
+                                                        <label class="control-label"><?php echo $item->field_value;?></label>
+                                                    </div>
 
-                                        <div class="col-md-6 no-padding">
-                                            <?php
-                                                $cost_data = array('style'=>'margin-top:5px;' , 'name'=>'exist_cost['.$field->id.']['.$item->id.']', 'value'=>$item->cost, 'class'=>"form-control");
-                                                echo form_input($cost_data);
-                                            ?>
-                                          </div>
-                                      </div>
-								  </div><!--col-->
+                                                    <div class="col-md-6 no-padding">
+                                                        <?php
+                                                            $cost_data = array('style'=>'margin-top:5px;' , 'name'=>'exist_cost['.$field->id.']['.$item->id.']', 'value'=>$item->cost, 'class'=>"form-control");
+                                                            echo form_input($cost_data);
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </div><!--col-->
 
-                                  <?php if($field->has_weight == 1){?>
-                                      <div class="col-md-4">
-    								     <div class="form-group ">
-                                            <div class="col-md-6 no-padding">
-        										<label class="control-label"><?php echo lang('weight');?></label>
-        									</div>
+                                            <?php if($field->has_weight == 1){?>
+                                                <div class="col-md-4">
+                                                    <div class="form-group ">
+                                                        <div class="col-md-6 no-padding">
+                                                            <label class="control-label"><?php echo lang('weight');?></label>
+                                                        </div>
 
-                                            <div class="col-md-6 no-padding">
-                                                <?php
-                                                    $weight_data = array('style'=>'margin-top:5px;',
-                                                     'name'=>'exist_weight['.$field->id.']['.$item->id.']',
-                                                     'value'=>$item->weight, 'class'=>"form-control"
-                                                     );
-                                                    echo form_input($weight_data);
-                                                ?>
-                                              </div>
-                                          </div>
-    								  </div><!--col-->
-                                  <?php }?>
-								  <div class="col-md-4">
+                                                        <div class="col-md-6 no-padding">
+                                                            <?php
+                                                                $weight_data = array('style'=>'margin-top:5px;',
+                                                                'name'=>'exist_weight['.$field->id.']['.$item->id.']',
+                                                                'value'=>$item->weight, 'class'=>"form-control"
+                                                                );
+                                                                echo form_input($weight_data);
+                                                            ?>
+                                                        </div>
+                                                    </div>
+                                                </div><!--col-->
+                                            <?php }?>
 
-                                      <div class="form-group">
-                                        <label class="control-label col-md-6"><?php echo lang('thumbnail');?></label>
+                                            <!-- Start Optional Field Option SKU Part -->
+                                            <?php if($field->has_sku == 1){?>
+                                                <div class="col-md-4">
+                                                    <div class="form-group ">
+                                                        <div class="col-md-6 no-padding">
+                                                            <label class="control-label"><?php echo lang('sku_part');?></label>
+                                                        </div>
 
-                                          <?php if($item->image != ''){?>
-                                             <div class="col-md-6 no-padding option_image_<?php echo $item->id;?>">
+                                                        <div class="col-md-6 no-padding">
+                                                            <?php
+                                                                $sku_data = array('style'=>'margin-top:5px;',
+                                                                'name'=>'exist_sku['.$field->id.']['.$item->id.']',
+                                                                'value'=>$item->sku, 'class'=>"form-control"
+                                                                );
+                                                                echo form_input($sku_data);
+                                                            ?>
+                                                        </div>
+                                                    </div>
+                                                </div><!--col-->
+                                            <?php }?>
+                                            <!-- End Optional Field Option SKU Part -->
 
-                                                  <img  width="70" height="70" src="<?php echo $images_path.$item->image;?>" />
-                                                  <button  value="<?php echo $field->id.'_'.$item->id;?>"  class="btn btn-sm red filter-cancel delete_alert delete-btn remove_op_image"><?php echo lang('delete');?></button>
-                                             </div>
-                                          <?php }else{?>
-                                              <div class="col-md-6 no-padding ">
-                                                  <input type="file" name="exist_op_image[<?php echo $field->id.']['.$item->id;?>]" />
-                                              </div>
-                                          <?php }?>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-6"><?php echo lang('thumbnail');?></label>
+                                                    <?php if($item->image != ''){?>
+                                                        <div class="col-md-6 no-padding option_image_<?php echo $item->id;?>">
 
-                                      </div>
+                                                            <img  width="70" height="70" src="<?php echo $images_path.$item->image;?>" />
+                                                            <button  value="<?php echo $field->id.'_'.$item->id;?>"  class="btn btn-sm red filter-cancel delete_alert delete-btn remove_op_image"><?php echo lang('delete');?></button>
+                                                        </div>
+                                                    <?php }else{?>
+                                                        <div class="col-md-6 no-padding ">
+                                                            <input type="file" name="exist_op_image[<?php echo $field->id.']['.$item->id;?>]" />
+                                                        </div>
+                                                    <?php }?>
+                                                </div>
+                                            </div><!--col-->
 
-								  </div><!--col-->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-6"><?php echo lang('active');?></label>
+                                                    <div class="col-md-4 no-padding">
+                                                        <?php
+                                                        if($item->active ==1 ) {
+                                                            $active_val = true;
+                                                        }
+                                                        else {
+                                                            $active_val = false;
+                                                        }
+                                                        $active_option_data = array(
+                                                            'name'           => 'exist_op_active['.$field->id.']['.$item->id.']',
+                                                            'class'          => 'make-switch',
+                                                            'data-on-color'  => 'danger',
+                                                            'data-off-color' => 'default',
+                                                            'value'          => 1,
+                                                            'checked'        => set_checkbox("op_active", $active_val, $active_val),
+                                                            'data-on-text'   => lang('yes'),
+                                                            'data-off-text'  => lang('no'),
+                                                            );
 
-								  <div class="col-md-4">
-
-
-                                      <div class="form-group">
-                                        <label class="control-label col-md-6"><?php echo lang('active');?></label>
-
-                                          <div class="col-md-4 no-padding">
-
-                                              <?php
-                                              if($item->active ==1 )
-                                              {
-                                                $active_val = true;
-                                              }
-                                              else
-                                              {
-                                                $active_val = false;
-                                              }
-
-                                              $active_option_data = array(
-                                                'name'           => 'exist_op_active['.$field->id.']['.$item->id.']',
-                                                'class'          => 'make-switch',
-                                                'data-on-color'  => 'danger',
-                                                'data-off-color' => 'default',
-                                                'value'          => 1,
-                                                'checked'        => set_checkbox("op_active", $active_val, $active_val),
-                                                'data-on-text'   => lang('yes'),
-                                                'data-off-text'  => lang('no'),
-                                                );
-
-                                                echo form_checkbox($active_option_data);
-                                                ?>
-                                           </div>
-                                      </div>
-								  </div><!--col-->
-
-
-                              </div>
-
-                              <div class="form-group">
-                                <label class="control-label col-md-3"><?php echo lang('group_price');?></label>
-                                <div class="col-md-6">
-                                    <?php foreach($customer_groups as $group){?>
-                                        <div class="form-group form-group-border-none" style="display: block;">
-                                           <div class="col-md-4 input-inline price_group_label">
-                                           <div style="color: #2977f7;">
-                                               <?php
-                                                       echo form_label($group->title, 'price');
-                                               ?>
-                                           </div>
-                                           </div>
-
-                                           <div class="col-md-4">
-                                             <div class="input-medium input-inline">
-                                               <?php //echo '<pre>'; print_r($item->groups_prices[$group->id] );die();
-                                               echo form_error("exist_op_group_price[$field->id][$item->id][$group->id]");
-                                                       $op_group_price_data = array('name'=>"exist_op_group_price[$field->id][$item->id][$group->id]" ,
-                                                       'class'=>"form-control price_spinner",
-                                                       'value'=> isset($item->groups_prices[$group->id])? $item->groups_prices[$group->id] : set_value("op_group_price[$field->id][$item->id][$group->id]", 0));
-                                                       echo form_input($op_group_price_data);
-                                              ?>
-                                              </div>
-                                           </div>
+                                                            echo form_checkbox($active_option_data);
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </div><!--col-->
                                         </div>
+                                        */
+                                        // end Basic Code ?>
+
+                                        <!-- Start Optional Field Option field_value & active -->
+                                        <div class="row-flex-1re form-group ">
+                                            <div class="col-md-1">
+                                                <div class="col-md-10 no-padding">
+                                                </div>
+                                            </div><!--col-->
+                                            <div class="col-md-10" style="background-color:lightblue;">
+                                                <div class="col-md-9 no-padding">
+                                                    <label class="control-label"><?php echo $item->field_value;?></label>
+                                                </div>
+
+                                                <!-- Start Optional Field Option active -->
+                                                <div class="col-md-3">
+                                                    <div class="col-md-6 no-padding">
+                                                        <label class="control-label col-md-6"><?php echo lang('active');?></label>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-4 no-padding">
+                                                        <?php
+                                                        if($item->active ==1 ) {
+                                                            $active_val = true;
+                                                        }
+                                                        else {
+                                                            $active_val = false;
+                                                        }
+                                                        $active_option_data = array(
+                                                            'name'           => 'exist_op_active['.$field->id.']['.$item->id.']',
+                                                            'class'          => 'make-switch',
+                                                            'data-on-color'  => 'danger',
+                                                            'data-off-color' => 'default',
+                                                            'value'          => 1,
+                                                            'checked'        => set_checkbox("op_active", $active_val, $active_val),
+                                                            'data-on-text'   => lang('yes'),
+                                                            'data-off-text'  => lang('no'),
+                                                            );
+
+                                                            echo form_checkbox($active_option_data);
+                                                        ?>
+                                                    </div>
+                                                </div><!--col-->
+                                                <!-- End Optional Field Option active -->
+                                            </div><!--col-->
+                                        </div><!--form-group -->
+                                        <!-- End Optional Field Option field_value & active -->
+
+                                        <div style="clear:both"> </div>
+
+                                        <!-- Start Optional Field Option cost & thumbnail -->
+                                        <div class="row-flex-1re">
+                                            <!-- Start Optional Field Option cost -->
+                                            <div class="col-md-4 form-group">
+                                                <div class="col-md-6 no-padding">
+                                                    <label class="control-label col-md-6"><?php echo lang('cost');?></label>
+                                                </div>
+
+                                                <div class="col-md-6 no-padding">
+                                                    <?php
+                                                        $cost_data = array('style'=>'margin-top:5px;' , 'name'=>'exist_cost['.$field->id.']['.$item->id.']', 'value'=>$item->cost, 'class'=>"form-control");
+                                                        echo form_input($cost_data);
+                                                    ?>
+                                                </div>
+                                            </div><!--col-->
+                                            <!-- End Optional Field Option cost -->
+
+                                            <!-- Start Optional Field Option thumbnail -->
+                                            <div class="col-md-4 form-group">
+                                                <div class="col-md-6 no-padding">
+                                                    <label class="control-label col-md-6"><?php echo lang('thumbnail');?></label>
+                                                </div>
+                                                <?php if($item->image != ''){?>
+                                                    <div class="col-md-6 no-padding option_image_<?php echo $item->id;?>">
+
+                                                        <img  width="70" height="70" src="<?php echo $images_path.$item->image;?>" />
+                                                        <button  value="<?php echo $field->id.'_'.$item->id;?>"  class="btn btn-sm red filter-cancel delete_alert delete-btn remove_op_image"><?php echo lang('delete');?></button>
+                                                    </div>
+                                                <?php }else{?>
+                                                    <div class="col-md-6 no-padding ">
+                                                        <input type="file" name="exist_op_image[<?php echo $field->id.']['.$item->id;?>]" />
+                                                    </div>
+                                                <?php }?>
+                                            </div><!--col-->
+                                            <!-- End Optional Field Option thumbnail -->
+                                        </div>
+                                        <!-- End Optional Field Option cost & thumbnail -->
+
+                                        <div style="clear:both"> </div>
+
+                                        <!-- Start Optional Field Option weight & SKU -->
+                                        <div class="row-flex-1re">
+                                            <!-- Start Optional Field Option weight -->
+                                            <?php if($field->has_weight == 1){?>
+                                                <div class="col-md-4 form-group">
+                                                    <div class="col-md-6 no-padding">
+                                                        <label class="control-label col-md-6"><?php echo lang('weight');?></label>
+                                                    </div>
+
+                                                    <div class="col-md-6 no-padding">
+                                                        <?php
+                                                            $weight_data = array('style'=>'margin-top:5px;',
+                                                            'name'=>'exist_weight['.$field->id.']['.$item->id.']',
+                                                            'value'=>$item->weight, 'class'=>"form-control"
+                                                            );
+                                                            echo form_input($weight_data);
+                                                        ?>
+                                                    </div>
+                                                </div><!--col-->
+                                            <?php }?>
+                                            <!-- End Optional Field Option weight -->
+
+                                            <!-- Start Optional Field Option SKU Part -->
+                                            <?php if($field->has_sku == 1){?>
+                                                <div class="col-md-4 form-group">
+                                                    <div class="col-md-8 no-padding">
+                                                        <label class="control-label col-md-12"><?php echo lang('sku_part');?></label>
+                                                    </div>
+
+                                                    <div class="col-md-4 no-padding">
+                                                        <?php
+                                                            $sku_data = array('style'=>'margin-top:5px;',
+                                                            'name'=>'exist_sku['.$field->id.']['.$item->id.']',
+                                                            'value'=>$item->sku, 'class'=>"form-control"
+                                                            );
+                                                            echo form_input($sku_data);
+                                                        ?>
+                                                    </div>
+                                                </div><!--col-->
+                                            <?php }?>
+                                            <!-- End Optional Field Option SKU Part -->
+
+                                        </div>
+                                        <!-- End Optional Field Option weight & SKU -->
+
+                                        <div style="clear:both"> </div>
+
+                                        <!-- Start Optional Field Option group_price -->
+                                        <div class="row-flex-1re">
+                                            <div class="col-md-12 form-group">
+                                                <div class="col-md-4 no-padding">
+                                                    <label class="control-label col-md-6"><?php echo lang('group_price');?></label>
+                                                </div>
+                                                
+                                                <div class="col-md-8 no-padding">
+                                                    <?php foreach($customer_groups as $group){?>
+                                                        <div class="form-group form-group-border-none" style="display: block;">
+                                                            <div class="col-md-4 input-inline price_group_label">
+                                                                <div style="color: #2977f7;">
+                                                                    <?php
+                                                                            echo form_label($group->title, 'price');
+                                                                    ?>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <div class="input-medium input-inline">
+                                                                    <?php //echo '<pre>'; print_r($item->groups_prices[$group->id] );die();
+                                                                    echo form_error("exist_op_group_price[$field->id][$item->id][$group->id]");
+                                                                    $op_group_price_data = array('name'=>"exist_op_group_price[$field->id][$item->id][$group->id]" ,
+                                                                    'class'=>"form-control price_spinner",
+                                                                    'value'=> isset($item->groups_prices[$group->id])? $item->groups_prices[$group->id] : set_value("op_group_price[$field->id][$item->id][$group->id]", 0));
+                                                                    echo form_input($op_group_price_data);
+                                                                    ?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <?php }?>
+                                                </div>
+                                            </div>
+                                        </div><!--customer groups -->
+                                        <!-- End Optional Field Option group_price -->
+
+                                        <div style="clear:both"> </div>
+
                                     <?php }?>
-                               </div>
-                            </div><!--customer groups -->
-
-                          <?php }?>
-                 <?php }?>
+                                <?php }?>
 							</div><!--col-->
-
-
                         </div>
-			         </div><!--row-->
-
-
-						<div class="row">
+			        </div><!--row-->
+                    
+                    <div class="row">
 
                 <?php if(isset($field->secondary_fields) && count($field->secondary_fields) != 0){  //echo '<pre>';print_r($field->secondary_fields);die();?>
                   <div class="col-md-12">

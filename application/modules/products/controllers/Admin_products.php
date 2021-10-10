@@ -1170,16 +1170,18 @@ class Admin_products extends CI_Controller
                /************************Optional Fields****************************/
                if(isset($_POST['option_id']) && count($_POST['option_id']) != 0)
                {
-                    $options_ids = $this->input->post('option_id');
-                    $values      = $this->input->post('value');
-                    $costs       = $this->input->post('cost');
-                    $weight      =  $this->input->post('op_weight');
-                    $groups_ids  = $this->input->post('field_group_id');
+                    $options_ids        = $this->input->post('option_id');
+                    $values             = $this->input->post('value');
+                    $costs              = $this->input->post('cost');
+                    $weights            = $this->input->post('op_weight');
+                    $groups_ids         = $this->input->post('field_group_id');
 
-                    $sec_options_ids = $this->input->post('sec_option_id');
-                    $sec_values      = $this->input->post('sec_value');
+                    $sec_options_ids    = $this->input->post('sec_option_id');
+                    $sec_values         = $this->input->post('sec_value');
 
-                    $this->_insert_products_optional_fields($last_insert_id, $options_ids, $values, $costs, $weight, $groups_ids, $sec_options_ids, $sec_values);
+                    $skus               = $this->input->post('op_sku'); // Update Edit 9/2021 => Optional Option SKU 
+
+                    $this->_insert_products_optional_fields($last_insert_id, $options_ids, $values, $costs, $weights, $groups_ids, $sec_options_ids, $sec_values, $skus);
 
                }
                /****************************************************/
@@ -1603,16 +1605,18 @@ class Admin_products extends CI_Controller
             //$this->products_model->delete_product_optional_field($id);
             if(isset($_POST['option_id']) && count($_POST['option_id']) != 0)
             {
-                $options_ids = $this->input->post('option_id');
-                $values      = $this->input->post('value');
-                $costs       = $this->input->post('cost');
-                $weight      =  $this->input->post('op_weight');
-                $groups_ids  = $this->input->post('field_group_id');
+                $options_ids        = $this->input->post('option_id');
+                $values             = $this->input->post('value');
+                $costs              = $this->input->post('cost');
+                $weights            =  $this->input->post('op_weight');
+                $groups_ids         = $this->input->post('field_group_id');
 
-                $sec_options_ids = $this->input->post('sec_option_id');
-                $sec_values      = $this->input->post('sec_value');
+                $sec_options_ids    = $this->input->post('sec_option_id');
+                $sec_values         = $this->input->post('sec_value');
 
-                $this->_insert_products_optional_fields($id, $options_ids, $values, $costs, $weight, $groups_ids, $sec_options_ids, $sec_values);
+                $skus               = $this->input->post('op_sku'); // Update Edit 9/2021 => Optional Option SKU 
+
+                $this->_insert_products_optional_fields($id, $options_ids, $values, $costs, $weights, $groups_ids, $sec_options_ids, $sec_values, $skus);
            }
 
            if(isset($_POST['exist_option_id']) && count($_POST['exist_option_id']) != 0)
@@ -1626,7 +1630,10 @@ class Admin_products extends CI_Controller
 
                 $sec_options_ids = $this->input->post('exist_sec_option_id');
                 $sec_values      = $this->input->post('exist_sec_value');
-                $this->_update_exist_product_optional_fields($id, $options_ids, $values, $costs, $weights, $groups_ids, $sec_options_ids, $sec_values);
+
+                $skus        = $this->input->post('exist_sku'); // Update Edit 9/2021 => Optional Option SKU 
+                
+                $this->_update_exist_product_optional_fields($id, $options_ids, $values, $costs, $weights, $groups_ids, $sec_options_ids, $sec_values, $skus);
             }
 
 
@@ -2047,7 +2054,7 @@ class Admin_products extends CI_Controller
     }
 
     private function _insert_products_optional_fields($product_id, $options_ids, $values, $costs, $weights, $groups_ids=array(),
-    $sec_options_ids, $sec_values)
+    $sec_options_ids, $sec_values, $skus)
     {
         $index = 0;
 
@@ -2125,8 +2132,10 @@ class Admin_products extends CI_Controller
 
                             }
 
-                            $active_op_val = isset($options_active[$main_option_id][$option_cost_id]) ? 1 : 0;
-                            $op_weight     = isset($weights[$main_option_id][$option_cost_id]) ? $weights[$main_option_id][$option_cost_id] : 0;
+                            $active_op_val  = isset($options_active[$main_option_id][$option_cost_id]) ? 1 : 0;
+                            $op_weight      = isset($weights[$main_option_id][$option_cost_id]) ? $weights[$main_option_id][$option_cost_id] : 0;
+
+                            $op_sku         = isset($skus[$main_option_id][$option_cost_id]) ? $skus[$main_option_id][$option_cost_id] : ""; // Update Edit 9/2021 => Optional Option SKU 
 
                             $main_cost_data = array(
                                             'product_id'        => $product_id  ,
@@ -2135,7 +2144,8 @@ class Admin_products extends CI_Controller
                                             'cost'              => $cost_val,
                                             'weight'            => $op_weight,
                                             'active'            => $active_op_val,
-                                            'image'             => $image_name
+                                            'image'             => $image_name,
+                                            'sku'               => $op_sku  // Update Edit 9/2021 => Optional Option SKU 
                                           );
 
                             $this->products_model->insert_products_optional_fields_costs($main_cost_data);
@@ -2274,7 +2284,7 @@ class Admin_products extends CI_Controller
     }
 
 
-    private function _update_exist_product_optional_fields($product_id, $options_ids, $values, $costs, $weights, $groups_ids=array(), $sec_options_ids, $sec_values)
+    private function _update_exist_product_optional_fields($product_id, $options_ids, $values, $costs, $weights, $groups_ids=array(), $sec_options_ids, $sec_values,$skus)
     {
 
         $options_active = $this->input->post('exist_op_active', true);
@@ -2351,11 +2361,14 @@ class Admin_products extends CI_Controller
                             $op_active = isset($options_active[$product_option_id][$option_cost_id]) ? 1 : 0;
                             $op_weight = isset($weights[$product_option_id][$option_cost_id]) ? $weights[$product_option_id][$option_cost_id] : 0;
 
+                            $op_sku    = isset($skus[$product_option_id][$option_cost_id]) ? $skus[$product_option_id][$option_cost_id] : ""; // Update Edit 9/2021 => Optional Option SKU 
+
                             $main_cost_data = array(
-                                                    'cost'   => $cost_val,
-                                                    'weight' => $op_weight,
-                                                    'active' => $op_active,
-                                                    'image'  => $image_name
+                                                    'cost'      => $cost_val,
+                                                    'weight'    => $op_weight,
+                                                    'active'    => $op_active,
+                                                    'image'     => $image_name,
+                                                    'sku'       => $op_sku  // Update Edit 9/2021 => Optional Option SKU 
                                                   );
 
                             $this->products_model->update_products_optional_fields_costs($option_cost_id, $main_cost_data);
@@ -2546,6 +2559,10 @@ class Admin_products extends CI_Controller
 
                     if($option_data->has_weight == 1){
                         $html .= '<div class="form-group "><label class="control-label col-md-6">'.lang('weight').'</label><div class="col-md-6"><input class="form-control" placeholder="'.lang('weight').'" type="text" name="op_weight['.$option_data->id.']['.$option->id.']" /></div></div>';
+                    }
+
+                    if($option_data->has_sku == 1){
+                        $html .= '<div class="form-group "><label class="control-label col-md-6">'.lang('sku_part').'</label><div class="col-md-6"><input class="form-control" placeholder="'.lang('sku_part').'" type="text" name="op_sku['.$option_data->id.']['.$option->id.']" /></div></div>';
                     }
 
                     $html .= '<div class="form-group "><label class="control-label col-md-6">'.lang('thumbnail').'</label><div class="col-md-6"><input class="form-control" placeholder="'.lang('thumbnail').'" type="file" name="op_image['.$option_data->id.']['.$option->id.']" /></div></div>';

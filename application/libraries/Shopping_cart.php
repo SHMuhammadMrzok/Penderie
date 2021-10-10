@@ -1265,7 +1265,8 @@ class Shopping_cart
                                                         'final_price'     => $product_price_data[1]
                                                      );
 
-                                        $this->update($product_id, $data);
+                                        // $this->update($product_id, $data); // Basic Code
+                                        $this->update($product_id, $data, 0, $cartRowId); // Mrzok Edit
 
                                         $cart_data = $this->shopping_cart_data();
 

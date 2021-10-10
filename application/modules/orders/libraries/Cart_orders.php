@@ -706,11 +706,27 @@ class Cart_orders
             // get user selected options for this product => if exist options
             $user_product_order_options = $this->CI->products_model->get_user_order_product_optional_fields_data($row->order_product_id, $display_lang_id);
 
+            $full_product_code_options_sku = $row->code; // initialize with product code
+
             if(count($user_product_order_options) > 0 )
             {
                 // Splite posted options to Optional array and selected options array
                 $selected_optionals_array   = array_values(array_column($user_product_order_options,'product_optional_field_id')); // array of the cart user selected product optionals ids
                 $selected_options_array     = array_values(array_column($user_product_order_options,'product_optional_field_value')); // array of the cart user selected options values
+
+                /**
+                 * Setting SKU for each Optional Option of the Product ||  => 9/2021
+                 * Get SKU Parts related to user selections from product data
+                 */
+                $user_product_options               = $this->CI->products_model->get_user_order_product_options_sku_parts_data($row->product_id, $selected_options_array);
+                $user_product_sku_parts             = array_values(array_column($user_product_options,'sku')); // array of the SKU parts of user selected product options values
+                $generic_product_options_sku_part   = implode("",$user_product_sku_parts);
+
+                /**
+                 * full_product_code_options_sku is consists from (product code + selected options sku parts) 
+                 * which inserted in product data with the it's adding order in admin product form
+                 */
+                $full_product_code_options_sku      = $full_product_code_options_sku.$generic_product_options_sku_part; // Compination of product code and selected options sku parts
             }else
             {
                 $selected_optionals_array   = array();
@@ -729,7 +745,9 @@ class Cart_orders
                                             'order_id'          => $order_id,
                                             'product_id'        => $row->product_id,
                                             'product_serial_id' => $serial->id,
-                                            'unix_time'         => time()
+                                            'unix_time'         => time(),
+                                            "full_sku"          => $full_product_code_options_sku, // assigning SKU to selected Order Serial , Mrzok Edit => 9/2021
+                                            'order_product_id'  => $row->order_product_id // set order_product_id for inserted serial
                                          );
 
                     ////////serial status///////

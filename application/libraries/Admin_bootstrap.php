@@ -106,12 +106,12 @@ class Admin_bootstrap
         
         $controller_data = $this->CI->controllers_model->get_controller_by_module_path($opened_module, $this->controller);
         
-        $this->module = $controller_data->module;
+        $this->module = isset($controller_data->module) ? $controller_data->module : ""; // $controller_data->module;
         $this->opened_module = $opened_module;
         
                 
-        $this->module_id =  $controller_data->module_id;
-        $this->controller_id = $controller_data->id;
+        $this->module_id =  isset($controller_data->module_id) ? $controller_data->module_id : ""; // $controller_data->module_id;
+        $this->controller_id = isset($controller_data->id) ? $controller_data->id : ""; // $controller_data->id;
         
         //echo"<pre>";print_r($controller_data);die();
         
@@ -717,7 +717,17 @@ class Admin_bootstrap
    {
         $country_reward_point_value = $this->CI->countries_model->get_reward_points($country_id);
 
-        $user_reward_points         = round($rewrd_points_value / $country_reward_point_value, 2);
+        // $user_reward_points         = round($rewrd_points_value / $country_reward_point_value, 2); // Basic Code
+
+        /**
+         * Edit Code
+         * To Fix Case of : country_reward_point_value = 0
+         * */ 
+        $user_reward_points         = round($rewrd_points_value, 2);
+        if($country_reward_point_value > 0)
+        {
+            $user_reward_points         = round($rewrd_points_value / $country_reward_point_value, 2);
+        }
 
         return $user_reward_points;
    }
