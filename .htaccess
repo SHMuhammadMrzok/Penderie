@@ -1,4 +1,3 @@
-RewriteOptions inherit
 RewriteEngine On
 RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
