@@ -469,8 +469,8 @@ class Dashboard extends CI_Controller
                                 'ratingAvg'                     => $product->rating_avg         ,
                                 'availableProduct'              => $availability                        ,
                                 'restQty'                       => $rest_qty                            ,
-                                'product_route'                 => $this->site_settings->product_route         ,
-                                'sub_category_route'            => $this->site_settings->sub_category_route
+                                // 'product_route'                 => $this->site_settings->product_route         ,
+                                // 'sub_category_route'            => $this->site_settings->sub_category_route
 
                               );
             }
