@@ -187,7 +187,7 @@ class Salasa
 
         $json_parameters = json_encode($params);
         
-        echo"<pre>";print_r($params);die();
+        // echo"<pre>";print_r($params);die();
         
         $method         = 'order_management/whole_order/create';
         $api_end_point  = $this->api_url.$this->api_version.$method;
@@ -306,150 +306,19 @@ class Salasa
         $response = curl_exec($channal);
         curl_close($channal);
 
-        echo "<br />Admin Salasa - addShipment || url : $url <br /> <pre>";
-        echo "<br />Admin Salasa - addShipment || parameters : $parameters <br /> <pre>";
-        echo "<br />Admin Salasa - addShipment || headers : <br /> <pre>";
-        print_r($headers);
-        echo "<br />Admin Salasa - addShipment || response : <br /> <pre>";
-        print_r($response);
-        die();
+        // echo "<br />Admin Salasa - addShipment || url : $url <br /> <pre>";
+        // echo "<br />Admin Salasa - addShipment || parameters : $parameters <br /> <pre>";
+        // echo "<br />Admin Salasa - addShipment || headers : <br /> <pre>";
+        // print_r($headers);
+        // echo "<br />Admin Salasa - addShipment || response : <br /> <pre>";
+        // print_r($response);
+        // die();
 
         if ($channal === false) {
             return 'cURL Error #:' . $channal;
         } else {
             return $response;
         }
-    }
-
-    Public Function getRTLCities()
-    {
-        $params = array(
-                        'passkey' => $this->passKey
-                       );
-
-        $method = 'getRTLCities';
-        $result = $this->CallAPI($params, $method);
-
-        return $result;
-
-       /**
-        * Result:
-        * stdClass Object
-            (
-                [getRTLCitiesResult] => stdClass Object
-                    (
-                        [schema] =>
-                        [any] => ABT       Al-BahaABT       BaljurashiABT       MakhwahABT       QunfudahAFIF
-                        AfifAJF       Dawmat Al JandalAJF       SkakahANS       NamassANS       Sapt Al OlayaANS
-                        TanumahDMM       Al Qarya Al Ulya DMM       An NairiyahDMM       BuqaiqDMM       DammamDMM
-                        DhahranDMM       JubailDMM       KhafjiDMM       KhobarDMM       QatifDMM
-                        Ras TannurahDMM       SafwaDMM       SayhatEAM       NajranEAM       SharourahEAM
-                        Wadi Al-Dawasir ( Khamasin )ELQ       Al BukayriyahELQ       Ar RassELQ       BuraydahELQ
-                        MidhnabELQ       Riyadh Al KhabraELQ       SajirELQ       UnayzahGIZ       Abu ArishGIZ
-                        Ad DarbGIZ       Al DayerGIZ       At Tuwal (Aratawiyah)GIZ       GizanGIZ       SabyaGIZ
-                        SamthaHAS       HailHBT       Hafar Al BatenHBT       Hafer al BatenHBT       RafhaHOF
-                        Al HufufHOF       IhsaJED       JeddahJED       RabighKMT       AbhaKMT       BishahKMT
-                        Dhahran Al-JanoubKMT       Khamis MushaitKMT       MajardahKMT       Muhayyil AssirKMT
-                        Raj'l AlmaaKMT       Sarat AbidaKMT       TathlithMAK       MakkahMED       Al UlaMED
-                        MadinahMJM       Ad DuwadimiMJM       Al Majma'hMJM       Az ZulfiMJM       ShaqraRAE
-                        ArarRUH       Al Aflaj (Layla)RUH       Al QuwayiyadhRUH       KharjRUH       MuzamiyahRUH
-                        RiaydhRUH       RiyadhTIF       Al KhurmahTIF       RanyahTIF       TaifTIF       TurbahTUU
-                        DhubaTUU       TabukTUU       TaimaURY       Al-QurayyatURY       TabarjalURY       TuraifWAE
-                        SulayyilYNB       UmmlujjYNB       Yanbu
-                    )
-
-            )
-            */
-    }
-
-    Public Function getRTLRetails($cityCode)
-    {
-        $params = array(
-                        'passkey'   => $this->passKey,
-                        'cityCode'  => $cityCode
-                       );
-
-        $method = 'getRTLRetails';
-
-        $result = $this->CallAPI($params, $method);
-        return $result;
-    }
-
-    Public function getStatus($awbNo)
-    {
-        //This method can be used to get the realtime Status information of the shipment.
-
-        $params = array(
-                        'passkey'   => $this->passKey,
-                        'awbNo'     => $awbNo
-                       );
-
-        $method = 'getStatus';
-
-        $result = $this->CallAPI($params, $method);
-
-        return $result;
-    }
-
-    Public function getStatusByRef($refNo)
-    {
-        //This method can be used to get the realtime Status information of the shipment.
-
-        $params = array(
-                        'passkey'   => $this->passKey,
-                        'refNo'     => $refNo
-                       );
-
-        $method = 'getStatusByRef';
-
-        $result = $this->CallAPI($params, $method);
-
-        return $result;
-    }
-
-    Public function getPDF($awbNo)
-    {
-        //This method can be used to get the AWB Copy in PDF format for printing and labeling on shipment.
-
-        $params = array(
-                        'passkey'   => $this->passKey,
-                        'awbNo'     => $awbNo
-                       );
-
-        $method = 'getPDF';
-
-        $result = $this->CallAPI($params, $method);
-
-        return $result;
-    }
-
-    public function CallAPI($params, $method)
-    {
-        $client = new SoapClient('http://track.smsaexpress.com/seCOM/SMSAwebService.asmx?WSDL', array('trace'=>true));
-        $result = $client->$method($params);
-
-        $result_object = $method.'Result';
-
-        if(isset($result->$result_object->any))
-        {
-            $response = $this->parseResponse($result->$result_object->any);
-        }
-        else
-        {
-            $response = $result;
-        }
-
-        return $response;
-
-    }
-
-    public function parseResponse($result)
-    {
-       $your_xml_response = $result;
-       $clean_xml = str_ireplace(['SOAP-ENV:', 'SOAP:'], '', $your_xml_response);
-       $xml = simplexml_load_string($clean_xml);
-
-       return $xml->NewDataSet;
     }
 
     public function handel_status($status)
