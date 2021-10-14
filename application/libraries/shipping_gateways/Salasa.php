@@ -158,6 +158,8 @@ class Salasa
         }
 
         $marketplace_order_id = $order_data->orders_number."_".$order_data->related_orders_ids ;
+        
+        $cod_value = $cod_amount > 0 ? ( ($cod_amount == (int) $cod_amount ) ? (int) $cod_amount : (float) $cod_amount ) : false;
 
         $params = array(
             "data" => array(
@@ -171,7 +173,7 @@ class Salasa
                 'order_amount'          => array(
                     "price"             => ($order_data->final_total == (int) $order_data->final_total ) ? (int) $order_data->final_total : (float) $order_data->final_total,
                     "currency_code"     => $order_data->currency_symbol,
-                    "cod_amount"        => ($cod_amount == (int) $cod_amount ) ? (int) $cod_amount : (float) $cod_amount
+                    "cod_amount"        => $cod_value
                 ),
                 'shipping_type'         => "salasa_shipping",      //date('d / m / Y')
                 'order_line_items'      => $order_line_items
@@ -300,13 +302,13 @@ class Salasa
         $response = curl_exec($channal);
         curl_close($channal);
 
-        echo "<br />Admin Salasa - addShipment || url : $url <br /> <pre>";
-        echo "<br />Admin Salasa - addShipment || parameters : $parameters <br /> <pre>";
-        echo "<br />Admin Salasa - addShipment || headers : <br /> <pre>";
-        print_r($headers);
-        echo "<br />Admin Salasa - addShipment || response : <br /> <pre>";
-        print_r($response);
-        die();
+        // echo "<br />Admin Salasa - addShipment || url : $url <br /> <pre>";
+        // echo "<br />Admin Salasa - addShipment || parameters : $parameters <br /> <pre>";
+        // echo "<br />Admin Salasa - addShipment || headers : <br /> <pre>";
+        // print_r($headers);
+        // echo "<br />Admin Salasa - addShipment || response : <br /> <pre>";
+        // print_r($response);
+        // die();
 
         if ($channal === false) {
             return 'cURL Error #:' . $channal;
