@@ -300,13 +300,13 @@ class Salasa
         $response = curl_exec($channal);
         curl_close($channal);
 
-        // echo "<br />Admin Salasa - addShipment || url : $url <br /> <pre>";
-        // echo "<br />Admin Salasa - addShipment || parameters : $parameters <br /> <pre>";
-        // echo "<br />Admin Salasa - addShipment || headers : <br /> <pre>";
-        // print_r($headers);
-        // echo "<br />Admin Salasa - addShipment || response : <br /> <pre>";
-        // print_r($response);
-        // die();
+        echo "<br />Admin Salasa - addShipment || url : $url <br /> <pre>";
+        echo "<br />Admin Salasa - addShipment || parameters : $parameters <br /> <pre>";
+        echo "<br />Admin Salasa - addShipment || headers : <br /> <pre>";
+        print_r($headers);
+        echo "<br />Admin Salasa - addShipment || response : <br /> <pre>";
+        print_r($response);
+        die();
 
         if ($channal === false) {
             return 'cURL Error #:' . $channal;
