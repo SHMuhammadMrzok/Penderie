@@ -157,9 +157,17 @@ class Salasa
             $order_line_items[] = $product_item;
         }
 
-        $marketplace_order_id = $order_data->orders_number."_".$order_data->related_orders_ids ;
+        $marketplace_order_id   = $order_data->orders_number."_".$order_data->related_orders_ids ;
         
-        $cod_value = $cod_amount > 0 ? ( ($cod_amount == (int) $cod_amount ) ? (int) $cod_amount : (float) $cod_amount ) : false;
+        $order_amount           = array(
+            "price"             => ($order_data->final_total == (int) $order_data->final_total ) ? (int) $order_data->final_total : (float) $order_data->final_total,
+            "currency_code"     => $order_data->currency_symbol,
+            "cod_amount"        => ($cod_amount == (int) $cod_amount ) ? (int) $cod_amount : (float) $cod_amount 
+        );
+
+        if($cod_amount == 0){
+            unset($order_amount["cod_amount"]);
+        }
 
         $params = array(
             "data" => array(
@@ -170,11 +178,7 @@ class Salasa
                 'payment_details'       => array(
                     "payment_method"    => $cod_amount == 0 ? "prepaid" : "cod" // cod ┃ prepaid
                 ),
-                'order_amount'          => array(
-                    "price"             => ($order_data->final_total == (int) $order_data->final_total ) ? (int) $order_data->final_total : (float) $order_data->final_total,
-                    "currency_code"     => $order_data->currency_symbol,
-                    "cod_amount"        => $cod_value
-                ),
+                'order_amount'          => $order_amount,
                 'shipping_type'         => "salasa_shipping",      //date('d / m / Y')
                 'order_line_items'      => $order_line_items
                 // ,'purchase_date'         => $sent_date
@@ -183,7 +187,7 @@ class Salasa
 
         $json_parameters = json_encode($params);
         
-        //echo"<pre>";print_r($params);die();
+        echo"<pre>";print_r($params);die();
         
         $method         = 'order_management/whole_order/create';
         $api_end_point  = $this->api_url.$this->api_version.$method;
