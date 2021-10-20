@@ -304,11 +304,11 @@ class Salasa
 
         curl_setopt($channal, CURLOPT_SSL_VERIFYPEER, false);
 
-        // echo "<br />Admin Salasa - addShipment || url : $url <br /> <pre>";
-        // echo "<br />Admin Salasa - addShipment || parameters : $parameters <br /> <pre>";
-        // echo "<br />Admin Salasa - addShipment || headers : <br /> <pre>";
-        // print_r($headers);
-        // die();
+        echo "<br />Admin Salasa - addShipment || url : $url <br /> <pre>";
+        echo "<br />Admin Salasa - addShipment || parameters : $parameters <br /> <pre>";
+        echo "<br />Admin Salasa - addShipment || headers : <br /> <pre>";
+        print_r($headers);
+        die();
 
         $response = curl_exec($channal);
         curl_close($channal);
