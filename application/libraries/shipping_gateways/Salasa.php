@@ -122,16 +122,38 @@ class Salasa
          * 
          */
         
-        echo "<br />Admin Salasa - addShipment || order_data : <br /> <pre>";
-        print_r($order_data);
-        die();
+        // echo "<br />Admin Salasa - addShipment || order_data : <br /> <pre>";
+        // print_r($order_data);
+        // die();
+
+        if($order_data->shipping_type == 1){
+            $shipping_address_1 = $order_data->shipping_address;
+            $shipping_address_2 = $order_data->shipping_address;
+            $shipping_city      = $order_data->city_name;
+
+        }
+        elseif($order_data->shipping_type == 2){ // Recieve from branch
+            $shipping_address_1 = "";
+            $shipping_address_2 = "";
+            $shipping_city      = "";
+        }
+        elseif($order_data->shipping_type == 3){
+            $shipping_address_1 = $order_data->order_shipping_address;
+            $shipping_address_2 = $order_data->order_shipping_town. ' - ' .$order_data->orders_shipping_district;
+            $shipping_city      = $order_data->order_shipping_city;
+        }
+        else{
+            $shipping_address_1 = $order_data->shipping_address;
+            $shipping_address_2 = $order_data->lat.','.$order_data->lng;
+            $shipping_city      = $order_data->shipping_city;
+        }
 
         $receiver_address = array (
             "receiver_email_id"     => $order_data->email ,
             "receiver_name"         => $order_data->first_name.' '.$order_data->last_name ,
-            "receiver_address_1"    => $order_data->shipping_address ,
-            "receiver_address_2"    => $order_data->lat.','.$order_data->lng , // 'https://www.google.com/maps/place/'.
-            "receiver_city"         => $order_data->shipping_city ,
+            "receiver_address_1"    => $shipping_address_1 ,
+            "receiver_address_2"    => $shipping_address_2 , // 'https://www.google.com/maps/place/'.
+            "receiver_city"         => $shipping_city ,
             "receiver_mobile_no"    => $order_data->phone ,
             "receiver_country"      => $order_data->country_name 
         );
@@ -139,9 +161,9 @@ class Salasa
         $billing_address = array (
             "billing_email_id"     => $order_data->email ,
             "billing_name"         => $order_data->first_name.' '.$order_data->last_name ,
-            "billing_address_1"    => $order_data->shipping_address ,
-            "billing_address_2"    => $order_data->lat.','.$order_data->lng , // 'https://www.google.com/maps/place/'.
-            "billing_city"         => $order_data->shipping_city ,
+            "billing_address_1"    => $shipping_address_1 ,
+            "billing_address_2"    => $shipping_address_2 , // 'https://www.google.com/maps/place/'.
+            "billing_city"         => $shipping_city ,
             "billing_mobile_no"    => $order_data->phone ,
             "billing_country"      => $order_data->country_name 
         );
@@ -307,7 +329,7 @@ class Salasa
         echo "<br />Admin Salasa - addShipment || parameters : $parameters <br /> <pre>";
         echo "<br />Admin Salasa - addShipment || headers : <br /> <pre>";
         print_r($headers);
-        // die();
+        die();
 
         $response = curl_exec($channal);
         curl_close($channal);
