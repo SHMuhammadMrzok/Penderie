@@ -14,9 +14,6 @@ class Salasa
         $this->CI = &get_instance();
         $this->CI->config->load('shipping_gateways');
         $this->CI->load->library('Gateways');
-
-        $this->passKey = $this->CI->gateways->get_gateway_field_value('smsa_key');//$this->CI->config->item('passKey');
-        
     
         $this->integration_mode         = $this->CI->gateways->get_gateway_field_value('salasa_test_mode'); // '1'; // 1 => Test Mode , 0 => Live Mode
         $this->api_token_key            = trim($this->CI->gateways->get_gateway_field_value('salasa_api_key'));
@@ -125,6 +122,10 @@ class Salasa
          * 
          */
         
+        echo "<br />Admin Salasa - addShipment || order_data : <br /> <pre>";
+        print_r($order_data);
+        die();
+
         $receiver_address = array (
             "receiver_email_id"     => $order_data->email ,
             "receiver_name"         => $order_data->first_name.' '.$order_data->last_name ,
@@ -254,8 +255,6 @@ class Salasa
         /**
          * Get , order_id
          */
-        $passKey = $this->passKey;
-
         $params = "?order_id=$awbNo";
 
         $method         = 'order_management/order_status_history/get';
