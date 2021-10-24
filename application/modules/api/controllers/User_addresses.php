@@ -56,7 +56,8 @@ class User_addresses extends CI_Controller
                                   'address'         => $row->address,
                                   'lat'             => $row->lat,
                                   'lng'             => $row->lng,
-                                  'defaultAddress'  => $row->default_add
+                                  'defaultAddress'  => $row->default_add,
+                                  'cityName'        => $row->city
                                );
             }
        }
@@ -113,6 +114,7 @@ class User_addresses extends CI_Controller
           $lat          = strip_tags($this->input->post('lat', true));
           $lng          = strip_tags($this->input->post('lng', true));
           $default_add  = intval($this->input->post('defaultAddress', true));
+          $city         = strip_tags($this->input->post('city', TRUE));
 
           $id    = intval($this->input->post('id', true));
 
@@ -134,7 +136,8 @@ class User_addresses extends CI_Controller
                               'address' => $address ,
                               'lat'     => $lat     ,
                               'lng'     => $lng     ,
-                              'default_add' => $default_add
+                              'default_add' => $default_add,
+                              'city'    => $city
                             );
           if($id == 0)
           {
