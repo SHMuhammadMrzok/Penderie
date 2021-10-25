@@ -122,8 +122,8 @@ class Salasa
          * 
          */
         
-        // echo "<br />Admin Salasa - addShipment || order_data : <br /> <pre>";
-        // print_r($order_data);
+        // echo "<br />Admin Salasa - addShipment || order_products : <br /> <pre>";
+        // print_r($order_products);
         // die();
 
         if($order_data->shipping_type == 1){
@@ -174,6 +174,7 @@ class Salasa
                 "sku_id"                    => $product->sku,
                 "title"                     => $product->title,
                 "item_quantity"             => (int) $product->qty,
+                "item_amount"               => (float) $product->final_price,
                 "fulfill_inventory_bucket"  => "in_available"
             );
     
@@ -288,6 +289,36 @@ class Salasa
         if(isset($response_data['data']) && !empty($response_data['data']))
         {
             $response = $response_data['data'][0]; // catch the last state of the gateway order statuses list
+        }
+        else
+        {
+            $response = array(
+                                'response' => 0,
+                                'message'  => 'Failed'
+                            );
+        }
+        
+        return $response;
+    }
+
+
+    public function getOrderDetails($awbNo)
+    {
+        /**
+         * Get , order_id
+         */
+        // $params = "?order_id=56533065735434";
+        $params = "?order_id=$awbNo";
+
+        $method         = 'order_management/order/get';
+        $api_end_point  = $this->api_url.$this->api_version.$method.$params;
+        $result         = $this->request($api_end_point, "" , 'GET');
+
+        $response_data  = json_decode($result,true);
+        
+        if(isset($response_data['data']) && !empty($response_data['data']))
+        {
+            $response = $response_data['data']; 
         }
         else
         {
