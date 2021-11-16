@@ -1086,7 +1086,7 @@ deviceId:{length=32,bytes=0xa5f433ca6fffd6db67ac6a229d6ca290...efca0f52f3684667}
                  * Setting SKU for each Optional Option of the Product ||  => 9/2021
                  * Get SKU Parts related to user selections from product data
                  */
-                $user_product_options               = $this->CI->products_model->get_user_order_product_options_sku_parts_data($row->product_id, $selected_options_array);
+                $user_product_options               = $this->products_model->get_user_order_product_options_sku_parts_data($row->product_id, $selected_options_array);
                 $user_product_sku_parts             = array_values(array_column($user_product_options,'sku')); // array of the SKU parts of user selected product options values
                 $generic_product_options_sku_part   = implode("",$user_product_sku_parts);
 
