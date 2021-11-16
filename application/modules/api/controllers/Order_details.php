@@ -35,6 +35,9 @@ class Order_details extends CI_Controller
         $orderNumber   = intval($this->input->post('orderNumber', TRUE));
         $country_id    = intval($this->input->post('countryId', TRUE));
 
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         $output        = array();
         $order_history = array();
         $serials_array = '';
@@ -45,7 +48,8 @@ class Order_details extends CI_Controller
 
         if($this->ion_auth->login($email, $password))
         {
-            $user_data = $this->ion_auth->user()->row();
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
             $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $country_id);
 
             $order_details = $this->orders_model->get_order_details( $orderNumber, $lang_id);
@@ -406,6 +410,11 @@ class Order_details extends CI_Controller
             //$output  = array( 'message' => '0');
         }//if login
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Order details', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 
     }
@@ -472,6 +481,9 @@ class Order_details extends CI_Controller
         $orderNumber   = intval($this->input->post('orderNumber', TRUE));
         $country_id    = intval($this->input->post('countryId', TRUE));
 
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         $image = $this->input->post('image', true);
 
         $fail_message  = $this->general_model->get_lang_var_translation('execution_fail',$lang_id);
@@ -520,6 +532,11 @@ class Order_details extends CI_Controller
                                 );
             //$output  = array( 'message' => '0');
         }//if login
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Order details - Upload bank statment', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }

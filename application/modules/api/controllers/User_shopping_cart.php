@@ -21,7 +21,7 @@ class User_shopping_cart extends CI_Controller
     public function index()
     {
         $lang_id            = strip_tags($this->input->post('langId', TRUE));
-        $userId             = strip_tags($this->input->post('userId', TRUE));
+        $user_id             = strip_tags($this->input->post('userId', TRUE));
         $deviceId           = strip_tags($this->input->post('deviceId', TRUE));
         $country_id         = strip_tags($this->input->post('countryId', TRUE));
         $ip_address         = $this->input->ip_address();
@@ -36,6 +36,8 @@ class User_shopping_cart extends CI_Controller
         $shoppingType       = strip_tags($this->input->post('shoppingType', TRUE));
         $chargingPrice      = strip_tags($this->input->post('chargingPrice', TRUE));
 
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+
         $settings           = $this->general_model->get_settings();
 
         $output = array();
@@ -43,10 +45,11 @@ class User_shopping_cart extends CI_Controller
         if($this->ion_auth->login($email, $password))
         {
             $user_data = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
             $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $country_id);
         }
 
-        $this->shopping_cart->set_user_data($userId, $deviceId, $ip_address , $country_id ,$lang_id);
+        $this->shopping_cart->set_user_data($user_id, $deviceId, $ip_address , $country_id ,$lang_id);
 
         $productId = intval($productId);
 
@@ -103,14 +106,14 @@ class User_shopping_cart extends CI_Controller
                 }
                 else
                 {
-                    $product_price_data = $this->products_lib->get_product_price_data($product_details, $country_id, $userId, $deviceId);
+                    $product_price_data = $this->products_lib->get_product_price_data($product_details, $country_id, $user_id, $deviceId);
                     $cart_data          = $this->shopping_cart->shopping_cart_data();
 
                     $quantity           = 0;
                     $product_qty_error  = false;
 
                     $product_optiona_fields_count = $this->products_model->count_product_optional_fields($productId);
-                    $user_product_shopping_cart   = $this->products_model->check_user_product_optional_fields($cartRowId, $userId);
+                    $user_product_shopping_cart   = $this->products_model->check_user_product_optional_fields($cartRowId, $user_id);
 
 
                     if($is_product_exist)
@@ -122,9 +125,9 @@ class User_shopping_cart extends CI_Controller
                         {
                             $non_stock_product = 1;
 
-                            if($userId != 0)
+                            if($user_id != 0)
                             {
-                                $user_customer_group_data = $this->customer_groups_model->get_user_customer_group_data($userId);
+                                $user_customer_group_data = $this->customer_groups_model->get_user_customer_group_data($user_id);
                                 $max_per_order            = $user_customer_group_data->product_limit_per_order;
                             }
                             else
@@ -441,6 +444,11 @@ class User_shopping_cart extends CI_Controller
                 }
             }
         }
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User Shopping Cart (Add) ', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         /**
          *  response

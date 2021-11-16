@@ -1049,7 +1049,7 @@ class Orders
                             $template_payment_method = lang('bank_name')." : ".$bank_data->bank."<br>";//.lang('bank_account_name')." : ".$order_bank_name."<br>".lang('bank_account_number')." : ".$order_bank_number;
                         }
                         // else if( in_array($payment_method_id, array(13, 16)))// Basic Code
-                        else if( in_array($payment_method_id, array(13, 15, 16, 17, 18, 19, 20, 21))) // Mrzok Edit = to add MyFatoora payment methods  , hyperpay stc pay , Moyasar
+                        else if( in_array($payment_method_id, array(13, 15, 16, 17, 18, 19, 20, 21))) // Mrzok Edit = to add MyFatoora payment methods | 17-18-19-20 , hyperpay stc pay | 21 , Moyasar | 15
                         {
                             if($payment_method_id != 10)
                             {

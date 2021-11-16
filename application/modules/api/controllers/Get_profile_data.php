@@ -11,20 +11,24 @@ class Get_profile_data extends CI_Controller
         
         $this->load->model('get_profile_data_model');
         
+        $this->load->library('api_lib');
     }
 
     public function index( )
     {   
        
-       $lang_id        = intval(strip_tags($this->input->post('langId', TRUE)));
-       $email          = strip_tags($this->input->post('email', TRUE));
-       $password       = strip_tags($this->input->post('password', TRUE));
+        $lang_id        = intval(strip_tags($this->input->post('langId', TRUE)));
+        $email          = strip_tags($this->input->post('email', TRUE));
+        $password       = strip_tags($this->input->post('password', TRUE));
        
-       $output         = array();
-         
-       if($this->ion_auth->login($email, $password))
-       {
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+
+        $output         = array();
+            
+        if($this->ion_auth->login($email, $password))
+        {
             $user = $this->ion_auth->user()->row();
+            $user_id       = $user->id;
             
             //-->> get user bank accounts and country
             $bank_accounts      = $this->get_profile_data_model->get_user_bank_accounts($lang_id ,$user->id);
@@ -48,7 +52,7 @@ class Get_profile_data extends CI_Controller
                                                             'bankName'               => $account->bankName,
                                                             'userAccountName'        => $account->account_name,
                                                             'userAccountNumber'      => $account->account_number,
-                                                           );
+                                                        );
                     }
                     
                 }
@@ -72,14 +76,19 @@ class Get_profile_data extends CI_Controller
             }else{
                 
                 $output =array( 'message' => 'user not found'); 
-           }
-       }else{
+            }
+        }else{
+            
+            $output =array( 'message' => 'login error'); 
         
-        $output =array( 'message' => 'login error'); 
-       
-       }
-       
-       $this->output->set_content_type('application/json')->set_output(json_encode($output));
+        }
+        
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Get Profile data', $agent, $_POST, $output);
+        //***************END LOG***************//
+        
+        $this->output->set_content_type('application/json')->set_output(json_encode($output));
         
     }
        

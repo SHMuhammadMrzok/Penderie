@@ -36,6 +36,7 @@ class Search_products extends CI_Controller
 
         $ip_address     = $this->input->ip_address();
 
+        $agent          = strip_tags($this->input->post('agent', TRUE));
 
         $limit  = 25;
         $offset = ($page -1) * $limit;
@@ -102,6 +103,10 @@ class Search_products extends CI_Controller
           );*/
         }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Search products', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }

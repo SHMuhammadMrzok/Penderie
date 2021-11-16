@@ -23,239 +23,247 @@ class Confirmation_code extends CI_Controller
 
     public function index( )
     { 
-       $email               = strip_tags($this->input->post('email', TRUE));
-       $password            = strip_tags($this->input->post('password', TRUE));
-       $lang_id             = strip_tags($this->input->post('langId', TRUE));
-       $store_country_id    = strip_tags($this->input->post('storeCountryId', TRUE));
-       
-       //-->>$confirmationWay = 1 for sms confirmation
-       //-->>$confirmationWay = 2 for  Google Auth confirmation
-       
-       $confirmationCode    = strip_tags($this->input->post('confirmationCode', TRUE));
-       $confirmationWay     = strip_tags($this->input->post('confirmationWay', TRUE));
+        $email                  = strip_tags($this->input->post('email', TRUE));
+        $password               = strip_tags($this->input->post('password', TRUE));
+        $lang_id                = strip_tags($this->input->post('langId', TRUE));
+        $store_country_id       = strip_tags($this->input->post('storeCountryId', TRUE));
         
-       $output    = array();
-         
-       if($this->ion_auth->login($email, $password))
-       {
-            $user_data = $this->ion_auth->user()->row();
-            $user_id   = $user_data->id;
+        //-->>$confirmationWay = 1 for sms confirmation
+        //-->>$confirmationWay = 2 for  Google Auth confirmation
+        
+        $confirmationCode       = strip_tags($this->input->post('confirmationCode', TRUE));
+        $confirmationWay        = strip_tags($this->input->post('confirmationWay', TRUE));
             
-            $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $store_country_id);
-            //$user_data = $this->ion_auth->user()->row();
+        $agent                  = strip_tags($this->input->post('agent', TRUE));
+        $user_id                = 0;
+        
+        $output    = array();
             
-             //-->> Get user data
-             //$user           = $this->user_model->get_user($lang_id, $user_id);
-             $city_name      = $this->cities_model->get_city_name($user_data->city_id, $lang_id);
-             $country_data   = $this->general_model->get_nationality_data($user_data->Country_ID, $lang_id);
-             
-             $country        = $country_data->name;
-             $country_code   = $country_data->calling_code;
-            
-             $user_phone     = substr($user_data->phone, strlen($country_code)); // return user phone without country code
-             
-             $bank_accounts = $this->login_model->get_bank_accounts_result($lang_id, $user_id);
-             
-             $all_banks_Accounts  = array();
-            
-             if(count($bank_accounts) != 0)
-             {
-                foreach($bank_accounts as $account)
+        if($this->ion_auth->login($email, $password))
+        {
+                $user_data = $this->ion_auth->user()->row();
+                $user_id   = $user_data->id;
+                
+                $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $store_country_id);
+                //$user_data = $this->ion_auth->user()->row();
+                
+                //-->> Get user data
+                //$user           = $this->user_model->get_user($lang_id, $user_id);
+                $city_name      = $this->cities_model->get_city_name($user_data->city_id, $lang_id);
+                $country_data   = $this->general_model->get_nationality_data($user_data->Country_ID, $lang_id);
+                
+                $country        = $country_data->name;
+                $country_code   = $country_data->calling_code;
+                
+                $user_phone     = substr($user_data->phone, strlen($country_code)); // return user phone without country code
+                
+                $bank_accounts = $this->login_model->get_bank_accounts_result($lang_id, $user_id);
+                
+                $all_banks_Accounts  = array();
+                
+                if(count($bank_accounts) != 0)
                 {
-                    if(isset($account->image) && $account->image != '')
+                    foreach($bank_accounts as $account)
                     {
-                        $pic =  base_url().'assets/uploads/'.$account->image;
-                    }else{
-                       $pic = ''; 
+                        if(isset($account->image) && $account->image != '')
+                        {
+                            $pic =  base_url().'assets/uploads/'.$account->image;
+                        }else{
+                        $pic = ''; 
+                        }
+                        
+                        $all_banks_Accounts[] = array(
+                                            'banckId'                     => $account->id,
+                                            'bankName'                    => $account->bank,
+                                            'bankImage'                   => $pic,
+                                            'bankAccountName'             => (isset($account->bank_account_name))? $account->bank_account_name:'',
+                                            'bankAccountNumber'           => (isset($account->bank_account_number))? $account->bank_account_number:'',
+                                            'userAccountName'             => (isset($account->user_bank_account_name))? $account->user_bank_account_name:'',
+                                            'userAccountNumber'           => (isset($account->user_bank_account_number))? $account->user_bank_account_number:'',
+                                            );
+                    }
+                
+                }
+                
+                $cities = $this->registration_countries_model->get_cities($lang_id, $user_data->Country_ID);
+                    
+                if(!empty($cities))
+                {
+                    foreach($cities as $city)
+                    {
+                        $cities_array [] = array(
+                                                    'regCityId'           => $city->id,
+                                                    'regCityName'         => $city->name,
+                                                );
                     }
                     
-                    $all_banks_Accounts[] = array(
-                                        'banckId'                     => $account->id,
-                                        'bankName'                    => $account->bank,
-                                        'bankImage'                   => $pic,
-                                        'bankAccountName'             => (isset($account->bank_account_name))? $account->bank_account_name:'',
-                                        'bankAccountNumber'           => (isset($account->bank_account_number))? $account->bank_account_number:'',
-                                        'userAccountName'             => (isset($account->user_bank_account_name))? $account->user_bank_account_name:'',
-                                        'userAccountNumber'           => (isset($account->user_bank_account_number))? $account->user_bank_account_number:'',
-                                        );
                 }
-            
-             }
-             
-             $cities = $this->registration_countries_model->get_cities($lang_id, $user_data->Country_ID);
-                
-             if(!empty($cities))
-             {
-                foreach($cities as $city)
+                else
                 {
-                    $cities_array [] = array(
-                                                'regCityId'           => $city->id,
-                                                'regCityName'         => $city->name,
+                    $cities_array = '';
+                }
+                
+                $country_info = array(
+                                                    'regCountryId'    => $user_data->id ,
+                                                    'regCountryName'  => $country       ,
+                                                    'regCountryKey'   => $country_code  ,
+                                                    'regCities'       => $cities_array
                                             );
+                
+                $this->load->library('encryption');
+                $secret_key   = $this->config->item('new_encryption_key');
+                $secret_iv    = $user_id;
+                
+                $user_balance = $this->encryption->decrypt($user_data->user_balance, $secret_key , $secret_iv);
+                
+                if($user_data->user_points == '')
+                {
+                    $user_points = 0;
+                }
+                else
+                {
+                    $user_points  = $this->encryption->decrypt($user_data->user_points,$secret_key , $secret_iv);
                 }
                 
-             }
-             else
-             {
-                 $cities_array = '';
-             }
-             
-             $country_info = array(
-                                                'regCountryId'    => $user_data->id ,
-                                                'regCountryName'  => $country       ,
-                                                'regCountryKey'   => $country_code  ,
-                                                'regCities'       => $cities_array
-                                          );
-             
-            $this->load->library('encryption');
-            $secret_key   = $this->config->item('new_encryption_key');
-            $secret_iv    = $user_id;
-            
-            $user_balance = $this->encryption->decrypt($user_data->user_balance, $secret_key , $secret_iv);
-            
-            if($user_data->user_points == '')
-            {
-                $user_points = 0;
-            }
-            else
-            {
-                $user_points  = $this->encryption->decrypt($user_data->user_points,$secret_key , $secret_iv);
-            }
-            
-            if($confirmationWay == 1)
-            {
-                //-->> compare sms code
-                if( $user_data->sms_code == $confirmationCode)
+                if($confirmationWay == 1)
                 {
-                     $data    = array('login_auth_activated' => 1);
-                     $this->ion_auth->update($user_data->id, $data);
-                     
-                     
-                     $country_data   = $this->general_model->get_nationality_data($user_data->Country_ID, $lang_id);
-                     
-                     $country        = $country_data->name;
-                     $country_code   = $country_data->calling_code;
-                    
-                     $user_phone     = substr($user_data->phone, strlen($country_code)); // return user phone without country code
-                     
-                     $output[] = array(
-                                        'userId'              => $user_data->id,
-                                        'userFirstName'       => $user_data->first_name,
-                                        'userlastName'        => $user_data->last_name,
-                                        'userMail'            => $user_data->email,
-                                        'countryCode'         => $country_code                 , 
-                                        'userMobile'          => $user_phone                   ,
-                                        'userCustomerGroupId' => $user_data->customer_group_id ,
-                                        'userCountry'       => $country,
-                                        'userCountryId'     => $user_data->Country_ID,
-                                        'userRegion'        => $city_name,
-                                        'userRegionId'      => $user_data->city_id,
-                                        'userCredit'        => $user_balance,
-                                        'userRewardPoints'  => $user_points,
-                                        'userMailList'      => $user_data->mail_list,
-                                        'userBankAccounts'  => $all_banks_Accounts,
-                                    );
-                     
-                }
-                else
-                {    
-                     $error_msg = $this->general_model->get_lang_var_translation('sms_code_error', $lang_id); 
-                     $output = array(
-                                      'message'  => $error_msg,
-                                      'response' => 0
-                                    ); 
-                }
-            }
-            elseif($confirmationWay == 2)
-            {
-                //-->> compare Google Auth code  
-                 $ga                         = new PHPGangsta_GoogleAuthenticator();
-                              
-                 $google_auth_code           = $confirmationCode; 
-                 $checkResult = $ga->verifyCode($user_data->google_auth_secret_key, $google_auth_code ,2 ); 
-                 
-                 if ($checkResult) 
-                 {
-                     $data    = array('login_auth_activated' => 1);
-                     $this->ion_auth->update($user_data->id, $data);
-                     
-                     $output[] = array(
-                                        'userId'            => $user_data->id,
-                                        'userFirstName'     => $user_data->first_name,
-                                        'userlastName'      => $user_data->last_name,
-                                        'userMail'          => $user_data->email,
-                                        'countryCode'         => $country_code                 , 
-                                        'userMobile'          => $user_phone                   ,
-                                        'userCustomerGroupId' => $user_data->customer_group_id ,
-                                        'userCountry'       => $country_name,
-                                        'userCountryId'     => $user_data->Country_ID,
-                                        'userRegion'        => $city_name,
-                                        'userRegionId'      => $user_data->city_id,
-                                        'userCredit'        => $user_balance,
-                                        'userRewardPoints'  => $user_points,
-                                        'userMailList'      => $user_data->mail_list,
-                                        'userBankAccounts'  => $all_banks_Accounts,
-                                    );
-                                    
-                 } 
-                 else 
-                 {
-                    $error_msg = $this->general_model->get_lang_var_translation('google_code_error', $lang_id);
-                    $output    = array(
-                                         'message' => $error_msg,
-                                         'response' => 0
-                                      ); 
-                 }
-            }
-            elseif($confirmationWay == 3)
-            { 
-                if($confirmationCode == $user_data->sms_code)
-                {
-                    $data = array(
-                                    'login_auth_activated'  => 1,
-                                    'account_sms_activated' => 1
-                                 );
+                    //-->> compare sms code
+                    if( $user_data->sms_code == $confirmationCode)
+                    {
+                        $data    = array('login_auth_activated' => 1);
+                        $this->ion_auth->update($user_data->id, $data);
                         
-                    $this->ion_auth->update($user_data->id, $data);
-                    
-                    
-                    $output[] = array(
-                                        'userId'                => $user_data->id,
-                                        'userFirstName'         => $user_data->first_name,
-                                        'userlastName'          => $user_data->last_name,
-                                        'userMail'              => $user_data->email,
-                                        'countryCode'           => $country_code                 , 
-                                        'userMobile'            => $user_phone                   ,
-                                        'userCustomerGroupId'   => $user_data->customer_group_id ,
-                                        'userCountry'           => $country,
-                                        'userCountryId'         => $user_data->Country_ID,
-                                        'userRegion'            => $city_name,
-                                        'userRegionId'          => $user_data->city_id,
-                                        'userCredit'            => $user_balance,
-                                        'userRewardPoints'      => $user_points,
-                                        'userMailList'          => $user_data->mail_list,
-                                        'userBankAccounts'      => $all_banks_Accounts,
-                                        'countryInfo'           => $country_info
-                                    );
-                }
-                else
-                {
-                    $error_msg = $this->general_model->get_lang_var_translation('sms_code_error', $lang_id);
-                    $output    = array( 
+                        
+                        $country_data   = $this->general_model->get_nationality_data($user_data->Country_ID, $lang_id);
+                        
+                        $country        = $country_data->name;
+                        $country_code   = $country_data->calling_code;
+                        
+                        $user_phone     = substr($user_data->phone, strlen($country_code)); // return user phone without country code
+                        
+                        $output[] = array(
+                                            'userId'              => $user_data->id,
+                                            'userFirstName'       => $user_data->first_name,
+                                            'userlastName'        => $user_data->last_name,
+                                            'userMail'            => $user_data->email,
+                                            'countryCode'         => $country_code                 , 
+                                            'userMobile'          => $user_phone                   ,
+                                            'userCustomerGroupId' => $user_data->customer_group_id ,
+                                            'userCountry'       => $country,
+                                            'userCountryId'     => $user_data->Country_ID,
+                                            'userRegion'        => $city_name,
+                                            'userRegionId'      => $user_data->city_id,
+                                            'userCredit'        => $user_balance,
+                                            'userRewardPoints'  => $user_points,
+                                            'userMailList'      => $user_data->mail_list,
+                                            'userBankAccounts'  => $all_banks_Accounts,
+                                        );
+                        
+                    }
+                    else
+                    {    
+                        $error_msg = $this->general_model->get_lang_var_translation('sms_code_error', $lang_id); 
+                        $output = array(
                                         'message'  => $error_msg,
                                         'response' => 0
-                                      ); 
+                                        ); 
+                    }
                 }
-            }
-    
-       }
-       else
-       { 
-          $fail_message = $this->ion_auth->errors();//$this->general_model->get_lang_var_translation('login_error', $lang_id);
-          $output = array( 'message' => $fail_message); //$this->ion_auth->errors()
-       }
+                elseif($confirmationWay == 2)
+                {
+                    //-->> compare Google Auth code  
+                    $ga                         = new PHPGangsta_GoogleAuthenticator();
+                                
+                    $google_auth_code           = $confirmationCode; 
+                    $checkResult = $ga->verifyCode($user_data->google_auth_secret_key, $google_auth_code ,2 ); 
+                    
+                    if ($checkResult) 
+                    {
+                        $data    = array('login_auth_activated' => 1);
+                        $this->ion_auth->update($user_data->id, $data);
+                        
+                        $output[] = array(
+                                            'userId'            => $user_data->id,
+                                            'userFirstName'     => $user_data->first_name,
+                                            'userlastName'      => $user_data->last_name,
+                                            'userMail'          => $user_data->email,
+                                            'countryCode'         => $country_code                 , 
+                                            'userMobile'          => $user_phone                   ,
+                                            'userCustomerGroupId' => $user_data->customer_group_id ,
+                                            'userCountry'       => $country_name,
+                                            'userCountryId'     => $user_data->Country_ID,
+                                            'userRegion'        => $city_name,
+                                            'userRegionId'      => $user_data->city_id,
+                                            'userCredit'        => $user_balance,
+                                            'userRewardPoints'  => $user_points,
+                                            'userMailList'      => $user_data->mail_list,
+                                            'userBankAccounts'  => $all_banks_Accounts,
+                                        );
+                                        
+                    } 
+                    else 
+                    {
+                        $error_msg = $this->general_model->get_lang_var_translation('google_code_error', $lang_id);
+                        $output    = array(
+                                            'message' => $error_msg,
+                                            'response' => 0
+                                        ); 
+                    }
+                }
+                elseif($confirmationWay == 3)
+                { 
+                    if($confirmationCode == $user_data->sms_code)
+                    {
+                        $data = array(
+                                        'login_auth_activated'  => 1,
+                                        'account_sms_activated' => 1
+                                    );
+                            
+                        $this->ion_auth->update($user_data->id, $data);
+                        
+                        
+                        $output[] = array(
+                                            'userId'                => $user_data->id,
+                                            'userFirstName'         => $user_data->first_name,
+                                            'userlastName'          => $user_data->last_name,
+                                            'userMail'              => $user_data->email,
+                                            'countryCode'           => $country_code                 , 
+                                            'userMobile'            => $user_phone                   ,
+                                            'userCustomerGroupId'   => $user_data->customer_group_id ,
+                                            'userCountry'           => $country,
+                                            'userCountryId'         => $user_data->Country_ID,
+                                            'userRegion'            => $city_name,
+                                            'userRegionId'          => $user_data->city_id,
+                                            'userCredit'            => $user_balance,
+                                            'userRewardPoints'      => $user_points,
+                                            'userMailList'          => $user_data->mail_list,
+                                            'userBankAccounts'      => $all_banks_Accounts,
+                                            'countryInfo'           => $country_info
+                                        );
+                    }
+                    else
+                    {
+                        $error_msg = $this->general_model->get_lang_var_translation('sms_code_error', $lang_id);
+                        $output    = array( 
+                                            'message'  => $error_msg,
+                                            'response' => 0
+                                        ); 
+                    }
+                }
+        
+        }
+        else
+        { 
+            $fail_message = $this->ion_auth->errors();//$this->general_model->get_lang_var_translation('login_error', $lang_id);
+            $output = array( 'message' => $fail_message); //$this->ion_auth->errors()
+        }
        
-       $this->output->set_content_type('application/json')->set_output(json_encode($output));
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Confirmation Code', $agent, $_POST, $output);
+        //***************END LOG***************//
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($output));
         
     }
     

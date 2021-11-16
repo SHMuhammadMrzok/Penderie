@@ -23,9 +23,22 @@ class Stores extends CI_Controller
     {
         $firsts_array = array();
 
-        $lang_id      = 1;//intval(strip_tags($this->input->post('langId', TRUE)));
-        $deviceId     = 'dhf';//strip_tags($this->input->post('deviceId', TRUE));
-        $page     = 1;//strip_tags($this->input->post('page', TRUE));
+        $lang_id            = intval(strip_tags($this->input->post('langId', TRUE)));
+        $deviceId           = strip_tags($this->input->post('deviceId', TRUE));
+        $page               = strip_tags($this->input->post('page', TRUE));
+
+        // Added for api log
+        $email              = strip_tags($this->input->post('email', TRUE));
+        $password           = strip_tags($this->input->post('password', TRUE));  
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+        }
+        ///
 
         $settings     = $this->general_model->get_settings();
         $images_path = $this->api_lib->get_images_path();
@@ -140,15 +153,20 @@ class Stores extends CI_Controller
             }
         }
         else
-            {
-                $fail_message   = $this->general_model->get_lang_var_translation('no_data', $lang_id);
-                $output         = array(
-                                            'message' => $fail_message,
-                                            'response' => 0
-                                        );
-            }
-    
-            $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
+        {
+            $fail_message   = $this->general_model->get_lang_var_translation('no_data', $lang_id);
+            $output         = array(
+                                        'message' => $fail_message,
+                                        'response' => 0
+                                    );
+        }
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Stores', $agent, $_POST, $output);
+        //***************END LOG***************//
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     
         
     }

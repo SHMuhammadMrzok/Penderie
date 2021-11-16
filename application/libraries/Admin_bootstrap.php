@@ -546,7 +546,7 @@ class Admin_bootstrap
 
     /****************Dashboard Statistics**********************/
 
-    public function get_top_selling_products($stores_ids)
+    public function get_top_selling_products($stores_ids=array())
     {
         $products_ids      = $this->CI->orders_model->get_ordered_products($stores_ids);
         $product_ids_array = array();

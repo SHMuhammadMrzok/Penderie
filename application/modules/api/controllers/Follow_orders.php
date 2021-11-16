@@ -20,18 +20,19 @@ class Follow_orders extends CI_Controller
     public function index($page =1)
     {
 
-        $userId                   = intval(strip_tags($this->input->post('userId', TRUE)));
-        $email                    = strip_tags($this->input->post('email', TRUE));
-        $password                 = strip_tags($this->input->post('password', TRUE));
+        $user_id                    = intval(strip_tags($this->input->post('userId', TRUE)));
+        $email                      = strip_tags($this->input->post('email', TRUE));
+        $password                   = strip_tags($this->input->post('password', TRUE));
 
-        $country_id               = intval(strip_tags($this->input->post('countryId', TRUE)));
-        $lang_id                  = intval(strip_tags($this->input->post('langId', TRUE)));
+        $country_id                 = intval(strip_tags($this->input->post('countryId', TRUE)));
+        $lang_id                    = intval(strip_tags($this->input->post('langId', TRUE)));
 
-        $page                     = intval(strip_tags($this->input->post('page', TRUE)));
-        $searchOrderNumbery       = strip_tags($this->input->post('searchOrderNumber', TRUE));
-        $searchOrderstatus        = strip_tags($this->input->post('searchOrderstatus', TRUE));
-        $deviceId                 = strip_tags($this->input->post('deviceId', TRUE));
+        $page                       = intval(strip_tags($this->input->post('page', TRUE)));
+        $searchOrderNumbery         = strip_tags($this->input->post('searchOrderNumber', TRUE));
+        $searchOrderstatus          = strip_tags($this->input->post('searchOrderstatus', TRUE));
+        $deviceId                   = strip_tags($this->input->post('deviceId', TRUE));
 
+        $agent                      = strip_tags($this->input->post('agent', TRUE));
         $output = array();
 
 
@@ -41,7 +42,6 @@ class Follow_orders extends CI_Controller
 
             $user    = $this->ion_auth->user()->row();
             $user_id = $user->id;
-            $userId  = $user_id;
 
             $this->api_lib->check_user_store_country_id($email, $password, $user_id, $country_id);
 
@@ -65,7 +65,7 @@ class Follow_orders extends CI_Controller
                 $config['uri_segment'] = 4;
                 $config['use_page_numbers'] = TRUE;
 
-                $config['total_rows']  = $this->follow_orders_model->get_all_orders_count($userId,$searchOrderNumbery,$searchOrderstatus);
+                $config['total_rows']  = $this->follow_orders_model->get_all_orders_count($user_id,$searchOrderNumbery,$searchOrderstatus);
 
                 $this->pagination->initialize($config);
                 $this->pagination->create_links();
@@ -106,6 +106,11 @@ class Follow_orders extends CI_Controller
             //$output  = array( 'message' => '0');
         }//if login
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Follow orders', $agent, $_POST, $output);
+        //***************END LOG***************//
+        
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
 
     }

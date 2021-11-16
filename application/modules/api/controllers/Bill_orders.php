@@ -44,6 +44,8 @@ class Bill_orders extends CI_Controller
 
         $ip_address           = $this->input->ip_address();
 
+        $user_id              = 0;
+        
         if($this->ion_auth->login($email, $password) || (isset($_SESSION['user_id']) && $_SESSION['user_id'] > 0 ))
         {
             $user_data  = $this->ion_auth->user()->row();
@@ -383,8 +385,10 @@ class Bill_orders extends CI_Controller
         }
 
 
-
-
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Bill Orders', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 

@@ -12,6 +12,7 @@ class Check_cart_exist extends CI_Controller
         $this->load->model('shopping_cart_model');
         $this->load->model('general_model');
         
+        $this->load->library('api_lib');
 
     }
 
@@ -23,6 +24,20 @@ class Check_cart_exist extends CI_Controller
       $order_id   = 0;
       $message    = '';
       
+      // Added for api log
+      $email              = strip_tags($this->input->post('email', TRUE));
+      $password           = strip_tags($this->input->post('password', TRUE));  
+      $agent              = strip_tags($this->input->post('agent', TRUE));
+      $user_id            = 0;
+
+      if($this->ion_auth->login($email, $password))
+      {
+          $user_data  = $this->ion_auth->user()->row();
+
+          $user_id    = $user_data->id;
+      }
+      ///
+
       $cart_exist = $this->shopping_cart_model->check_cart_exist($cart_id);
       if(!$cart_exist && $cart_id != 0)
       {
@@ -36,6 +51,11 @@ class Check_cart_exist extends CI_Controller
         'orderId' => $order_id,
         'message' => $message
       );
+
+      //***************LOG DATA***************//
+      //insert log
+      $this->api_lib->insert_log($user_id, current_url(), 'Check cart exist', $agent, $_POST, $output);
+      //***************END LOG***************//
 
       $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 

@@ -22,6 +22,19 @@ class Spams extends CI_Controller
         
         $lang_id      = intval(strip_tags($this->input->post('langId', TRUE)));
         
+        // Added for api log
+        $email              = strip_tags($this->input->post('email', TRUE));
+        $password           = strip_tags($this->input->post('password', TRUE));  
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+        }
+        ///
+        
         $output = array();
         $spams = $this->spams_model->get_all_spams($lang_id);
         
@@ -45,9 +58,12 @@ class Spams extends CI_Controller
                                     );  
         }
         
-        $this->output->set_content_type('application/json')->set_output(json_encode($output));
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Spams - Spams reasons', $agent, $_POST, $output);
+        //***************END LOG***************//
 
-        
+        $this->output->set_content_type('application/json')->set_output(json_encode($output));
     }
     
     public function submit_report()
@@ -62,6 +78,9 @@ class Spams extends CI_Controller
         $comment        = strip_tags($this->input->post('comment', TRUE));
         $block_user     = strip_tags($this->input->post('blockUser', TRUE));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         if($this->ion_auth->login($email, $password))
         {
             $user              = $this->ion_auth->user()->row();
@@ -141,6 +160,11 @@ class Spams extends CI_Controller
                                 'response' => 0
                            );
         }
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Spams - Submit Spam report', $agent, $_POST, $output);
+        //***************END LOG***************//
         
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     } 
@@ -154,6 +178,9 @@ class Spams extends CI_Controller
         $deviceId       = strip_tags($this->input->post('deviceId', TRUE));
         $page           = intval($this->input->post('page', TRUE));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         if($this->ion_auth->login($email, $password))
         {
             $user     = $this->ion_auth->user()->row();
@@ -198,6 +225,12 @@ class Spams extends CI_Controller
                            );
         }
         
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Spams - Blocked users', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
     
@@ -209,6 +242,9 @@ class Spams extends CI_Controller
         $password       = strip_tags($this->input->post('password', TRUE));
         $deviceId       = strip_tags($this->input->post('deviceId', TRUE));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         if($this->ion_auth->login($email, $password))
         {
             $user     = $this->ion_auth->user()->row();
@@ -241,6 +277,11 @@ class Spams extends CI_Controller
                            );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Spams - UnBlock user', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
         
     }

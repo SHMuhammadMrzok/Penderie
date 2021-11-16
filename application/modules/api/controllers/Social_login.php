@@ -22,31 +22,34 @@ class Social_login extends CI_Controller
     public function index( )
     {
        
-       $email          = strip_tags($this->input->post('email', TRUE));
-       $lang_id        = intval(strip_tags($this->input->post('langId', TRUE)));
-       $deviceId       = strip_tags($this->input->post('deviceId', TRUE));
-       $country_id     = intval(strip_tags($this->input->post('countryId', TRUE)));   
-       
-       $user_name      = strip_tags($this->input->post('userName', TRUE));
-       $social_id      = strip_tags($this->input->post('socialId', TRUE));
-       $social_json    = strip_tags($this->input->post('socialJson', TRUE));
-       $type           = strip_tags($this->input->post('loginType', true));
-       
-       $this->form_validation->set_rules('socialId', ('socialId'),'required');
-       $this->form_validation->set_rules('socialJson', ('socialJson'),'required');
-       $this->form_validation->set_rules('loginType', ('loginType'),'required');
-       
-       if ($this->form_validation->run() == false)
-       {
-            $message = $this->general_model->get_lang_var_translation('validation_error', $lang_id);
-            
-            $output  = array(
-                               'message'  => $message ,
-                               'response' => 0
-                            );
-       }
-       else
-       {
+        $email          = strip_tags($this->input->post('email', TRUE));
+        $lang_id        = intval(strip_tags($this->input->post('langId', TRUE)));
+        $deviceId       = strip_tags($this->input->post('deviceId', TRUE));
+        $country_id     = intval(strip_tags($this->input->post('countryId', TRUE)));   
+        
+        $user_name      = strip_tags($this->input->post('userName', TRUE));
+        $social_id      = strip_tags($this->input->post('socialId', TRUE));
+        $social_json    = strip_tags($this->input->post('socialJson', TRUE));
+        $type           = strip_tags($this->input->post('loginType', true));
+        
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        $this->form_validation->set_rules('socialId', ('socialId'),'required');
+        $this->form_validation->set_rules('socialJson', ('socialJson'),'required');
+        $this->form_validation->set_rules('loginType', ('loginType'),'required');
+        
+        if ($this->form_validation->run() == false)
+        {
+                $message = $this->general_model->get_lang_var_translation('validation_error', $lang_id);
+                
+                $output  = array(
+                                'message'  => $message ,
+                                'response' => 0
+                                );
+        }
+        else
+        {
             /**
              * LOGIN TYPES:
              * facebook
@@ -64,7 +67,8 @@ class Social_login extends CI_Controller
                 
                 //return user data 
                 $user_data = $this->user_model->get_user_by_social($social_id, $type, $email);
-                
+                $user_id    = $user_data->id;
+
                 //update user type and password
                 $user_new_data = array(
                                         'user_type' => $type,
@@ -229,6 +233,7 @@ class Social_login extends CI_Controller
                                       );
                 
                 $id = $this->ion_auth->register($user_name, $social_id, $email, $additional_data, $group);
+                $user_id    = $id;
                 
                 $output[] = array(
                                             'userId'              => $id        ,
@@ -258,7 +263,12 @@ class Social_login extends CI_Controller
         }
         
         
-      $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE)); 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Social login', $agent, $_POST, $output);
+        //***************END LOG***************//
+
+        $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE)); 
     }
        
      

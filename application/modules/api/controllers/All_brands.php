@@ -23,6 +23,20 @@
         $lang_id    = intval($this->input->post('langId', TRUE));
         $page       = intval($this->input->post('page', TRUE));
         
+        $email      = strip_tags($this->input->post('email', TRUE));
+        $password   = strip_tags($this->input->post('password', TRUE));
+        $agent      = strip_tags($this->input->post('agent', TRUE));
+        
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data = $this->ion_auth->user()->row();
+            $user_id = $user_data->id;
+            // $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $country_id);
+        }
+        else {
+          $user_id = 0;
+        }
+        
         $output    = array();
         
         if(!$page) $page = 1;
@@ -58,6 +72,10 @@
                                    );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Brands', $agent, $_POST, $output);
+        //***************END LOG***************//
         
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }

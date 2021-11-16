@@ -24,58 +24,66 @@ class Bank_accounts extends CI_Controller
         $deviceId           = strip_tags($this->input->post('deviceId', TRUE));
         $store_country_id   = strip_tags($this->input->post('storeCountryId', TRUE));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
         
         $output    = array();
         
         $fail_message = $this->general_model->get_lang_var_translation('execution_fail',$lang_id);
         $success_message = $this->general_model->get_lang_var_translation('execution_success',$lang_id);
          
-       if($this->ion_auth->login($email, $password))
-       {
-            $user    = $this->ion_auth->user()->row();
-            $user_id = $user->id;
-            
-            $this->api_lib->check_user_store_country_id($email, $password, $user_id, $store_country_id);
-       }
-       else
-       {
-            $user_id = 0;
-       }
-            $bank_accounts      = $this->bank_accounts_model->get_bank_accounts_result($lang_id, $user_id);
-            
-            if(isset($bank_accounts) && !empty($bank_accounts))
-            {
-                    foreach($bank_accounts as $account)
-                    {
-                        if(isset($account->image) && $account->image != '')
-                        {
-                            $pic =  base_url().'assets/uploads/'.$account->image;
-                        }
-                        else
-                        {
-                           $pic = ''; 
-                        }
-                        
-                        $image_path = realpath(APPPATH. '../assets/uploads/'.$account->image);
-                        //$image_code = $this->api_lib->get_image_code($image_path);
-                        
-                        $output [] = array(
-                                            'bankId'                      => $account->id,
-                                            'bankName'                    => $account->bank,
-                                            'bankImage'                   => $pic,
-                                            'bankAccountName'             => (isset($account->bank_account_name))? $account->bank_account_name:'',
-                                            'bankAccountNumber'           => (isset($account->bank_account_number))? $account->bank_account_number:'',
-                                            'userAccountName'             => (isset($account->user_bank_account_name))? $account->user_bank_account_name:'',
-                                            'userAccountNumber'           => (isset($account->user_bank_account_number))? $account->user_bank_account_number:'',
-                                            //'imageBitMap'                 => $image_code
-                                            );
-                    }
+        if($this->ion_auth->login($email, $password))
+        {
+                $user    = $this->ion_auth->user()->row();
+                $user_id = $user->id;
                 
-            }
-            else
-            {
-                $output  = array( 'message' => $fail_message);  
-            }
+                $this->api_lib->check_user_store_country_id($email, $password, $user_id, $store_country_id);
+        }
+        else
+        {
+                $user_id = 0;
+        }
+        
+        $bank_accounts      = $this->bank_accounts_model->get_bank_accounts_result($lang_id, $user_id);
+        
+        if(isset($bank_accounts) && !empty($bank_accounts))
+        {
+                foreach($bank_accounts as $account)
+                {
+                    if(isset($account->image) && $account->image != '')
+                    {
+                        $pic =  base_url().'assets/uploads/'.$account->image;
+                    }
+                    else
+                    {
+                        $pic = ''; 
+                    }
+                    
+                    $image_path = realpath(APPPATH. '../assets/uploads/'.$account->image);
+                    //$image_code = $this->api_lib->get_image_code($image_path);
+                    
+                    $output [] = array(
+                                        'bankId'                      => $account->id,
+                                        'bankName'                    => $account->bank,
+                                        'bankImage'                   => $pic,
+                                        'bankAccountName'             => (isset($account->bank_account_name))? $account->bank_account_name:'',
+                                        'bankAccountNumber'           => (isset($account->bank_account_number))? $account->bank_account_number:'',
+                                        'userAccountName'             => (isset($account->user_bank_account_name))? $account->user_bank_account_name:'',
+                                        'userAccountNumber'           => (isset($account->user_bank_account_number))? $account->user_bank_account_number:'',
+                                        //'imageBitMap'                 => $image_code
+                                        );
+                }
+            
+        }
+        else
+        {
+            $output  = array( 'message' => $fail_message);  
+        }
+        
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Bank Accounts', $agent, $_POST, $output);
+        //***************END LOG***************//
+        
              
        $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));        
     }       

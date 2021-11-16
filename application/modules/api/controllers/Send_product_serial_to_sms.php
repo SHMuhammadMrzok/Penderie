@@ -34,6 +34,9 @@ class Send_product_serial_to_sms extends CI_Controller
         
         $store_country_id   = intval(strip_tags($this->input->post('storeCountryId', TRUE)));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+        
         $output = array();
         
         $fail_message    = $this->general_model->get_lang_var_translation('execution_fail',$lang_id);
@@ -149,6 +152,11 @@ class Send_product_serial_to_sms extends CI_Controller
                                 'response' => 0
                                 );
         }
+        
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Send product serial to sms', $agent, $_POST, $output);
+        //***************END LOG***************//
         
         $this->output->set_content_type('application/json')->set_output(json_encode($output)); 
         

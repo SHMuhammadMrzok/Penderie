@@ -35,6 +35,8 @@ class Payment_methods extends CI_Controller
         $password       = strip_tags($this->input->post('password', TRUE));
         $pay_later      = intval($this->input->post('pay_later_bills', TRUE));
 
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
 
         $this->shopping_cart->set_user_data($userId, $deviceId, $ip_address , $country_id ,$lang_id);
 
@@ -82,6 +84,12 @@ class Payment_methods extends CI_Controller
                               );
             }
         }
+
+        
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Payment methods', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }

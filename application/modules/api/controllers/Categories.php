@@ -18,11 +18,25 @@ class Categories extends CI_Controller
 
     public function index()
     {
-        $lang_id      = intval($this->input->post('langId', TRUE));
-        $deviceId     = strip_tags($this->input->post('deviceId', TRUE));
-        $parent_id    = $this->input->post('parentId', TRUE);
-        $store_id     = intval($this->input->post('storeId', TRUE));
+        $lang_id        = intval($this->input->post('langId', TRUE));
+        $deviceId       = strip_tags($this->input->post('deviceId', TRUE));
+        $parent_id      = $this->input->post('parentId', TRUE);
+        $store_id       = intval($this->input->post('storeId', TRUE));
+        $email          = strip_tags($this->input->post('email', TRUE));
+        $password       = strip_tags($this->input->post('password', TRUE));
 
+        $agent          = strip_tags($this->input->post('agent', TRUE));
+        
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data = $this->ion_auth->user()->row();
+            $user_id = $user_data->id;
+            // $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $country_id);
+        }
+        else {
+            $user_id = 0;
+        }
+        
         if($parent_id != 'sub')
         {
             $conds = array(
@@ -104,6 +118,10 @@ class Categories extends CI_Controller
                                         'response' => 0
                                     );
         }
+        
+        //***************LOG DATA***************//
+        $this->api_lib->insert_log($user_id, current_url(), 'Categories', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
 

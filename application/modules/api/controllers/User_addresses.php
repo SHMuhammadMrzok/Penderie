@@ -25,6 +25,9 @@ class User_addresses extends CI_Controller
         $store_country_id   = intval($this->input->post('storeCountryId', TRUE));
         $page               = intval($this->input->post('page', TRUE));
 
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
 
         $output    = array();
 
@@ -70,6 +73,11 @@ class User_addresses extends CI_Controller
             );
        }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User Addresses - list', $agent, $_POST, $output);
+        //***************END LOG***************//
+
        $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
 
@@ -77,6 +85,9 @@ class User_addresses extends CI_Controller
     {
       $lang_id = intval($this->input->post('langId', TRUE));
 
+      $agent              = strip_tags($this->input->post('agent', TRUE));
+      $user_id            = 0;
+      
       $title_lang    = $this->general_model->get_lang_var_translation('title', $lang_id);
       $address_lang  = $this->general_model->get_lang_var_translation('address', $lang_id);
       $location_lang = $this->general_model->get_lang_var_translation('site_map', $lang_id);
@@ -181,6 +192,12 @@ class User_addresses extends CI_Controller
           );
         }
       }
+
+      //***************LOG DATA***************//
+      //insert log
+      $this->api_lib->insert_log($user_id, current_url(), 'User Addresses - address details', $agent, $_POST, $output);
+      //***************END LOG***************//
+
       $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 
     }

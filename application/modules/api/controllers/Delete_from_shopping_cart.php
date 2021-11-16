@@ -30,10 +30,14 @@ class Delete_from_shopping_cart extends CI_Controller
         $lang_id        = intval(strip_tags($this->input->post('langId', TRUE)));
         $productId      = intval(strip_tags($this->input->post('productId', TRUE)));
         $cartRowId      = intval(strip_tags($this->input->post('cartRowId', TRUE)));
-        
+         
+        $agent          = strip_tags($this->input->post('agent', TRUE));
+        $user_id        = 0;
+
         if($this->ion_auth->login($email, $password))
         {
             $user_data = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
             $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $country_id);
         }
         
@@ -56,6 +60,11 @@ class Delete_from_shopping_cart extends CI_Controller
                           'response' => $response
                        );
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Delete from shopping cart', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE)); 
         
     }

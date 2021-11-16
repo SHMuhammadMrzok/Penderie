@@ -22,6 +22,19 @@ class Slider extends CI_Controller
         //$slider_images  = $this->slider_model->get_slider_images();
         $lang_id        = intval($this->input->post('langId', TRUE));
 
+        // Added for api log
+        $email              = strip_tags($this->input->post('email', TRUE));
+        $password           = strip_tags($this->input->post('password', TRUE));  
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+        }
+        ///
+    
         $slider_images = $this->advertisement_model->get_advertisments($lang_id, 'top');
         
         $output         = array();
@@ -56,6 +69,12 @@ class Slider extends CI_Controller
                                     'response' => 0
                                     );
         }
+
+        
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Slider', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
 

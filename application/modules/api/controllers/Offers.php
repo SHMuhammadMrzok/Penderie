@@ -45,6 +45,8 @@ class Offers extends CI_Controller
         $brand_id               = $this->input->post('brandId', true);
         $cat_id                 = $this->input->post('categoryId', true);
 
+        $agent                  = strip_tags($this->input->post('agent', TRUE));
+        $user_id                = 0;
 
         $limit  = 8;
         $offset = ($page -1) * $limit;
@@ -100,6 +102,10 @@ class Offers extends CI_Controller
           $output = $products_new_array;
         }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Offers', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }

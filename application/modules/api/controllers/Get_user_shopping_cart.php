@@ -32,6 +32,9 @@ class Get_user_shopping_cart extends CI_Controller
         $output         = array();
         $images_path    = $this->api_lib->get_images_path();
 
+        $agent          = strip_tags($this->input->post('agent', TRUE));
+        $user_id        = 0;
+
         if($this->ion_auth->login($email, $password))
         {
             $user_data = $this->ion_auth->user()->row();
@@ -255,6 +258,11 @@ class Get_user_shopping_cart extends CI_Controller
                            );
         }
 
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Get User Cart', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
 

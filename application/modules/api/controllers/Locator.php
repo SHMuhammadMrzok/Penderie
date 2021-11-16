@@ -9,6 +9,7 @@ class Locator extends CI_Controller
         parent::__construct();
         
         $this->load->library('location_locator');
+        $this->load->library('api_lib');
         
         $this->load->model('general_model');
     }
@@ -19,6 +20,18 @@ class Locator extends CI_Controller
         $lng        = strip_tags($this->input->post('lng', TRUE));
         $lat        = strip_tags($this->input->post('lat', TRUE));
         
+        // Added for api log
+        $email              = strip_tags($this->input->post('email', TRUE));
+        $password           = strip_tags($this->input->post('password', TRUE));  
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+        }
+        ///
         $address = $this->location_locator->get_location_address($lng.','.$lat);
         
         if($address)
@@ -37,6 +50,11 @@ class Locator extends CI_Controller
                               );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Locator - Get address', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
         
     }
@@ -46,6 +64,19 @@ class Locator extends CI_Controller
         $lang_id    = intval($this->input->post('langId', TRUE));
         $address    = strip_tags($this->input->post('address', TRUE));
         
+        // Added for api log
+        $email              = strip_tags($this->input->post('email', TRUE));
+        $password           = strip_tags($this->input->post('password', TRUE));  
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+        }
+        ///
+
         $lat_lng    = $this->location_locator->get_location_latlong($address);
         
         if($lat_lng)
@@ -66,6 +97,12 @@ class Locator extends CI_Controller
                               );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Locator - Get location Lat Lng', $agent, $_POST, $output);
+        //***************END LOG***************//
+
+        
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
     }
     
@@ -75,6 +112,19 @@ class Locator extends CI_Controller
         $lang_id    = intval($this->input->post('langId', TRUE));
         $lng        = strip_tags($this->input->post('lng', TRUE));
         $lat        = strip_tags($this->input->post('lat', TRUE));
+        
+        // Added for api log
+        $email              = strip_tags($this->input->post('email', TRUE));
+        $password           = strip_tags($this->input->post('password', TRUE));  
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+        }
+        ///
         
         $list       = $this->location_locator->get_branch_list($lat.','.$lng, $lang_id);
         $list       = json_decode($list);
@@ -105,6 +155,11 @@ class Locator extends CI_Controller
                               );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Locator - Get branches list', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
     }
     
