@@ -204,7 +204,7 @@ class Api_lib
         'unix_time'     => time()
        );
        
-       $this->CI->general_model->insert_table_data('users_api_log', $log_data);
+       //$this->CI->general_model->insert_table_data('users_api_log', $log_data);
    }
 
 }
