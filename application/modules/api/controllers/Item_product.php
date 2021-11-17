@@ -37,6 +37,8 @@ class Item_product extends CI_Controller
         $product_id     = intval($this->input->post('productId', TRUE));
         $ip_address     = $this->input->ip_address();
 
+        $agent          = strip_tags($this->input->post('agent', TRUE));
+
         $images_path    = $this->api_lib->get_images_path();
 
         if($this->ion_auth->login($email, $password))
@@ -252,6 +254,11 @@ class Item_product extends CI_Controller
                            );
         }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Product Details', $agent, $_POST, $output);
+        //***************END LOG***************//
+        
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 
 
@@ -426,13 +433,24 @@ class Item_product extends CI_Controller
     public function add_rate()
     {
 
-        $product_id     = 266;//intval($this->input->post('productId', true));
-        $rating_points  = 5;//intval($this->input->post('ratingPoints', true));
-        $email          = 'mariam@shourasoft.com';//strip_tags($this->input->post('email', true));
-        $password       = 12345678;//strip_tags($this->input->post('password', true));
-        $country_id     = 2;//strip_tags($this->input->post('countryId', true));
-        $lang_id        = 2;//intval($this->input->post('langId', true));
-        $rating_comment = 'good product';//strip_tags($this->input->post('ratingComment', true));
+        // $product_id     = 266;//intval($this->input->post('productId', true));
+        // $rating_points  = 5;//intval($this->input->post('ratingPoints', true));
+        // $email          = 'mariam@shourasoft.com';//strip_tags($this->input->post('email', true));
+        // $password       = 12345678;//strip_tags($this->input->post('password', true));
+        // $country_id     = 2;//strip_tags($this->input->post('countryId', true));
+        // $lang_id        = 2;//intval($this->input->post('langId', true));
+        // $rating_comment = 'good product';//strip_tags($this->input->post('ratingComment', true));
+
+        $product_id     = intval($this->input->post('productId', true));
+        $rating_points  = intval($this->input->post('ratingPoints', true));
+        $email          = strip_tags($this->input->post('email', true));
+        $password       = strip_tags($this->input->post('password', true));
+        $country_id     = strip_tags($this->input->post('countryId', true));
+        $lang_id        = intval($this->input->post('langId', true));
+        $rating_comment = strip_tags($this->input->post('ratingComment', true));
+
+        $agent          = strip_tags($this->input->post('agent', TRUE));
+        $user_id        = 0;
 
         if($this->ion_auth->login($email, $password))
         {
@@ -544,6 +562,10 @@ class Item_product extends CI_Controller
         }
 
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Add Product Rate', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }

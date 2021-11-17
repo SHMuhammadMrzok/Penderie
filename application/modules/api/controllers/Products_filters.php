@@ -13,6 +13,7 @@ class Products_filters extends CI_Controller
         $this->load->model('products/site_products_model');
         $this->load->model('categories/cat_model');
         $this->load->model('general_model');
+        $this->load->library('api_lib');
 
     }
 
@@ -22,6 +23,19 @@ class Products_filters extends CI_Controller
         $lang_id      = intval($this->input->post('langId', true));
         $country_id   = intval($this->input->post('countryId', true));
         $cat_id       = intval($this->input->post('catId', true));
+
+        // Added for api log
+        $email              = strip_tags($this->input->post('email', TRUE));
+        $password           = strip_tags($this->input->post('password', TRUE));  
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+        }
+        ///
 
         /*******CATEGORIES FILTER START********/
         $cats_title = $this->general_model->get_lang_var_translation('sub_categories',$lang_id);
@@ -101,6 +115,11 @@ class Products_filters extends CI_Controller
       );
       /**********RATING FILTER END***************/
 
+        
+      //***************LOG DATA***************//
+      //insert log
+      $this->api_lib->insert_log($user_id, current_url(), 'Products filter', $agent, $_POST, $output);
+      //***************END LOG***************//
 
       $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
@@ -111,6 +130,18 @@ class Products_filters extends CI_Controller
         $country_id   = intval($this->input->post('countryId', true));
         $cat_id       = intval($this->input->post('catId', true));
 
+        // Added for api log
+        $email              = strip_tags($this->input->post('email', TRUE));
+        $password           = strip_tags($this->input->post('password', TRUE));  
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+        }
+        ///
         $cat_brands = $this->site_products_model->get_category_brands($cat_id, $lang_id);
         $output = array();
         if(count($cat_brands) != 0)
@@ -123,6 +154,11 @@ class Products_filters extends CI_Controller
               );
           }
         }
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Products filter - Get brands filter', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }

@@ -40,6 +40,15 @@ class User_products extends CI_Controller
         
         $maintenance_cat_id = $this->settings->maintenance_cat_id;
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+        }
+
         $conds = array(
                         //'categories.has_brands' => 1,
                         'parent_id'     => 0,
@@ -96,6 +105,11 @@ class User_products extends CI_Controller
         
         $output = $cats_array;
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User products - Products cats', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
     
@@ -123,6 +137,8 @@ class User_products extends CI_Controller
         $brand_id       = intval($this->input->post('brandId', TRUE));
         $price          = intval($this->input->post('price', TRUE));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
         
         $output         = array();
         
@@ -320,6 +336,11 @@ class User_products extends CI_Controller
         }
         
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User products', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
     
@@ -372,6 +393,9 @@ class User_products extends CI_Controller
         $password   = strip_tags($this->input->post('password', true));
         $lang_id    = intval($this->input->post('langId', true));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         if($this->ion_auth->login($email, $password))
         {
             $product_data = $this->products_model->get_products_row($product_id);
@@ -427,6 +451,10 @@ class User_products extends CI_Controller
                                    );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User products - Resend Product code', $agent, $_POST, $output);
+        //***************END LOG***************//
         
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
         
@@ -441,6 +469,9 @@ class User_products extends CI_Controller
         $product_id = intval($this->input->post('productId', true));
         $code       = intval($this->input->post('code', true));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         if($this->ion_auth->login($email, $password))
         {
             $product_data = $this->products_model->get_products_row($product_id);
@@ -506,6 +537,10 @@ class User_products extends CI_Controller
                                    );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User products - Activate Product code', $agent, $_POST, $output);
+        //***************END LOG***************//
         
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
         
@@ -603,6 +638,9 @@ class User_products extends CI_Controller
         $type       = intval($this->input->post('type', true));
         
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         /**
          * Type vals
          * 1 => pending
@@ -708,6 +746,11 @@ class User_products extends CI_Controller
         }
         
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User products - Products List', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
                      
     }
@@ -720,6 +763,9 @@ class User_products extends CI_Controller
         
         $product_id = intval($this->input->post('productId', true));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         if($this->ion_auth->login($email, $password))
         {
             $user     = $this->ion_auth->user()->row();
@@ -789,6 +835,10 @@ class User_products extends CI_Controller
                                    );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User products - Delete Product', $agent, $_POST, $output);
+        //***************END LOG***************//
         
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
                   
@@ -803,6 +853,9 @@ class User_products extends CI_Controller
         $country_id = intval($this->input->post('countryId', true));
         $product_id = intval($this->input->post('productId', true));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         if($this->ion_auth->login($email, $password))
         {
             $user     = $this->ion_auth->user()->row();
@@ -916,6 +969,10 @@ class User_products extends CI_Controller
                                    );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User products - User Product Details', $agent, $_POST, $output);
+        //***************END LOG***************//
         
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
         
@@ -946,6 +1003,8 @@ class User_products extends CI_Controller
         $brand_id       = intval($this->input->post('brandId', TRUE));
         $price          = intval($this->input->post('price', TRUE));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
         
         $output         = array();
         
@@ -1089,18 +1148,23 @@ class User_products extends CI_Controller
                     }
                  }
               }
-         }
-         else
-         {
-            $fail_message   = $this->general_model->get_lang_var_translation('login_error',$lang_id);
-            $output         = array( 
-                                        'message'   => $fail_message,
-                                        'response'  => 0
-                                   );
-         }
-        
-        
-         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
+        }
+        else
+        {
+        $fail_message   = $this->general_model->get_lang_var_translation('login_error',$lang_id);
+        $output         = array( 
+                                    'message'   => $fail_message,
+                                    'response'  => 0
+                                );
+        }
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User products - Update Product data', $agent, $_POST, $output);
+        //***************END LOG***************//
+    
+    
+        $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
     
     public function delete_product_image()
@@ -1114,6 +1178,9 @@ class User_products extends CI_Controller
         //$image_name     = strip_tags($this->input->post('imageName', TRUE));
         $image_id       = strip_tags($this->input->post('imageId', TRUE));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         if($this->ion_auth->login($email, $password))
         {
             $user     = $this->ion_auth->user()->row();
@@ -1188,6 +1255,10 @@ class User_products extends CI_Controller
                                    );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User products - Delete Product image', $agent, $_POST, $output);
+        //***************END LOG***************//
         
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));        
     }

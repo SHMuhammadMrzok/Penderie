@@ -39,6 +39,9 @@ class Register extends CI_Controller
         $deviceId         = strip_tags($this->input->post('deviceId', TRUE));
         $store_country_id = intval($this->input->post('storeCountryId', TRUE));
 
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         $check_user_count = $this->user_model->check_if_user_regestered($email, $mobile);
 
        if($check_user_count == 0)
@@ -138,6 +141,7 @@ class Register extends CI_Controller
            if($check_user_count == 0)
            {
                $id = $this->ion_auth->register($userName, $password, $email, $additional_data,$group);
+               $user_id = $id;
 
               //-->>Send notification
               $this->_send_new_registered_notification($id, $lang_id);
@@ -232,9 +236,12 @@ class Register extends CI_Controller
 
        }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Register', $agent, $_POST, $output);
+        //***************END LOG***************//
 
-
-      $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
+        $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
 
     private function _send_new_registered_notification($id, $lang_id)

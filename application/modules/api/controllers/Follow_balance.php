@@ -19,7 +19,7 @@ class Follow_balance extends CI_Controller
 
     public function index($page =1)
     {
-        $userId             = intval(strip_tags($this->input->post('userId', TRUE)));
+        $user_id             = intval(strip_tags($this->input->post('userId', TRUE)));
         $email              = strip_tags($this->input->post('email', TRUE));
         $password           = strip_tags($this->input->post('password', TRUE));
 
@@ -28,6 +28,8 @@ class Follow_balance extends CI_Controller
         $deviceId           = strip_tags($this->input->post('deviceId', TRUE));
 
         $store_country_id   = intval(strip_tags($this->input->post('storeCountryId', TRUE)));
+
+        $agent              = strip_tags($this->input->post('agent', TRUE));
 
         $output = array();
 
@@ -47,7 +49,7 @@ class Follow_balance extends CI_Controller
             $perPage = 10;
             $offset  = ($page -1 ) * $perPage;
 
-            $users_balance_data          = $this->user_balance_model->get_user_balance_log($userId, $lang_id, $perPage, $offset);
+            $users_balance_data          = $this->user_balance_model->get_user_balance_log($user_id, $lang_id, $perPage, $offset);
             //follow_balance_model->get_user_balance_log($userId, $lang_id, $perPage, $offset);
 
             if(!empty($users_balance_data))
@@ -87,6 +89,11 @@ class Follow_balance extends CI_Controller
                             );
             //$output  = array( 'message' => '0');
         }//if login
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Follow balance', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
 

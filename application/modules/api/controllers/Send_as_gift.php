@@ -13,12 +13,26 @@ if(!Defined('BASEPATH'))
         $this->load->library('shopping_cart');
         $this->load->model('general_model');
         $this->load->model('wrapping/admin_wrapping_model');
+        $this->load->library('api_lib');
     }
 
     public function wrapping_data()
     {
         $lang_id    = intval($this->input->post('langId', true));
         $country_id = intval($this->input->post('countryId', true));
+
+        // Added for api log
+        $email              = strip_tags($this->input->post('email', TRUE));
+        $password           = strip_tags($this->input->post('password', TRUE));  
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+        }
+        ///
 
         $options        = array();
         $wrapping_array = array();
@@ -112,6 +126,11 @@ if(!Defined('BASEPATH'))
                         );
                         */
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Send as gift', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
 
@@ -132,12 +151,25 @@ if(!Defined('BASEPATH'))
         $box_id         = intval($this->input->post('boxId', true));
         $gift_msg       = strip_tags($this->input->post('giftMsg', true));
 
+        // Added for api log
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
+        if($this->ion_auth->login($email, $password))
+        {
+            $user_data  = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+            $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $country_id);
+            
+        }
+        ///
+
         $wrapping_type_lang = $this->general_model->get_lang_var_translation('wrapping', $lang_id);
         $ribbon_type_lang   = $this->general_model->get_lang_var_translation('ribbon', $lang_id);
         $box_type_lang      = $this->general_model->get_lang_var_translation('box', $lang_id);
         $required_lang      = $this->general_model->get_lang_var_translation('required', $lang_id);
 
-        $this->shopping_cart->set_user_data($userId, $deviceId, $ip_address , $country_id ,$lang_id);
+        $this->shopping_cart->set_user_data($user_id, $deviceId, $ip_address , $country_id ,$lang_id);
 
         $cart_data      = $this->shopping_cart->shopping_cart_data();
 
@@ -186,14 +218,6 @@ if(!Defined('BASEPATH'))
         }
         else
         {
-            if($this->ion_auth->login($email, $password))
-            {
-                $user_data = $this->ion_auth->user()->row();
-                $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $country_id);
-            }
-
-
-
             //$wrapping_data  = $this->admin_wrapping_model->get_wrapping_data($wrapping_id);
 
             $wrapping_data  = $this->admin_wrapping_model->get_wrapping_row($wrapping_id);
@@ -233,6 +257,11 @@ if(!Defined('BASEPATH'))
                             );
         }
       }
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Send as gift - Update cart wrapping data', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 

@@ -31,6 +31,9 @@ class Compare_products extends CI_Controller
         $product_id     = intval($this->input->post('productId', TRUE));
         $country_id     = intval($this->input->post('countryId', TRUE));
 
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         if(!$this->ion_auth->login($email, $password))
         {
             $login_error_message = $this->general_model->get_lang_var_translation('login_error', $lang_id);
@@ -90,6 +93,11 @@ class Compare_products extends CI_Controller
             }
         }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Add to comparelist', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
 
@@ -101,6 +109,9 @@ class Compare_products extends CI_Controller
         $password   = strip_tags($this->input->post('password', TRUE));
         $deviceId   = strip_tags($this->input->post('deviceId', TRUE));
         $page       = intval($this->input->post('page', true));
+
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
 
         if(!$this->ion_auth->login($email, $password))
         {
@@ -213,6 +224,11 @@ class Compare_products extends CI_Controller
 
         }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User comparelist', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
 
@@ -223,6 +239,9 @@ class Compare_products extends CI_Controller
         $password       = strip_tags($this->input->post('password', TRUE));
         $deviceId       = strip_tags($this->input->post('deviceId', TRUE));
         $product_id     = intval($this->input->post('productId', TRUE));
+
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
 
         if(!$this->ion_auth->login($email, $password))
         {
@@ -260,6 +279,11 @@ class Compare_products extends CI_Controller
             }
         }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Remove from comparelist', $agent, $_POST, $output);
+        //***************END LOG***************//
+        
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
 

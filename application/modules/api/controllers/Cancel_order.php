@@ -18,25 +18,30 @@ class Cancel_order extends CI_Controller
 
         $this->load->library('notifications');
 
+        $this->load->library('api_lib');
+
     }
 
     public function index()
     {
 
         //$settings         = $this->global_model->get_config();
-        $email            = strip_tags($this->input->post('email', TRUE));
-        $password         = strip_tags($this->input->post('password', TRUE));
-        $lang_id          = intval($this->input->post('langId', TRUE));
-        $order_id         = intval($this->input->post('orderId', TRUE));
-        $country_id       = intval($this->input->post('countryId', TRUE));
-        $device_id        = strip_tags($this->input->post('deviceId', TRUE));
+        $email              = strip_tags($this->input->post('email', TRUE));
+        $password           = strip_tags($this->input->post('password', TRUE));
+        $lang_id            = intval($this->input->post('langId', TRUE));
+        $order_id           = intval($this->input->post('orderId', TRUE));
+        $country_id         = intval($this->input->post('countryId', TRUE));
+        $device_id          = strip_tags($this->input->post('deviceId', TRUE));
 
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
 
         if($this->ion_auth->login($email, $password))
         {
-
             $user_data  = $this->ion_auth->user()->row();
             $order_data = $this->orders_model->get_order($order_id);
+
+            $user_id    = $user_data->id;
 
             if($user_data->id == $order_data->user_id)
             {
@@ -82,19 +87,24 @@ class Cancel_order extends CI_Controller
                                );
             }
 
-       }
-       else
-       {
+        }
+        else
+        {
             $message = $this->general_model->get_lang_var_translation('login_error', $lang_id);
 
             $output = array(
-                              'message'  => strip_tags($message) ,
-                              'response' => 0
-                           );
+                            'message'  => strip_tags($message) ,
+                            'response' => 0
+                        );
 
 
-       }
+        }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Cancel Orders', $agent, $_POST, $output);
+        //***************END LOG***************//
+        
        $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
 

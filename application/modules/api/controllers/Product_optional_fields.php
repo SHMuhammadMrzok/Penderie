@@ -32,10 +32,13 @@ class Product_optional_fields extends CI_Controller
 
         $product_id  = intval($this->input->post('productId', TRUE));
 
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
 
         if($this->ion_auth->login($email, $password))
         {
             $user_data = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
             $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $country_id);
         }
 
@@ -123,7 +126,11 @@ class Product_optional_fields extends CI_Controller
                                 'response' => 0
                             );
         }
-
+        
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Product optional fields', $agent, $_POST, $output);
+        //***************END LOG***************//
 
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
@@ -318,6 +325,8 @@ class Product_optional_fields extends CI_Controller
 
         $quantity_sent      = intval($this->input->post('quantityOrdered', TRUE));
         $quantity_type      = strip_tags($this->input->post('quantityType', TRUE));
+
+        $agent              = strip_tags($this->input->post('agent', TRUE));
 
         $this->shopping_cart->set_user_data($user_id, $device_id, $ip_address , $country_id ,$lang_id);
         $required_lang_var = $this->general_model->get_lang_var_translation('required', $lang_id);
@@ -682,6 +691,11 @@ class Product_optional_fields extends CI_Controller
                             );
             }
         }
+        
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Save user optional fields', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }

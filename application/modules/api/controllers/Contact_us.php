@@ -11,6 +11,7 @@ class Contact_us extends CI_Controller
         $this->load->model('general_model');
         $this->load->model('contact_us/contact_us_model');
         
+        $this->load->library('api_lib');
     }
     
     public function index()
@@ -33,6 +34,16 @@ class Contact_us extends CI_Controller
         
         $title      = strip_tags($this->input->post('title', true));
         $comment    = strip_tags($this->input->post('comment', true));
+        $device_id    = strip_tags($this->input->post('deviceId', true));
+        
+        $user_id = 0;
+
+        $user_data = $this->user_model->get_user_data_by_field('phone', $phone);
+
+        if(count((array)$user_data) != 0)
+        {
+            $user_id = $user_data->id;
+        }
         
         $required_lang    = $this->general_model->get_lang_var_translation('required', $lang_id);
         $valid_email_lang = $this->general_model->get_lang_var_translation('valid_email', $lang_id);
@@ -104,6 +115,11 @@ class Contact_us extends CI_Controller
                             );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Contact us', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
 }

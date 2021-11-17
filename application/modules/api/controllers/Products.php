@@ -21,83 +21,83 @@ class Products extends CI_Controller
         $this->load->library('shopping_cart');
     }
 
-public function index_query()
-{
-       $lang_id =1;
-$user_id =0;
-$country_id =2;
-$cat_id = 7;//$this->input->post('categoryId', true);
-$productid = 1;
-
-$product_sql = "SELECT products.id as productId, products.cat_id as categoryId, categories_translation.name as categoryName , products_translation.title as productName, stores_translation.name as storeName, products.image as productImage, products.view as views, IF(shopping_cart_products.cart_id IS NULL, 0, 1 ) as isCart, IF(users_favourite_products.id IS NULL, 0, 1 ) as isFav, IF(users_compare_products.id IS NULL, 0, 1 ) as isCompare,
-brands_translation.name as brandName, products.total_rating_points as totalPoints, products.rating_times as ratingTimes, products.rating_avg as ratingAvg, products_images.productImagesIds as productImages
-
-FROM products
-join categories_translation on products.cat_id = categories_translation.category_id AND categories_translation.lang_id = ". $lang_id ."
-join products_translation on products.id = products_translation.product_id AND products_translation.lang_id = ". $lang_id ."
-
-left join stores_translation on products.store_id = stores_translation.store_id AND stores_translation.lang_id = ". $lang_id ."
-left join brands_translation on products.brand_id = brands_translation.brand_id AND brands_translation.lang_id = ". $lang_id ."
-left join ( select products_images.product_id, group_concat(gallery_images.image) AS productImagesIds
-            from products_images
-            join gallery_images on products_images.image_id = gallery_images.id
-            group by products_images.product_id
-          ) products_images on products.id = products_images.product_id
-
-left join shopping_cart on shopping_cart.user_id = ". $user_id ."
-left join shopping_cart_products on products.id = shopping_cart_products.product_id AND shopping_cart.id = shopping_cart_products.cart_id
-left join users_favourite_products on products.id = users_favourite_products.product_id AND users_favourite_products.user_id = ". $user_id ."
-left join users_compare_products ON products.id = users_compare_products.product_id AND users_compare_products.user_id = ". $user_id ."
-
-WHERE products.cat_id = ". $cat_id ." LIMIT 20";
-$result = $this->db->query($product_sql)->result();
-$images_path    = $this->api_lib->get_images_path();
-
-foreach($result as $product)
-{
-  $images_array = array();
-  if($product->productImages != '')
+  public function index_query()
   {
-      $images_arr = explode(',', $product->productImages);
-      foreach($images_arr as $image)
+    $lang_id =1;
+    $user_id =0;
+    $country_id =2;
+    $cat_id = 7;//$this->input->post('categoryId', true);
+    $productid = 1;
+
+    $product_sql = "SELECT products.id as productId, products.cat_id as categoryId, categories_translation.name as categoryName , products_translation.title as productName, stores_translation.name as storeName, products.image as productImage, products.view as views, IF(shopping_cart_products.cart_id IS NULL, 0, 1 ) as isCart, IF(users_favourite_products.id IS NULL, 0, 1 ) as isFav, IF(users_compare_products.id IS NULL, 0, 1 ) as isCompare,
+    brands_translation.name as brandName, products.total_rating_points as totalPoints, products.rating_times as ratingTimes, products.rating_avg as ratingAvg, products_images.productImagesIds as productImages
+
+    FROM products
+    join categories_translation on products.cat_id = categories_translation.category_id AND categories_translation.lang_id = ". $lang_id ."
+    join products_translation on products.id = products_translation.product_id AND products_translation.lang_id = ". $lang_id ."
+
+    left join stores_translation on products.store_id = stores_translation.store_id AND stores_translation.lang_id = ". $lang_id ."
+    left join brands_translation on products.brand_id = brands_translation.brand_id AND brands_translation.lang_id = ". $lang_id ."
+    left join ( select products_images.product_id, group_concat(gallery_images.image) AS productImagesIds
+                from products_images
+                join gallery_images on products_images.image_id = gallery_images.id
+                group by products_images.product_id
+              ) products_images on products.id = products_images.product_id
+
+    left join shopping_cart on shopping_cart.user_id = ". $user_id ."
+    left join shopping_cart_products on products.id = shopping_cart_products.product_id AND shopping_cart.id = shopping_cart_products.cart_id
+    left join users_favourite_products on products.id = users_favourite_products.product_id AND users_favourite_products.user_id = ". $user_id ."
+    left join users_compare_products ON products.id = users_compare_products.product_id AND users_compare_products.user_id = ". $user_id ."
+
+    WHERE products.cat_id = ". $cat_id ." LIMIT 20";
+    $result = $this->db->query($product_sql)->result();
+    $images_path    = $this->api_lib->get_images_path();
+
+    foreach($result as $product)
+    {
+      $images_array = array();
+      if($product->productImages != '')
       {
-        $images_array[] = $images_path.$image;
+          $images_arr = explode(',', $product->productImages);
+          foreach($images_arr as $image)
+          {
+            $images_array[] = $images_path.$image;
+          }
+        }
+                $output[] = array(
+                'productId'                     => $product->productId         ,
+                'categoryId'                    => $product->categoryId             ,
+                'productName'                   => $product->productName              ,
+                'storeName'                     => $product->storeName         ,
+                'productPrice'                  => "20"               ,
+                'productNewPrice'               => "20"           ,
+                'vatValue'                      => "1",
+                'vatPercent'                    => "5",
+                'productImage'                  => $images_path.$product->productImage                         ,
+                'productImageThumb'             => $images_path.$product->productImage                  ,
+                'productCurrency'               => 'SAR'                    ,
+                'optionalFieldsExist'           => "0"             ,
+                'views'                         => $product->views               ,
+                'isCart'                        => $product->isCart                     ,
+                'isFav'                         => $product->isFav                      ,
+                'isCompare'                     => $product->isCompare                  ,
+                'productImages'                 => $images_array                ,
+                'brandName'                     => $product->brandName                  ,
+                'totalPoints'                   => $product->totalPoints,
+                'ratingTimes'                   => $product->ratingTimes       ,
+                'ratingAvg'                     => $product->ratingAvg         ,
+                'availableProduct'              => "true"                        ,
+                'restQty'                       => 0                           ,
+                'pagesCount'                    => 3
+                );
       }
-    }
-            $output[] = array(
-            'productId'                     => $product->productId         ,
-            'categoryId'                    => $product->categoryId             ,
-            'productName'                   => $product->productName              ,
-            'storeName'                     => $product->storeName         ,
-            'productPrice'                  => "20"               ,
-            'productNewPrice'               => "20"           ,
-            'vatValue'                      => "1",
-            'vatPercent'                    => "5",
-            'productImage'                  => $images_path.$product->productImage                         ,
-            'productImageThumb'             => $images_path.$product->productImage                  ,
-            'productCurrency'               => 'SAR'                    ,
-            'optionalFieldsExist'           => "0"             ,
-            'views'                         => $product->views               ,
-            'isCart'                        => $product->isCart                     ,
-            'isFav'                         => $product->isFav                      ,
-            'isCompare'                     => $product->isCompare                  ,
-            'productImages'                 => $images_array                ,
-            'brandName'                     => $product->brandName                  ,
-            'totalPoints'                   => $product->totalPoints,
-            'ratingTimes'                   => $product->ratingTimes       ,
-            'ratingAvg'                     => $product->ratingAvg         ,
-            'availableProduct'              => "true"                        ,
-            'restQty'                       => 0                           ,
-            'pagesCount'                    => 3
-            );
+
+      $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
   }
 
-    $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
-    }
 
-
-    public function index()
-    {
+  public function index()
+  {
 
         $lang_id        = intval($this->input->post('langId', TRUE));
         $category_id    = intval($this->input->post('categoryId', TRUE));
@@ -122,6 +122,8 @@ foreach($result as $product)
         $rating_filter          = $this->input->post('rating', true);
         $products_type          = $this->input->post('productsListType', true);
 
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        
         $output       = array();
         $spammed_users_array = array();
 
@@ -232,11 +234,16 @@ foreach($result as $product)
         }
 
 
-        $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
-    }
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Products', $agent, $_POST, $output);
+        //***************END LOG***************//
 
-    public function get_product_optional_fields($product_id, $lang_id)
-    {
+        $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
+  }
+
+  public function get_product_optional_fields($product_id, $lang_id)
+  {
         $product_optional_fields = $this->products_model->get_product_optional_fields($product_id, $lang_id);
 
         if(count($product_optional_fields) != 0)
@@ -280,10 +287,10 @@ foreach($result as $product)
         }
 
         return $output;
-    }
+  }
 
-    private function _get_products_array($products, $lang_id, $country_id, $user_id, $deviceId, $cat_data, $pages_count)
-    {
+  private function _get_products_array($products, $lang_id, $country_id, $user_id, $deviceId, $cat_data, $pages_count)
+  {
       $output = array();
       $settings = $this->general_model->get_settings();
 
@@ -411,7 +418,7 @@ foreach($result as $product)
       }
 
       return $output;
-    }
+  }
 
 
 /************************************************************************/

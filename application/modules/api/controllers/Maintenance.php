@@ -31,10 +31,13 @@ class Maintenance extends CI_Controller
         $product_name   = strip_tags($this->input->post('productName', TRUE));
         $ip_address     = $this->input->ip_address();
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+        
         $output         = array();
         
-         if($this->ion_auth->login($email, $password))
-         {
+        if($this->ion_auth->login($email, $password))
+        {
             $user     = $this->ion_auth->user()->row();
             $user_id  = $user->id;
             
@@ -55,11 +58,11 @@ class Maintenance extends CI_Controller
             $this->form_validation->set_message('required', $required_lang."  : %s ");
             
             if($this->form_validation->run() == FALSE)
-    		{
-    		   $output = array(
+            {
+                $output = array(
                                 'response' => 0,
                                 'message' => strip_tags(validation_errors())
-                              );
+                                );
             }
             else
             {
@@ -73,7 +76,7 @@ class Maintenance extends CI_Controller
                                     'description'   => $description ,
                                     'ip_address'    => $ip_address  ,
                                     'unix_time'     => time()
-                                  );
+                                    );
                 
                 $this->maintenance_model->insert_message($main_data);
                 
@@ -81,18 +84,23 @@ class Maintenance extends CI_Controller
                 $output = array(
                                 'response' => 1,
                                 'message' => $message
-                              );
+                                );
             }
-         }
-         else
-         {
-            $fail_message   = $this->general_model->get_lang_var_translation('login_error',$lang_id);
-            $output         = array( 
-                                        'message'   => $fail_message,
-                                        'response'  => 0
-                                   );
-         }
+        }
+        else
+        {
+        $fail_message   = $this->general_model->get_lang_var_translation('login_error',$lang_id);
+        $output         = array( 
+                                    'message'   => $fail_message,
+                                    'response'  => 0
+                                );
+        }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Maintenance', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 
         

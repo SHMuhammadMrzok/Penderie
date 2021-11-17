@@ -20,26 +20,27 @@ class Add_coupon_code extends CI_Controller
         $lang_id        = strip_tags($this->input->post('langId', TRUE));
         $country_id     = strip_tags($this->input->post('countryId', TRUE));
 
-        //$userId         = strip_tags($this->input->post('userId', TRUE));
+        //$user_id         = strip_tags($this->input->post('userId', TRUE));
         $email          = strip_tags($this->input->post('email', TRUE));
         $password       = strip_tags($this->input->post('password', TRUE));
 
         $couponCode     = strip_tags($this->input->post('couponCode', TRUE));
 
         $deviceId       = strip_tags($this->input->post('deviceId', TRUE));
+        $agent          = strip_tags($this->input->post('agent', TRUE));
         $ip_address     = $this->input->ip_address();
 
         if($this->ion_auth->login($email, $password))
         {
             $user_data = $this->ion_auth->user()->row();
-            $userId = $user_data->id;
+            $user_id = $user_data->id;
             $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $country_id);
         }
         else {
-          $userId = 0;
+          $user_id = 0;
         }
 
-        $this->shopping_cart->set_user_data($userId, $deviceId, $ip_address , $country_id ,$lang_id);
+        $this->shopping_cart->set_user_data($user_id, $deviceId, $ip_address , $country_id ,$lang_id);
 
         $coupon_result_array = $this->shopping_cart->coupon_discount($couponCode);
         $cart_data           = $this->shopping_cart->shopping_cart_data();
@@ -69,6 +70,10 @@ class Add_coupon_code extends CI_Controller
         }
 
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Add coupon code', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
 

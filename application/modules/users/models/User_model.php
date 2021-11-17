@@ -697,4 +697,89 @@ class User_model extends CI_Model
       }
     }
   ////////////////////////////////////////////////
+
+  /**
+   * User API Log
+   */
+  
+    public function get_count_all_user_api_log($search_word='')
+    {
+        $this->db->join('users', 'users_api_log.user_id=users.id', 'left');
+        if($search_word != '')
+        {
+            $this->db->where('(users.phone LIKE "%'.$search_word.'%" OR users.first_name LIKE "%'.$search_word.'% "OR users.last_name LIKE "%'.$search_word.'%"OR users_api_log.api_name LIKE "%'.$search_word.'%"OR users_api_log.agent LIKE "%'.$search_word.'%")');
+        }
+        return $this->db->count_all_results('users_api_log');
+    }
+
+    public function get_user_api_log($lang_id, $limit, $offset, $search_word, $order_by, $order_state, $user_filter_id, $modules_filter_id, $controllers_filter_id, $methods_filter_id)
+    {
+        $this->db->select('users.first_name, users.last_name, users.phone, users_api_log.agent, users_api_log.api_name,
+                            users_api_log.url, users_api_log.id, users_api_log.unix_time');
+        $this->db->join('users', 'users_api_log.user_id=users.id', 'left');
+
+        if($search_word != '')
+        {
+            $this->db->where('(users.phone LIKE "%'.$search_word.'%" OR users.first_name LIKE "%'.$search_word.'% "OR users.last_name LIKE "%'.$search_word.'%"OR users_api_log.api_name LIKE "%'.$search_word.'%"OR users_api_log.agent LIKE "%'.$search_word.'%")');
+        }
+
+        if($order_by == lang('date'))
+        {
+            $this->db->order_by('users_api_log.unix_time', $order_state);
+        }
+        else if($order_by == lang('username'))
+        {
+            $this->db->order_by('users.phone', $order_state);
+        }
+        else
+        {
+            $this->db->order_by('users_api_log.id', $order_state);
+        }
+
+        $result = $this->db->get('users_api_log', $limit, $offset);
+
+        if($result)
+        {
+            return $result->result();
+        }
+        else
+        {
+            return false;
+        }
+
+
+    }
+
+    public function get_user_api_log_data($id)
+    {
+        $this->db->select('users.first_name, users.last_name, users.phone, users_api_log.*');
+        $this->db->join('users', 'users_api_log.user_id=users.id', 'left');
+
+        $this->db->where('users_api_log.id', $id);
+        $query = $this->db->get('users_api_log');
+
+        if($query)
+        {
+            return $query->row();
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+    
+    public function delete_user_api_log_row($ids_array)
+    {
+        $this->db->where_in('id', $ids_array);
+        $this->db->delete('users_api_log');
+        
+        echo '1';
+    
+    }
+
+    public function insert_table_data($table_name, $data)
+    {
+        return $this->db->insert($table_name, $data);
+    }
 }

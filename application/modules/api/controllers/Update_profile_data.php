@@ -43,6 +43,8 @@ class Update_profile_data extends CI_Controller
        $social_id               = $this->input->post('socialId', TRUE);
        $social_type             = $this->input->post('socialType', TRUE);
 
+       $agent              = strip_tags($this->input->post('agent', TRUE));
+       $user_id            = 0;
 
        $fail_message    = $this->general_model->get_lang_var_translation('execution_fail',$lang_id);
        $success_message = $this->general_model->get_lang_var_translation('execution_success',$lang_id);
@@ -56,12 +58,14 @@ class Update_profile_data extends CI_Controller
                               );
 
             $user_data = $this->user_model->get_user_data_by_conditions($con_array);
+            $user_id    = $user_data->id;
        }
        else
        {
             if($this->ion_auth->login($email, $password))
             {
                 $user_data  = $this->ion_auth->user()->row();
+                $user_id    = $user_data->id;
             }
 
        }
@@ -297,6 +301,11 @@ class Update_profile_data extends CI_Controller
                                      'response' => "0"
                                   );
        }
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Update profile', $agent, $_POST, $output);
+        //***************END LOG***************//
 
        $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 

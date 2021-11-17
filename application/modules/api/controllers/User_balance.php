@@ -24,11 +24,16 @@ class User_balance extends CI_Controller
         $email      = strip_tags($this->input->post('email', TRUE));
         $password   = strip_tags($this->input->post('password', TRUE));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
+        $user_id            = 0;
+
         $output     = array();
         
         if($this->ion_auth->login($email, $password))
         {
             $user_data      = $this->ion_auth->user()->row();
+            $user_id    = $user_data->id;
+            
             if($user_data->user_balance != '')
             {
                 $user_balance = $this->api_lib->get_any_user_balance($user_data->id);
@@ -54,6 +59,10 @@ class User_balance extends CI_Controller
                            );
         }
         
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'User balance', $agent, $_POST, $output);
+        //***************END LOG***************//
         
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
 

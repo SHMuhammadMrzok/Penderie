@@ -28,16 +28,17 @@ class Shipping extends CI_Controller
     // for shipping
     public function shipping_companies()
     {
-        $user_id     = $this->input->post('userId');
-        $email       = $this->input->post('email');
-        $password    = $this->input->post('password');
+        $user_id     = intval($this->input->post('userId'));
+        $email       = strip_tags($this->input->post('email'));
+        $password    = strip_tags($this->input->post('password'));
 
-        $lang_id     = $this->input->post('langId');
-        $country_id  = $this->input->post('countryId');
+        $lang_id     = intval($this->input->post('langId'));
+        $country_id  = intval($this->input->post('countryId'));
 
-        $device_id   = $this->input->post('deviceId');
+        $device_id   = strip_tags($this->input->post('deviceId'));
         $ip_address  = $this->input->ip_address();
 
+        $agent       = strip_tags($this->input->post('agent', TRUE));
 
         if($this->ion_auth->login($email, $password))
         {
@@ -77,6 +78,11 @@ class Shipping extends CI_Controller
                            );
         }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Shipping - Shipping companies', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
 
@@ -94,6 +100,7 @@ class Shipping extends CI_Controller
         $not_cart     = intval($this->input->post('notCart', true));
         $ip_address  = $this->input->ip_address();
 
+        $agent       = strip_tags($this->input->post('agent', TRUE));
 
         if($this->ion_auth->login($email, $password))
         {
@@ -155,6 +162,11 @@ class Shipping extends CI_Controller
                            );
         }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Shipping - Shipping countries', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($costs_array, JSON_UNESCAPED_UNICODE));
     }
 
@@ -171,14 +183,14 @@ class Shipping extends CI_Controller
         $device_id   = strip_tags($this->input->post('deviceId', TRUE));
         $ip_address  = $this->input->ip_address();
 
+        $agent       = strip_tags($this->input->post('agent', TRUE));
 
-        /*if($this->ion_auth->login($email, $password))
+        if($this->ion_auth->login($email, $password))
         {
             $user_data = $this->ion_auth->user()->row();
             $user_id   = $user_data->id;
             $this->api_lib->check_user_store_country_id($email, $password, $user_data->id, $country_id);
         }
-        */
 
         $this->shopping_cart->set_user_data($user_id, $device_id, $ip_address , $country_id ,$lang_id);
 
@@ -209,6 +221,11 @@ class Shipping extends CI_Controller
                            );
         }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Shipping - Shipping cities', $agent, $_POST, $output);
+        //***************END LOG***************//
+
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }
 
@@ -216,7 +233,7 @@ class Shipping extends CI_Controller
 
     public function save_shipping_data()
     {
-        $lang_id  = $this->input->post('langId', TRUE);
+        $lang_id  = intval($this->input->post('langId', TRUE));
         $required = $this->general_model->get_lang_var_translation('required', $lang_id);
 
         $branch_lang_var        = $this->general_model->get_lang_var_translation('branch', $lang_id);
@@ -228,6 +245,8 @@ class Shipping extends CI_Controller
         $device_id   = strip_tags($this->input->post('deviceId', TRUE));
 
         $ip_address  = $this->input->ip_address();
+
+        $agent       = strip_tags($this->input->post('agent', TRUE));
 
         if($this->ion_auth->login($email, $password))
         {
@@ -502,6 +521,11 @@ class Shipping extends CI_Controller
             }
         }
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Shipping - Save shipping date', $agent, $_POST, $output);
+        //***************END LOG***************//
+
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 
@@ -509,15 +533,17 @@ class Shipping extends CI_Controller
 
     public function check_shipping()
     {
-        $user_id     = $this->input->post('userId', TRUE);
-        $email       = $this->input->post('email', TRUE);
-        $password    = $this->input->post('password', TRUE);
+        $user_id     = intval($this->input->post('userId', TRUE));
+        $email       = strip_tags($this->input->post('email', TRUE));
+        $password    = strip_tags($this->input->post('password', TRUE));
 
-        $lang_id     = $this->input->post('langId', TRUE);
-        $country_id  = $this->input->post('countryId', TRUE);
+        $lang_id     = intval($this->input->post('langId', TRUE));
+        $country_id  = intval($this->input->post('countryId', TRUE));
 
-        $device_id   = $this->input->post('deviceId', TRUE);
+        $device_id   = strip_tags($this->input->post('deviceId', TRUE));
         $ip_address  = $this->input->ip_address();
+
+        $agent       = strip_tags($this->input->post('agent', TRUE));
 
         if($this->ion_auth->login($email, $password))
         {
@@ -540,6 +566,11 @@ class Shipping extends CI_Controller
         }
 
         $output['shipping'] = $shipping;
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Shipping - Check shipping', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }

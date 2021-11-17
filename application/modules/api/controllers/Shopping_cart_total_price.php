@@ -32,6 +32,7 @@ class Shopping_cart_total_price extends CI_Controller
         $password           = strip_tags($this->input->post('password', TRUE));
         $payment_option_id  = intval($this->input->post('paymentMethodId', TRUE));
         
+        $agent              = strip_tags($this->input->post('agent', TRUE));
         
         $user_id = 0;
         if($this->ion_auth->login($email, $password))
@@ -119,6 +120,11 @@ class Shopping_cart_total_price extends CI_Controller
 
           $output['cartPoints'] = $cart_points;
         }
+
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Shopping cart total price', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 

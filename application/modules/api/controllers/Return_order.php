@@ -18,6 +18,7 @@ class Return_order extends CI_Controller
         $this->load->model('orders/orders_model');
         $this->load->model('static_pages/static_pages_model');
 
+        $this->load->library('api_lib');
     }
 
     public function index()
@@ -28,6 +29,8 @@ class Return_order extends CI_Controller
       $email            = strip_tags($this->input->post('email'));
       $password         = strip_tags($this->input->post('password'));
       
+      $agent              = strip_tags($this->input->post('agent', TRUE));
+      $user_id            = 0;
       
       if($this->ion_auth->login($email, $password))
       {
@@ -202,6 +205,11 @@ class Return_order extends CI_Controller
                                 'response' => 0
                                 );
       }
+      
+      //***************LOG DATA***************//
+      //insert log
+      $this->api_lib->insert_log($user_id, current_url(), 'Return order', $agent, $_POST, $output);
+      //***************END LOG***************//
       
       $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
     }

@@ -23,7 +23,7 @@ class Charge_with_code extends CI_Controller
     public function index()
     {   
         
-        $user_id            = strip_tags($this->input->post('userId', TRUE));
+        $user_id            = intval($this->input->post('userId', TRUE));
         $email              = strip_tags($this->input->post('email', TRUE));
         $password           = strip_tags($this->input->post('password', TRUE));
         $lang_id            = strip_tags($this->input->post('langId', TRUE));
@@ -36,6 +36,8 @@ class Charge_with_code extends CI_Controller
         
         $fail_message = $this->general_model->get_lang_var_translation('execution_fail',$lang_id);
         $success_message = $this->general_model->get_lang_var_translation('execution_success',$lang_id);
+        
+        $agent              = strip_tags($this->input->post('agent', TRUE));
         
         if($this->ion_auth->login($email, $password))
         {            
@@ -126,6 +128,11 @@ class Charge_with_code extends CI_Controller
                             );
             //$output = array( 'message' => '0');
         }
+        
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Charge with code', $agent, $_POST, $output);
+        //***************END LOG***************//
         
         $this->output->set_content_type('application/json')->set_output(json_encode($output));
         

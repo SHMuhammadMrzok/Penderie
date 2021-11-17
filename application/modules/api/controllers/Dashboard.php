@@ -38,6 +38,9 @@ class Dashboard extends CI_Controller
         $password       = strip_tags($this->input->post('password', TRUE));
         $deviceId       = strip_tags($this->input->post('deviceId', TRUE));
         $ip_address     = $this->input->ip_address();
+        
+        $agent          = strip_tags($this->input->post('agent', TRUE));
+
         $output         = array();
         $spammed_users_array = array();
 
@@ -180,15 +183,15 @@ class Dashboard extends CI_Controller
         if(count($ads_2) != 0)
         {
             $ads_2_array = array();
-          foreach($ads_2 as $ads_2)
-          {
-            $ads_2_array[] = array(
-                                    'advId'     => $ads_2->id,
-                                    'advUrl'    => $ads_2->url,
-                                    'advImage'  => $images_path.$ads_2->image,
-                                  );
-          }
-        $output[] = array(
+            foreach($ads_2 as $ads_2)
+            {
+                $ads_2_array[] = array(
+                                        'advId'     => $ads_2->id,
+                                        'advUrl'    => $ads_2->url,
+                                        'advImage'  => $images_path.$ads_2->image,
+                                    );
+            }
+            $output[] = array(
                             'type'  => 'image'  ,
                             'title' => ''       ,
                             'productsListType' => '',
@@ -340,6 +343,10 @@ class Dashboard extends CI_Controller
         //END Brands
 
 
+        //***************LOG DATA***************//
+        //insert log
+        $this->api_lib->insert_log($user_id, current_url(), 'Dashboard', $agent, $_POST, $output);
+        //***************END LOG***************//
 
         $this->output->set_content_type('application/json')->set_output(json_encode($output, JSON_UNESCAPED_UNICODE));
 
@@ -469,8 +476,8 @@ class Dashboard extends CI_Controller
                                 'ratingAvg'                     => $product->rating_avg         ,
                                 'availableProduct'              => $availability                        ,
                                 'restQty'                       => $rest_qty                            ,
-                                // 'product_route'                 => $this->site_settings->product_route         ,
-                                // 'sub_category_route'            => $this->site_settings->sub_category_route
+                                'product_route'                 => "" ,//$this->site_settings->product_route         ,
+                                'sub_category_route'            => "" ,//$this->site_settings->sub_category_route
 
                               );
             }

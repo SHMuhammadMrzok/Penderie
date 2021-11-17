@@ -56,9 +56,9 @@ class Payment_gateways extends CI_Controller {
         {
             $this->process_moyasar($order_id);
         }
-        elseif($order_id > 0 && $type == 'myFatoora')
+        elseif($order_id > 0 && ($type == 'myFatoora_visa' || $type == 'myFatoora_apple_pay_mada' || $type == 'myFatoora_apple_pay'||$type == 'myFatoora_mada'))
         {
-            $this->process_myFatoora($order_id);
+            $this->process_myFatoora_from_cart($order_id, $type);
         }
     }
 
@@ -168,36 +168,6 @@ class Payment_gateways extends CI_Controller {
         }
 
     }*/
-    
-    public function process_myFatoora($order_id)
-    {
-        if(isset($this->data['lang_id']))
-        {
-          $lang_id = $this->data['lang_id'];
-        }
-        else {
-          $lang_id = 1;
-        }
-
-        $order_data         = $this->orders_model->get_order_details($order_id, $lang_id);
-        /*$user_data          = $this->users_model->get_user($order_data->user_id);
-        $user_ip            = $this->input->ip_address();
-        $country_data       = $this->countries_model->get_countries_result($order_data->country_id);
-        $country_iso        = $country_data->country_symbol;
-
-        // total with SAR
-        $gateway_currency   = 'SAR';
-        $order_total        = $this->currency->convert_to_currency($order_data->currency_symbol, $gateway_currency, $order_data->final_total);
-
-        */
-        $this->load->library('payment_gateways/myFatoora', $order_id);
-        //$this->myFatoora->Hello();
-
-         //$this->myFatoora->prepareCheckoutFatoora($order_id);//, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso);
-         //echo $form;
-        
-
-    }
 
     public function process_hyperpay_from_cart($cart_id, $type)
     {
@@ -283,6 +253,102 @@ class Payment_gateways extends CI_Controller {
         $this->load->view('moyasar', $this->data);
 
         //$this->moyasar->INITIATE_PAYMENT($order_id, $order_data->final_total, $order_data->currency_symbol);
+    }
+
+    public function process_myFatoora_from_cart($cart_id, $type)
+    {
+        $this->load->model('shopping_cart_model');
+        
+        if(isset($this->data['lang_id']))
+        {
+          $lang_id  = $this->data['lang_id'];
+        }
+        else {
+          $lang_id  = 1;
+        }
+
+        $cart_id        =  explode('_', $cart_id)[0]; // if cart id comming concatinated with time
+        $cart_data      = $this->shopping_cart_model->get_cart_data($cart_id);
+        $user_data      = $this->user_model->get_row_data($cart_data->user_id);
+        $country_data   = $this->cities_model->get_country_call_code($user_data->Country_ID);
+        $order_total    = $cart_data->final_total_price_with_tax;// + $cart_data->shipping_cost;
+        $user_fullname  = $user_data->first_name.' '.$user_data->last_name;
+        $user_email     = $user_data->email;
+        $country_code   = $country_data->calling_code;
+        $user_phone     = substr($user_data->phone, strlen($country_code)); // return user phone without country code
+        // $country_data   = $this->countries_model->get_countries_result($cart_data->country_id);
+        // $country_iso    = $country_data->country_symbol;
+        // $user_ip        = $this->input->ip_address();
+
+        // total with SAR
+        // $cart_currency   = $cart_data->currency_symbol;
+        $gateway_currency   = 'SAR';
+
+        
+        // echo "<br /> Payment Gateways Controller : prepareCheckout => cart_data <pre>";
+        // print_r($cart_data);
+        // echo "<br />";
+        // // die;
+
+        if($lang_id == 2 ){
+            $language = 'ar';
+        }
+        else {
+            $language = 'en';
+        }
+        // GateWay Enabled payment methods and it's gatway ids :
+        // 'myFatoora_visa' => 2 || 'myFatoora_apple_pay_mada' => 13 || 'myFatoora_apple_pay' => 11 ||'myFatoora_mada' => 6
+        if($type == 'myFatoora_visa'){
+            $gateway_payment_method_id   = '2';
+        }
+        elseif($type == 'myFatoora_mada'){
+            $gateway_payment_method_id   = '6';
+        }
+        elseif($type == 'myFatoora_apple_pay'){
+            $gateway_payment_method_id   = '11';
+        }
+        elseif($type == 'myFatoora_apple_pay_mada'){
+            $gateway_payment_method_id   = '13';
+        }
+
+        /**
+         * Mrzok Edit Code : MyFatoora Integration 4/2021
+         */
+        // $gateway_payment_methods       = $this->myfatoora->getAvailablePaymentMethods($order_total, $gateway_currency);
+        // echo "<br /> Payment Gateways Controller : process_myFatoora_from_cart => gateway_payment_methods <pre>";
+        // print_r($gateway_payment_methods);
+        // echo "<br />";
+        
+        $form       = $this->myfatoora->prepareCheckout($cart_id, $order_total, $user_fullname, $user_email, $user_phone, $country_code, $gateway_payment_method_id, $gateway_currency, $language , $type);
+        
+        // if($form == false) {
+        //     // Unknown Error after connection
+        //     $this->data['msg']          = "Failed!, Please try again ..";
+        //     // Pass Redirect to execute and show message
+        //     $this->data['redirect_url'] = base_url();
+        //     $this->load->view('gateway_msg', $this->data);
+        // }
+        // echo $form;
+
+        /*
+         * Basic Mariam Code
+         * /
+        /*$user_data          = $this->users_model->get_user($order_data->user_id);
+        $user_ip            = $this->input->ip_address();
+        $country_data       = $this->countries_model->get_countries_result($order_data->country_id);
+        $country_iso        = $country_data->country_symbol;
+
+        // total with SAR
+        $gateway_currency   = 'SAR';
+        $order_total        = $this->currency->convert_to_currency($order_data->currency_symbol, $gateway_currency, $order_data->final_total);
+
+        * /
+        $this->load->library('payment_gateways/myFatoora', $order_id);
+        //$this->myFatoora->Hello();
+
+         //$this->myFatoora->prepareCheckoutFatoora($order_id);//, $order_total , $gateway_currency , $user_ip ,$user_data->email  ,$payment_brand, $order_data, $user_data, $country_iso);
+         //echo $form;
+         */
     }
 
     public function submit_moyasar_form()

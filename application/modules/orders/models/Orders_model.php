@@ -1180,7 +1180,7 @@ class Orders_model extends CI_Model
 
         $this->db->join('orders', 'orders_products.order_id = orders.id');
 
-        $this->db->group_by('orders_products.product_id');
+        // $this->db->group_by('orders_products.product_id');
 
         $this->db->where('orders.order_status_id', 1);        // get Completed orders only
         $this->db->where('product_id', $product_id);
