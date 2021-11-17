@@ -562,9 +562,8 @@ class Shipping_gateways extends CI_Controller {
                 {
                     $salasa_created_order_id = $add_result['data']['order_id'];
                     $updated_data = array(
-                                            // 'tracking_number'   => $salasa_created_order_id,
-                                            'shipping_company_order_id' => $salasa_created_order_id,
-                                            'delivered'                 => 1
+                                            'tracking_number'   => $salasa_created_order_id,
+                                            'delivered'         => 1
                                        );
 
                     if($grouped_order) {
@@ -607,8 +606,7 @@ class Shipping_gateways extends CI_Controller {
 
         $order_data = $this->orders_model->get_order_data($order_id, $this->data['lang_id']);
 
-        // if($order_data->delivered == 1 && $order_data->tracking_number != 0) // Basic Code
-        if($order_data->delivered == 1 && ($order_data->tracking_number != 0 || $order_data->shipping_company_order_id != 0 ) )
+        if($order_data->delivered == 1 && $order_data->tracking_number != 0)
         {
 
             if($order_data->shipping_company_id == 1)  //SMSA
@@ -697,63 +695,29 @@ class Shipping_gateways extends CI_Controller {
             }
             else if($order_data->shipping_company_id == 6)  //Salasa
             {
-                $shipping_company_order_id = $order_data->shipping_company_order_id;
+                $info = $this->salasa->getTracking($order_data->tracking_number);
 
-                if (empty($order_data->tracking_number) ){
-                    // Get Shipping order Details to catch tracking_number
-                    $info = $this->salasa->getOrderDetails($shipping_company_order_id);
+                // $status = $this->smsa->handel_status($info->Activity);
+                // $status_id = $this->_get_status_id($status);
 
-                    $tracking_details   = $info['tracking_details'];
-                    $tracking_number    = isset($tracking_details['tracking_number']) ? $tracking_details['tracking_number'] : '';
+                // insert in shipping log
+                $log_data = array(
+                                    'order_id'           => $order_id                       ,
+                                    'shipping_method_id' => $order_data->shipping_company_id,
+                                    'status_id'          => '', // $status_id                      ,
+                                    'admin'              => $admin                          ,
+                                    'AWB_number'         => $order_data->tracking_number    ,
+                                    'feed_back_text'     => json_encode($info),
+                                    'unix_time'          => time()
+                                 );
 
-                    $shipping_order_refrence_id = explode( '_' , $info['marketplace_order_id']) ;
-                    $orders_number              = $shipping_order_refrence_id[1];
-
-                    if(isset($tracking_number) && !empty($tracking_number)) {
-                        $updated_data = array(
-                                            'tracking_number'   => $tracking_number
-                                        );
-                                    
-                        // Update All Related Order with Shipment Order id
-                        $related_orders_ids         = json_decode($orders_number);
-                        $this->orders_model->updated_orders_related_orders($related_orders_ids, $updated_data);
-                        
-                        // Update Selected Order with Shipment Order id
-                        // $this->orders_model->update_order_data($post_order_id, $updated_data);
-                    }
-                    else{
-                        // No shipping for this order
-                        $_SESSION['custom_error_msg'] = lang('no_shipment_for_this_order');
-                        $this->session->mark_as_flash('custom_error_msg');
-                    }
-                }
-                else{
-                    // Get Shipping order Status list to catch last status and insert it to databasse
-
-                    $info = $this->salasa->getTracking($shipping_company_order_id);
-
-                    // $status = $this->smsa->handel_status($info->Activity);
-                    // $status_id = $this->_get_status_id($status);
-
-                    // insert in shipping log
-                    $log_data = array(
-                                        'order_id'           => $order_id                       ,
-                                        'shipping_method_id' => $order_data->shipping_company_id,
-                                        'status_id'          => '', // $status_id                      ,
-                                        'admin'              => $admin                          ,
-                                        'AWB_number'         => $order_data->tracking_number    ,
-                                        'feed_back_text'     => json_encode($info),
-                                        'unix_time'          => time()
-                                    );
-
-                    $this->orders_model->insert_shipping_log($log_data);
-                }
+                $this->orders_model->insert_shipping_log($log_data);
             }
         }
         else
         {
             // No shipping for this order
-            $_SESSION['custom_error_msg'] = lang('no_shipment_for_this_order');
+            $_SESSION['custom_error_msg'] = ('no_shipping_for_this_order');
             $this->session->mark_as_flash('custom_error_msg');
         }
 
